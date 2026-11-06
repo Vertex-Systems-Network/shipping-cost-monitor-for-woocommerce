@@ -51,7 +51,7 @@ final class Summary {
 			$max_pages = max( 1, (int) $result->max_num_pages );
 
 			foreach ( $result->orders as $order ) {
-				if ( ! $order instanceof \WC_Order || $order->is_virtual() || empty( $order->get_items( 'shipping' ) ) ) {
+				if ( ! $order instanceof \WC_Order || empty( $order->get_items( 'shipping' ) ) ) {
 					continue;
 				}
 
