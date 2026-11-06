@@ -115,6 +115,7 @@
 		const [ commitResults, setCommitResults ] = useState( {} );
 		const [ committing, setCommitting ] = useState( false );
 		const [ commitError, setCommitError ] = useState( '' );
+		const [ rowFilter, setRowFilter ] = useState( 'all' );
 
 		useEffect( function () {
 			if ( ! rawCsv ) {
@@ -221,6 +222,25 @@
 				&& 'matched' === matchResults[ item.number ].status
 				&& ! commitResults[ item.number ];
 		} );
+
+		function getRowStatus( item ) {
+			const reference = '' !== mapping.reference ? String( item.values[ Number( mapping.reference ) ] || '' ).trim() : '';
+			const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
+			const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
+			const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
+			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && /^[A-Za-z]{3}$/.test( currency );
+			if ( commitResults[ item.number ] ) { return 'saved'; }
+			if ( matchResults[ item.number ] ) { return 'matched' === matchResults[ item.number ].status ? 'ready' : 'exception'; }
+			return valid ? 'unmatched' : 'invalid';
+		}
+
+		const previewRows = parsed
+			? parsed.rows.slice( 0, Object.keys( matchResults ).length > 0 ? 50 : 10 ).filter( function ( item ) {
+				if ( 'all' === rowFilter ) { return true; }
+				if ( 'needs_review' === rowFilter ) { return [ 'exception', 'invalid', 'unmatched' ].indexOf( getRowStatus( item ) ) !== -1; }
+				return getRowStatus( item ) === rowFilter;
+			} )
+			: [];
 
 		function matchReferences() {
 			if ( ! report.ajax_url || ! report.match_nonce || ! parsed ) {
@@ -421,6 +441,7 @@
 					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
 				),
 				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency. Negative rows require credit review and are excluded.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Show rows', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: rowFilter, onChange: function ( event ) { setRowFilter( event.target.value ); } }, h( 'option', { value: 'all' }, __( 'All preview rows', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'needs_review' }, __( 'Needs review', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'ready', }, __( 'Ready to save', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'saved', }, __( 'Saved', 'wpessential-shipping-cost-monitor' ) ) ),
 				h( 'div', { className: 'wpe-scm-import-actions' },
 					h( 'button', { type: 'button', className: 'button', onClick: matchReferences, disabled: matching || validRows.length < 1 }, matching ? __( 'Matching…', 'wpessential-shipping-cost-monitor' ) : __( 'Match first 50 valid rows', 'wpessential-shipping-cost-monitor' ) ),
 					matchedRows.length > 0 ? h( 'button', { type: 'button', className: 'button button-primary', onClick: commitMatchedRows, disabled: committing }, committing ? __( 'Saving…', 'wpessential-shipping-cost-monitor' ) : __( 'Save matched costs to orders', 'wpessential-shipping-cost-monitor' ) ) : null,
@@ -438,7 +459,7 @@
 							h( 'th', null, __( 'Currency', 'wpessential-shipping-cost-monitor' ) ),
 							h( 'th', null, __( 'Validation / match result', 'wpessential-shipping-cost-monitor' ) )
 						) ),
-						h( 'tbody', null, parsed.rows.slice( 0, Object.keys( matchResults ).length > 0 ? 50 : 10 ).map( function ( item ) {
+						h( 'tbody', null, previewRows.map( function ( item ) {
 							const reference = '' !== mapping.reference ? item.values[ Number( mapping.reference ) ] || '' : '';
 							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 							const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
