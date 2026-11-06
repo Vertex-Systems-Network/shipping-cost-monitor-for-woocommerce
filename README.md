@@ -50,23 +50,24 @@ Recommended first release: Free manual order-cost ledger, provenance, basic summ
 
 **Initial implementation boundary accepted:** WooCommerce CRUD for order data; manual cost entry first; no carrier API credentials. Credential security must be reviewed before integrations, and anonymized invoices plus retention policy are needed before CSV upload/persistence. The dated [compatibility baseline proposal](docs/COMPATIBILITY-BASELINE.md) is not a support claim. See the [owner decision register](docs/OWNER-DECISION-REGISTER.md).
 
-## Phase 5 implementation — current slices
+## Phase 5 implementation — complete code delivery
 
-The plugin bootstrap, React admin shell, manual order-cost ledger, report controls, tax-aware variance and report CSV export are implemented:
+The plugin bootstrap, React admin shell, manual order-cost ledger, date-filtered reports and privacy-minimized CSV export are implemented:
 
 - [Plugin entry point](wpessential-shipping-cost-monitor.php)
 - [Plugin coordinator](includes/Plugin.php)
 - [WooCommerce admin page](includes/Admin/Page.php)
 - [Order cost fields and CRUD persistence](includes/Admin/OrderCostFields.php)
 - [Read-only dashboard summary](includes/Admin/Summary.php)
+- [Protected report CSV export](includes/Admin/CsvExport.php)
 - [React dashboard and metrics](assets/js/admin.js)
 - [Admin styles](assets/css/admin.css)
 
-The order editor provides manual merchant-paid cost, currency, evidence type and source/note fields. Values are stored through the WooCommerce order object; private order notes record amount/currency/evidence changes and record removal. The dashboard queries the last 30 days of Processing and Completed orders with WooCommerce shipping lines, using paginated order queries. It displays shipping line totals and confirmed-cost totals separated by order currency, plus cost coverage for eligible orders.
+The order editor stores merchant-paid amount, currency, evidence type, tax treatment and source note through WooCommerce CRUD. Private order notes audit amount/currency/evidence/tax changes, source-note edits and record removal. The dashboard supports store-timezone date ranges up to 366 days, separates currencies, subtracts allocated shipping refunds and calculates variance only for confirmed, same-currency, tax-exclusive costs.
 
-Known report limits: shipping refunds are not adjusted; confirmed costs entered in another currency are excluded from the confirmed-cost total and coverage; shipping variance is hidden until cost tax treatment is captured. The date range is fixed to the last 30 days. CSV import/export, courier connections and multilingual UI remain unimplemented.
+The CSV export uses capability and nonce checks, paginated WooCommerce order queries, and the selected date range. It exports order and cost evidence without customer details or freeform notes, and guards text cells against spreadsheet formula prefixes. Invoice CSV import and live carrier connections move to Phase 6 because anonymized merchant invoice samples, retention review and credential-security decisions remain open.
 
-This code slice has not been runtime-verified. No tests were run; PHP/runtime, UI, HPOS, WPML and Polylang compatibility remain unverified. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress.
+**Phase 5 code delivery is complete.** Runtime verification, compatibility checks and tests are pending their dedicated quality phase. No HPOS, PHP/WP/WC, WPML or Polylang support claim is made.
 
 ## Marketplace submission plan
 
