@@ -1,79 +1,77 @@
 # Market research: WooCommerce shipping-cost intelligence
 
 **Reviewed:** 2026-11-06  
-**Purpose:** Identify existing workflows, provider API capabilities and a credible product gap. This is a focused desk review, not a full customer survey or exhaustive provider audit. Listing details and API access change; recheck before implementation and Marketplace submission.
+**Status:** Initial desk review complete; customer validation and merchant-account API checks remain open.  
+**Scope:** WooCommerce plugins plus global, GCC and South Asia carrier/platform candidates. This is not an exhaustive market census or a claim of exclusivity. Listings, APIs, access terms and platform versions change; recheck before implementation and Marketplace submission.
 
 ## What the market already covers
 
 | Product / source | Existing capability relevant to this product | Product implication |
 |---|---|---|
-| [Cost of Shipping for WooCommerce](https://wordpress.org/plugins/woo-cost-of-shipping/) | Manual actual shipping cost on each order; imports supported costs from WooCommerce Shipping/WooCommerce Services and ShipStation; multiple packages and void/reship scenarios are described. | Manual tracking and some label-cost imports are not unique differentiators. Our opportunity needs broader invoice matching and clearer exception handling. |
-| [Profitrics documentation](https://woocommerce.com/document/profitrics/) | Shipping-cost rules by method and class, per-order profit ledger, manual overrides, reports, trends and exports. | Method/class cost rules and general profit reporting are established patterns. Keep this plugin shipping-focused; avoid rebuilding a full profit suite. |
-| [Cost & Reports for WooCommerce](https://woocommerce.com/products/cost-reports-woocommerce/) | Cost, shipping, profit and financial reporting with filtering and exports. | General profit reports overlap; win through shipping-cost data quality and operational reconciliation. |
-| [WooCommerce Cost of Goods](https://woocommerce.com/products/woocommerce-cost-of-goods/) | Cost fields and profit reporting; docs describe configurable inclusion/exclusion of shipping and historical cost behavior. | Interoperability and unambiguous definitions matter. Don't silently redefine store profit. |
-| [WooCommerce Shipping](https://wordpress.org/plugins/woocommerce-shipping/) | Label purchasing, live label-rate comparison, split shipments, tracking and address verification for supported markets. | Labeling/fulfilment is already served. Integrate/import cost evidence when available; do not compete as another label tool. |
-
-## Carrier API discovery
-
-The initial provider shortlist is **UPS, FedEx, DHL Express**, plus platforms/aggregators already used by target merchants (including ShipStation). It is intentionally a shortlist, not an exhaustive or promised integration list.
-
-Official API documentation shows different data capabilities:
-
-| Provider | Publicly documented API capability found | What must be validated for our use |
-|---|---|---|
-| [UPS Developer Portal](https://developer.ups.com/get-started) | Rating and shipping APIs; account number can affect negotiated rating, and payment details can bill a shipment. | Which endpoints expose post-shipment billed charges/invoice adjustments for the merchant's account, access approval and regional availability. |
-| [FedEx Developer Portal](https://developer.fedex.com/api/en-us/catalog/comprehensive-rate.html) | Account-specific rate estimates including discounts, surcharges and fees; its API catalog includes broader billing-related functionality. | A rate response is still a quote. Verify the exact endpoint for final billed shipment/invoice charges and the required account permissions. |
-| [DHL Express MyDHL API](https://developer.dhl.com/api-reference/dhl-express-mydhl-api) | Account-based rates, shipment creation/labels, pickup, tracking, and related shipment services. | Verify what actual invoice/adjustment data is accessible through API versus invoice documents/portals and by region. |
-| [ShipStation API](https://www.shipstation.com/developer-api/) | Platform integration is already supported by a related shipping-cost plugin for shipment-cost import workflows. | Determine current API fields, authentication model, account tiers and actual-vs-estimated cost meaning before adopting or expanding the adapter. |
-
-### Important distinction: quote versus actual charge
-
-A carrier **rating/quote endpoint** predicts a rate from shipment details; it is not proof of the final billed amount. A **label-purchase or manifest response** may provide a booked/label amount, which can still differ from final invoice charges after adjustments. The product should label evidence state and source, and only treat invoice-final amounts or reviewed merchant-confirmed values as actual final cost.
+| [Cost of Shipping for WooCommerce](https://wordpress.org/plugins/woo-cost-of-shipping/) | Manual actual shipping cost per order; imports supported costs from WooCommerce Shipping/WooCommerce Services and ShipStation; multiple packages and void/reship scenarios described. | Manual tracking and some cost imports are not unique. Differentiate through broader invoice reconciliation and exception workflow. |
+| [Profitrics documentation](https://woocommerce.com/document/profitrics/) | Per-order profit ledger, shipping-cost rules by method/class, manual overrides, reports, trends, exports and expenses. | Method/class rules and profit reports overlap. Keep this product focused on shipping evidence and reconciliation. |
+| [Cost & Reports for WooCommerce](https://woocommerce.com/products/cost-reports-woocommerce/) | Cost, shipping, profit and financial reporting with filters and exports. | General profit reporting overlaps; focus on shipping-cost data quality and operational exceptions. |
+| [WooCommerce Cost of Goods](https://woocommerce.com/products/woocommerce-cost-of-goods/) | Product/order cost fields and profitability reporting; configurable shipping/tax inclusion and historical cost behavior. | Use clear definitions and avoid redefining general store profit. |
+| [WooCommerce Shipping](https://woocommerce.com/document/woocommerce-shipping/) | Label purchasing for UPS, USPS, DHL Express and FedEx; order-admin labels, tracking and split shipments. Currently limited to US-based stores using USD. | Integrate supported label evidence where available; do not compete as another label-purchase tool. |
 
 ## Findings and differentiation
 
-- Actual order-level cost storage and manual entry already exist.
-- Some shipping-label costs can already flow into orders from selected platforms.
-- Shipping-method and shipping-class rules, order-level overrides, aggregate charts, date filters and exports also exist in adjacent profit products.
-- Generic courier invoice CSV ingestion, reviewable order matching, unmatched/duplicate/delta exceptions and shipping-specific loss analysis appear less directly covered in the reviewed primary listings/docs. Treat this as a hypothesis to validate, not guaranteed exclusivity.
-- Carrier API support can improve automation, but connectors alone are not a moat. The product advantage should be a consistent cross-provider cost ledger and reconciliation workflow.
-- Rate-change simulation should be a later decision-support feature. It must use labelled assumptions and historical data, never change live rates automatically.
+- Actual order-level cost storage, manual cost entry and some label-cost imports already exist.
+- Method/class cost rules, order overrides, aggregate charts and export/report features also exist in adjacent profit products.
+- A focused combination of generic courier invoice CSV import, reviewable order matching, duplicate/unmatched/variance exceptions and shipping-specific loss analysis appears less directly covered in the reviewed primary listings/docs. This remains a hypothesis, not guaranteed exclusivity.
+- API connectors alone are not a product moat. The stronger product story is a consistent evidence ledger and reconciliation workflow across WooCommerce, carrier platforms and invoices.
+- **Rate quote ≠ actual cost.** A rate API estimates a charge. A label/manifest amount records what was booked, but may later be adjusted. Final invoice or reviewed merchant-confirmed evidence is needed for “actual final cost.”
 
-## Integration prioritization method
+## Carrier/API review
 
-Score each requested provider against:
+A detailed region-aware public-doc matrix is in [INTEGRATION-MATRIX.md](INTEGRATION-MATRIX.md). The initial discovery scope includes UPS, FedEx and DHL Express globally; Aramex, Emirates Post and iMile for GCC; and TCS, PostEx and Leopards for Pakistan/South Asia. ShipStation and WooCommerce Shipping are also reviewed as existing platforms/sources.
 
-1. Share of target merchants using it and target-region relevance.
-2. Whether API returns order/shipment identifiers needed for reliable matching.
-3. Whether it exposes final invoice/billed charges, not only rate quotes.
-4. Authentication/security burden, developer approval and account eligibility.
-5. Rate limits, webhook/polling support, stability and long-term maintenance.
-6. Whether an existing aggregator integration can cover the same workflow with lower support cost.
+**Verified from public docs:** rating/quote, shipment booking/label, tracking or webhook capabilities differ by provider. **Not established from public docs reviewed:** consistent API access to final carrier invoice charges and adjustments across these providers. Some require merchant accounts, partner access or private account documentation.
 
-Build a common adapter interface, then ship only the providers with strongest merchant demand and a reliable actual-cost data path. Keep manual entry and CSV as fallback.
+So the first release should not promise “automatic final cost from every carrier.” Keep generic CSV invoices as the universal final-cost path. Capture API shipment and booked-label evidence when available, but label that evidence separately until a final billed amount is confirmed.
 
-## Proposed validation questions
+## Product recommendation: MVP candidate
 
-1. Which courier invoice formats do target stores receive, and how often do formats change?
-2. What identifiers are present reliably: order number, tracking ID, AWB, date, recipient, amount, currency?
-3. Which APIs expose final billed charges, adjustments or refunds to the merchant's account?
-4. How often do invoice charges split across parcels, include surcharges, or get credited/refunded later?
-5. Do merchants need zone reporting from WooCommerce shipping zones, postcode regions, or their own territory mapping?
-6. Which imports and reports are essential in Free, and which reconciliation volume/automation justifies Pro?
-7. What does a merchant consider “actual shipping cost” when taxes, COD fees, fuel surcharge, return-to-origin, and insurance are separate?
+This is a decision-ready **proposal**, not owner-approved scope:
 
-## Scope conclusion
+### Free
 
-The first release should not promise “all courier integrations.” Start with dependable manual costs and a configurable CSV reconciliation pipeline, alongside only those API adapters that pass the capability/security review and have validated merchant demand. Do not mark a quote-only provider integration as actual-cost automation.
+- Per-order actual-cost field with source and audit history.
+- Customer-paid shipping, recorded cost, variance and data-coverage summary for a selectable period.
+- Basic filters and CSV export.
+- Optional import of supported WooCommerce Shipping label-cost evidence, only after the data path is verified.
+
+### Pro
+
+- Generic courier invoice CSV mapping, preview, validation and exact-identifier matching.
+- Reconciliation queue for unmatched, duplicate, ambiguous, split/adjusted and amount-mismatch rows.
+- Shipping loss reports by method and zone where order data supports it.
+- One or two optional API adapters selected from beta merchant usage; sync shipment identifiers and booked charges where available.
+- Only mark API cost as final actual after provider evidence confirms invoice-final semantics; otherwise preserve booked/estimate class and reconcile through invoice CSV.
+
+### Later
+
+- Broad all-carrier catalog, per-parcel component ledger, scheduled alerts, print/PDF reports, and rate-change simulation.
+- Rate-change simulation uses historical outcomes and explicit assumptions; it never pushes new live rates.
+- Label creation, checkout rate calculation, tracking portal, dispatch and general P&L remain outside the product focus.
+
+## Integration prioritization
+
+Score a provider on target-merchant usage, shipment identifiers, final invoice/adjustment access, region coverage, authentication burden, API cost/terms, webhook or permitted polling, and maintenance load. Candidate list is not a ship list. Need merchant/API account access before any connector is committed.
+
+## Open validation items
+
+1. Review at least three real but anonymized courier invoice CSV formats and represent split parcels, surcharges, COD, return-to-origin, reship and credit/refund rows.
+2. Get beta-merchant courier/platform usage by country and order volume.
+3. Obtain API/account documentation for the top two providers and confirm final-charge fields, scopes, access terms and available regions.
+4. Validate proposed Free/Pro boundary and willingness to pay.
+5. Define currency, taxes, discounts, statuses, refunds and coverage metric consistently.
 
 ## Sources
 
-- [Cost of Shipping for WooCommerce — WordPress.org listing](https://wordpress.org/plugins/woo-cost-of-shipping/)
+- [Cost of Shipping for WooCommerce — WordPress.org](https://wordpress.org/plugins/woo-cost-of-shipping/)
 - [Profitrics — WooCommerce Marketplace documentation](https://woocommerce.com/document/profitrics/)
-- [Cost & Reports for WooCommerce — Marketplace listing](https://woocommerce.com/products/cost-reports-woocommerce/)
+- [Cost & Reports for WooCommerce — Marketplace](https://woocommerce.com/products/cost-reports-woocommerce/)
 - [Cost of Goods — WooCommerce docs](https://woocommerce.com/document/cost-of-goods-sold/)
-- [WooCommerce Shipping — WordPress.org listing](https://wordpress.org/plugins/woocommerce-shipping/)
-- [UPS API getting started](https://developer.ups.com/get-started)
-- [FedEx Comprehensive Rates API](https://developer.fedex.com/api/en-us/catalog/comprehensive-rate.html)
-- [DHL Express MyDHL API](https://developer.dhl.com/api-reference/dhl-express-mydhl-api)
-- [ShipStation developer API](https://www.shipstation.com/developer-api/)
+- [WooCommerce Shipping docs](https://woocommerce.com/document/woocommerce-shipping/)
+- Official API/provider links and classification notes: [carrier API matrix](INTEGRATION-MATRIX.md)
