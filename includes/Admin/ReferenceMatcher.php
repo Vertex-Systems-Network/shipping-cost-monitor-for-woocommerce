@@ -108,6 +108,8 @@ final class ReferenceMatcher {
 				$order = wc_get_order( $candidate_id );
 				if (
 					$order instanceof \WC_Order
+					&& 'shop_order' === $order->get_type()
+					&& ! empty( $order->get_items( 'shipping' ) )
 					&& (
 						(string) $order->get_order_number() === $reference
 						|| (string) $order->get_id() === $reference
