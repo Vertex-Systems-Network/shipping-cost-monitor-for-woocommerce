@@ -22,7 +22,7 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-04 | Define terms: charged shipping, actual cost, variance, coverage, refunds and currencies | Planned | Metric glossary with worked examples |
 | AI-05 | Decide canonical storage for snapshots, components, imported rows and audit history | Planned | Schema decision record with query/performance rationale |
 | AI-06 | Map React admin screens, navigation, empty/loading/error/success states | Planned | Screen flow and reviewed wireframes/prototype |
-| AI-07 | Finalize platform compatibility matrix: PHP, WordPress, WooCommerce, HPOS, WPML, Polylang | Planned | Tested minimum/current versions and documented limitations |
+| AI-07 | Platform compatibility baseline drafted | Drafted; release versions need verification | PHP/WP/WC/database baseline documented; HPOS, WPML and Polylang release matrix verified and recorded |
 | AI-08 | Define security/privacy review and import threat model | Planned | Capability matrix, CSV rules, retention and external-service disclosure |
 | AI-09 | Define reconciliation matching rules and human review controls | Planned | Examples for duplicates, splits, returns, credits and ambiguity |
 | AI-10 | Define report query, pagination, caching and background-job strategy | Planned | Performance budget and volume test scenarios |
