@@ -1,92 +1,168 @@
 # Product requirements and options bank
 
-**Status:** Draft for product-owner review  
+**Status:** Decision-ready draft; product-owner approval pending  
 **Product:** WPEssential Shipping Cost Monitor  
 **Parent suite:** WPEssential  
-**Audience:** WooCommerce merchants who need to compare customer-paid shipping with their actual fulfilment spend.
+**Audience:** WooCommerce merchants comparing customer-paid shipping with fulfilment spend.
 
 ## Problem statement
 
-WooCommerce records the shipping amount charged to a customer, but a merchant may pay a different amount to a courier. Differences can be hidden across orders, invoices, shipping methods, locations, surcharges, splits, returns and adjustments. The plugin should make costs recordable, reconcile evidence, and show where shipping margin is being lost.
+WooCommerce records what the customer paid for shipping, but merchants may pay a different amount to couriers. Differences can be hidden across orders, invoices, shipping methods, locations, surcharges, split parcels, returns and adjustments. The plugin should make shipping-cost evidence recordable, reconcile that evidence, and show where shipping margin is being lost.
 
 ## Target outcomes
 
-- Show customer-paid shipping, recorded actual/confirmed cost, evidence type and variance per eligible order.
-- Match invoice/API charge evidence to orders using identifiers, with visible basis and review.
+- Show customer-paid shipping, selected actual/confirmed cost, evidence type and variance per eligible order.
+- Match invoice/API charge evidence to orders using identifiers, with visible match basis and review.
 - Surface duplicate, unmatched, ambiguous and materially different charges without silently overwriting merchant data.
 - Report recurring shipping loss patterns by period and supported shipping dimensions.
 - Remain useful with manual entry and invoice CSV even without carrier API access.
-- Automate shipment/cost evidence sync where provider APIs support it, while keeping quotes, booked charges and final billed costs distinct.
+- Automate shipment/cost evidence sync where APIs support it, while keeping quotes, booked charges and final billed costs distinct.
 
 ## Proposed MVP decision pack
 
-**Status: proposal, not yet product-owner approved.** This is the recommended first useful release based on the competitor/API desk review.
+**This is a product proposal, not a record of owner approval or customer validation.**
 
 ### Free
 
 - Manual actual shipping cost per WooCommerce order.
-- Provenance/audit history and clear split between customer-paid shipping, entered cost and variance.
-- Basic date-filtered summary: order count, shipping charged, recorded costs, known variance and coverage rate.
+- Source and audit history, separating customer-paid shipping, recorded cost and variance.
+- Date-filtered summary with order count, shipping charged, recorded costs, known variance and coverage rate.
 - Basic filters and CSV export.
-- Optional WooCommerce Shipping label-cost import only after the plugin can verify and safely read the purchase amount.
+- Optional WooCommerce Shipping label-cost import only after its available order data path is verified.
 
 ### Pro
 
-- Generic courier invoice CSV upload, field mapping, preview and validation.
-- Exact-ID matching (order number, tracking/AWB or provider shipment ID) and a reviewable exception queue.
-- Duplicate, unmatched, ambiguous and mismatch handling with auditable corrections.
-- Shipping variance reports by method and WooCommerce zone where data exists.
-- One or two optional API adapters chosen after beta merchant usage and account-level endpoint verification. First sync shipment identifiers/booked label amounts; final billing automation only if invoice-final data is documented and accessible.
-- Pro remains useful without API access because CSV is the cross-provider reconciliation path.
+- Generic courier invoice CSV upload, column mapping, preview and validation.
+- Exact-ID matching (order number, tracking/AWB, or provider shipment ID) with visible match basis.
+- Reviewable exception queue for duplicate, unmatched, ambiguous and mismatched rows.
+- Shipping variance reports by method and WooCommerce zone where source data exists.
+- One or two API adapters chosen after beta merchant usage and account-level endpoint verification. Initial API sync may record shipment identifiers/booked label amounts; final billing automation requires verified invoice-final data access.
+- Pro remains useful without a carrier API because CSV is the cross-provider final-cost path.
 
 ### Defer until evidence supports them
 
 - Integrating every carrier, rate shopping, label purchase, tracking portal or fulfilment automation.
 - Scheduled alerts, period comparisons, PDF/email reports and rate-change simulator.
-- Fine-grained per-parcel costing if the first merchant workflows can reconcile invoices at order-total level.
-- Any AI service or customer/order data sent to an LLM.
+- Fine-grained per-parcel costing if order-total reconciliation satisfies first user workflows.
+- Runtime AI analysis or sending customer/order data to LLMs.
 
-This reduces overlap with broad profit plugins while still enabling future API automation. Any Free/Pro pricing or boundaries require merchant validation and Marketplace review.
+Pricing and final Free/Pro entitlement await merchant validation and Marketplace review.
 
-## Feature ID policy
+## Metric definitions
 
-Every distinct capability gets one stable ID. This is the single options bank; search it before adding settings. A new screen must reuse existing capability/settings rather than duplicating them.
+These definitions are the single reporting contract; use them across dashboard, order detail, exports and help text.
 
-| ID | Capability | Free / Pro | Priority | Acceptance direction |
-|---|---|---|---|---|
-| SCM-ORD-01 | Order-level actual shipping cost field | Free | MVP | Store through WooCommerce order CRUD; display charged amount, selected cost, evidence type and variance. |
-| SCM-ORD-02 | Cost source and audit history | Free | MVP | Store source, timestamp and actor where available; preserve prior decisions. |
-| SCM-ORD-03 | Parcel-level cost components | Pro | Later | Support multiple parcels and labelled components (base, fuel, COD, insurance, return); order total reconciles. |
-| SCM-IMP-01 | CSV upload with column mapping | Pro | MVP | Preview/map/validate before commit; show row errors and import totals. |
-| SCM-IMP-02 | Match invoice rows to orders | Pro | MVP | Prefer configured exact order/AWB/tracking IDs; show match basis. |
-| SCM-IMP-03 | Reconciliation exception queue | Pro | MVP | Handle unmatched, duplicate, ambiguous and amount mismatch; resolve/skip actions are audited. |
-| SCM-IMP-04 | Import template profiles | Pro | Later | Save reusable field/date/amount/currency mappings per source. |
-| SCM-REP-01 | Basic period summary | Free | MVP | Show order count, shipping charged, recorded actual cost, known variance and coverage. |
-| SCM-REP-02 | Shipping loss breakdowns | Pro | MVP | Break down by method and zone where source data supports; disclose missing/incomplete data. |
-| SCM-REP-03 | Trend and period comparison | Pro | Later | Compare equivalent periods under consistent filters and metric definitions. |
-| SCM-REP-04 | CSV report export | Free (basic); Pro (filtered advanced) | MVP | Export only filtered fields/rows; protect against spreadsheet formula injection. |
-| SCM-REP-05 | Print/PDF report | Pro | Later | Include date range, filters, metric definitions and generated timestamp. |
-| SCM-ALR-01 | Variance threshold alerts | Pro | Later | Configurable threshold/frequency; require actual/eligible data; deduplicate notices. |
-| SCM-SIM-01 | Shipping-rate what-if simulator | Pro | Later | Run explicit assumptions on historical data; label estimate; never alter live shipping rates. |
-| SCM-INT-01 | WooCommerce Shipping cost import | Free | Conditional MVP | Import purchase evidence only if supported API/data path is verified; label as booked, not invoice-final. |
-| SCM-INT-02 | ShipStation/other provider adapters | Pro | Later | Add only after API semantics, permissions, demand and maintenance review. |
-| SCM-INT-03 | WPML / Polylang compatibility | Free | MVP | Translate plugin-owned strings; preserve underlying numeric records. |
-| SCM-INT-04 | Carrier/platform API adapter framework | Pro | MVP foundation | Shared connection, capability, sync, normalization, error and disconnect contract. |
-| SCM-INT-05 | Automatic API sync controls | Pro | MVP foundation | Manual/scheduled sync; signed webhooks only where provider supports; status, retries and idempotency. |
-| SCM-INT-06 | API connection/security management | Pro | MVP foundation | Least scopes, protected credentials, masked values, disconnect/revoke path, redacted logs, data disclosure. |
-| SCM-INT-07 | API evidence classification | Pro | MVP | Distinguish quote, booked/label, invoice-final, adjustment/refund and unknown; never silently promote quote to actual. |
-| SCM-SET-01 | Retention and uninstall controls | Free | MVP | Explain retained order data; purge only with explicit setting/choice. |
-| SCM-SET-02 | Permissions, privacy and diagnostics | Free | MVP | Least privilege, opt-in diagnostics, clear external-service disclosures and actionable errors. |
+| Metric | Definition for MVP | Guardrail |
+|---|---|---|
+| Customer-paid shipping | Sum of WooCommerce shipping line amounts, excluding shipping tax by default, less refunds explicitly allocated to shipping. | Show shipping tax separately if available. Never silently mix tax-inclusive and tax-exclusive amounts. |
+| Recorded fulfilment cost | Sum of current selected cost evidence for eligible orders, using the source's recorded currency and configured tax treatment. | Keep quote, booked/label, invoice-final, adjustment and merchant-confirmed classes distinct. Only invoice-final or explicitly merchant-confirmed evidence counts as “actual/confirmed” in the primary KPI. |
+| Shipping variance | Comparable customer-paid shipping minus comparable selected fulfilment cost. Positive is surplus; negative is deficit. | Suppress the numeric comparison or flag “not comparable” if currency/tax basis differs or evidence is only an estimate. |
+| Cost coverage | Eligible orders with invoice-final or merchant-confirmed cost ÷ all eligible orders in the selected report period. | Show numerator and denominator; missing cost is unknown, never zero. Booked/estimated evidence can have a separate coverage count. |
+| Eligible order | Non-virtual order with a shipping line and a status included by the report status filter; default statuses are Processing and Completed. | Cancelled, Failed, Draft and Pending orders are excluded by default. Merchant-selected custom statuses are shown explicitly. |
+| Report period | Order creation date in the store timezone for MVP. | State the selected date range/timezone. Shipment-date reporting is later unless a reliable shipment date exists. |
+| Currency aggregation | Calculate within each order currency and show separate currency groups. | No implicit FX conversion or cross-currency sum in MVP. |
+| Zone breakdown | Group by a shipping-zone snapshot/source reliably available for that order. | If historical zone cannot be established, use “Zone unavailable”; never infer from a current zone rule and present it as historical fact. |
+| Credit/refund | Preserve original courier charge and attach a separate linked negative adjustment/credit; shipping refunds reduce customer-paid shipping only when the refund is allocated to a shipping line. | Do not delete or overwrite the source charge. |
 
-### Provider priority
+## MVP acceptance criteria
 
-Public desk research shortlist: UPS, FedEx, DHL Express; Aramex, Emirates Post and iMile for GCC; TCS, PostEx and Leopards for Pakistan/South Asia; plus WooCommerce Shipping and ShipStation as existing shipping platforms. See [carrier/API evidence matrix](INTEGRATION-MATRIX.md).
+### SCM-ORD-01 — order cost field
 
-This is not a promised connector roadmap. Select the first one or two from beta usage and account-level proof of shipment identifiers and cost fields. Public docs currently establish many rating/shipping/tracking features but do not establish universally accessible final invoice feeds.
+- On an eligible WooCommerce order, an authorized user can save or edit a non-negative order-level cost, currency and evidence class.
+- Order detail displays customer-paid shipping, selected cost, variance, source and comparison status.
+- The display distinguishes booked/estimated from invoice-final or merchant-confirmed amounts.
+- Values are read/written through WooCommerce order CRUD APIs.
+
+### SCM-ORD-02 — provenance and audit
+
+- Every create/edit/replace action stores timestamp, actor where available, source and before/after value summary.
+- Source invoice rows are not silently modified when a selected order cost changes.
+- Audit records avoid unnecessary customer personal data.
+
+### SCM-IMP-01/02 — CSV import and exact matching
+
+- User can upload a supported CSV, map required columns, select date/decimal/currency treatment, preview parsed rows and errors, then explicitly commit.
+- Import supports an idempotency key derived from source batch/row identity where possible; repeat upload is detected and previewed rather than silently double-counted.
+- Exact configured order/tracking/AWB/provider shipment IDs are tried first. Fallback matching is off by default.
+- Every match exposes its identifier and source row. Ambiguous rows never auto-commit.
+- File size/row limits are shown before processing; long imports are bounded/background work.
+
+### SCM-IMP-03 — exception review
+
+- Each source row has exactly one reconciliation state: Matched, Unmatched, Duplicate, Ambiguous, Amount mismatch, Credit/Refund, or Invalid.
+- User can review, link, skip, or correct a row; actions create audit history and retain original source evidence.
+- Partial failures show counts and row-specific reasons, with safe retry.
+
+### SCM-REP-01/02 — reports
+
+- Dashboard/report reuses shared date, status and currency filters rather than implementing duplicate filter settings.
+- All totals expose cost coverage and separate confirmed from provisional evidence.
+- Reports group only by dimensions with valid historical data; unavailable data is labelled.
+- Tables are server-paginated and export respects the visible filters.
+- CSV output protects formula-leading cells.
+
+### SCM-INT-04/05/06/07 — API foundation
+
+- Every adapter declares supported regions, authentication/scopes, shipment IDs, quote/booked/invoice/adjustment evidence, webhook/polling capability and known gaps.
+- Sync is optional and reports last success, records processed, exceptions and actionable errors.
+- Retries are bounded/idempotent; expired credentials and rate limits do not create duplicate costs.
+- Secrets never appear in UI after saving or in logs. Disconnect/revoke guidance and provider data disclosure are available.
+- A quote never becomes actual cost automatically. The user can see and review evidence class before it affects confirmed-cost reports.
+
+## Single-home options/settings map
+
+These are the only planned homes for configurable options. Reuse shared settings in screens rather than adding duplicate copies.
+
+| Setting group | Canonical home | Contains | Do not duplicate in |
+|---|---|---|---|
+| Report filters | Shared report-filter model | Date range, order status, currency, shipping method, zone if available | Separate dashboard/exports/date widgets with conflicting defaults |
+| Manual order cost | WooCommerce order detail | Amount, currency, evidence class, source/note | Global settings or another per-order metabox |
+| Import profile | Imports | Column map, date/decimal format, currency and source identifier | Each report or unrelated settings tab |
+| Provider connection | Integrations → provider | Auth, account label, scopes/status, connection test | Global options, order screen secret fields |
+| Sync policy | Per provider connection, with one documented default | Manual/schedule/webhook mode, cadence/window, eligible statuses | A separate frequency setting per dashboard/report |
+| Variance alerts | Alerts (later) | Threshold, frequency, recipient | Dashboard filter or integration settings |
+| Retention/uninstall | Data & privacy | Retain/purge behavior, diagnostics opt-in | Import, integration and order settings copies |
+| Free/Pro entitlement | Licensing | License state and feature access | Separate feature toggles that contradict license state |
+
+## Feature ID policy and deduplication
+
+Every distinct capability gets one stable ID. This table is the canonical options bank; check it before adding a new feature. A new screen must reuse existing capability/settings rather than duplicate them.
+
+| ID | Capability | Free / Pro | Priority |
+|---|---|---|---|
+| SCM-ORD-01 | Order-level actual shipping cost field | Free | MVP |
+| SCM-ORD-02 | Cost source and audit history | Free | MVP |
+| SCM-ORD-03 | Parcel-level cost components | Pro | Later |
+| SCM-IMP-01 | CSV upload with column mapping | Pro | MVP |
+| SCM-IMP-02 | Match invoice rows to orders | Pro | MVP |
+| SCM-IMP-03 | Reconciliation exception queue | Pro | MVP |
+| SCM-IMP-04 | Reusable import template profiles | Pro | Later |
+| SCM-REP-01 | Basic period summary | Free | MVP |
+| SCM-REP-02 | Shipping loss breakdowns by available method/zone data | Pro | MVP |
+| SCM-REP-03 | Trend and period comparison | Pro | Later |
+| SCM-REP-04 | CSV report export | Free basic / Pro filtered | MVP |
+| SCM-REP-05 | Print/PDF report | Pro | Later |
+| SCM-ALR-01 | Variance threshold alerts | Pro | Later |
+| SCM-SIM-01 | Shipping-rate what-if simulator | Pro | Later |
+| SCM-INT-01 | WooCommerce Shipping cost import | Free | Conditional MVP; data path verification required |
+| SCM-INT-02 | ShipStation/other provider adapters | Pro | Later; one or two selected after validation |
+| SCM-INT-03 | WPML / Polylang compatibility | Free | MVP |
+| SCM-INT-04 | Carrier/platform API adapter framework | Pro | MVP foundation |
+| SCM-INT-05 | Automatic API sync controls | Pro | MVP foundation |
+| SCM-INT-06 | API connection/security management | Pro | MVP foundation |
+| SCM-INT-07 | API evidence classification | Pro | MVP |
+| SCM-SET-01 | Retention and uninstall controls | Free | MVP |
+| SCM-SET-02 | Permissions, privacy and diagnostics | Free | MVP |
+
+No second option is defined elsewhere: acceptance criteria describe behavior of these IDs; settings map defines their single UI home.
+
+## Provider priority
+
+Public desk research shortlist: UPS, FedEx, DHL Express; Aramex, Emirates Post and iMile for GCC; TCS, PostEx and Leopards for Pakistan/South Asia; plus WooCommerce Shipping and ShipStation as existing platforms. See [carrier/API evidence matrix](INTEGRATION-MATRIX.md). Select one or two API adapters only after beta usage and account-level proof of IDs/cost fields.
 
 ## Platform and compatibility baseline
 
-Initial policy based on official recommendations checked 2026-11-06. Recheck at release because platform support windows change.
+Initial policy based on official recommendations checked 2026-11-06. Recheck at release.
 
 | Platform | Initial baseline | Compatibility policy |
 |---|---|---|
@@ -100,7 +176,7 @@ Initial policy based on official recommendations checked 2026-11-06. Recheck at 
 | Polylang | Optional compatibility target | Translate plugin-owned strings; test Polylang for WooCommerce only if installed; do not require it. |
 | Memory | 256 MB WooCommerce recommendation | Bounded imports/jobs; document file-size limits and avoid unbounded data loads. |
 
-WPML and Polylang are compatibility targets, not plugin dependencies. They must not duplicate settings or change numeric costs based on display language. Currency conversion is out of scope unless designed as its own feature.
+WPML and Polylang are compatibility targets, not plugin dependencies. Currency conversion is out of scope unless designed as its own feature.
 
 Official references:
 - [WordPress requirements](https://wordpress.org/about/requirements/)
@@ -120,8 +196,8 @@ Official references:
 
 ## Product acceptance rules
 
-1. Define metric denominator, currency, statuses, refunds and missing-data behavior.
-2. Actual cost must come from manual confirmation, final invoice evidence, or be clearly identified as booked/estimated.
-3. Imports are previewable, auditable, idempotent where possible and correctable.
-4. Tables are paginated/server-filtered; React never loads the entire store history.
-5. Missing costs are coverage gaps, never silently treated as zero.
+1. Missing costs are coverage gaps, never silently treated as zero.
+2. Imported values preserve source and evidence class.
+3. Use matching identifiers only according to the documented priority; ambiguity requires review.
+4. Reuse one canonical setting per options map.
+5. No API connector is listed as automatic final-cost integration until provider/account evidence supports that claim.
