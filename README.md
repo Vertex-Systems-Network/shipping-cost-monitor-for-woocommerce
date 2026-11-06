@@ -4,8 +4,8 @@
 
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
-> **Project status:** Pre-development planning  
-> **Current overall progress:** `■■■■■░░░░░ 50%` — desk research and four planning phases have draft deliverables; product, UX and architecture reviews remain open; no plugin code or CLI.  
+> **Project status:** Initial implementation in progress  
+> **Current overall progress:** `■■■■■░░░░░ 52%` — four planning phases have reviewable deliverables; the first Phase 5 bootstrap/admin-shell slice is in place; implementation is 17%; no CLI or build toolchain.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -17,38 +17,50 @@ Record what customers paid for shipping and what merchants paid to fulfil shipme
 
 ## Roadmap
 
-Dates are proposed targets. Completed dates show actual document-work completion; progress shows phase deliverables, not calendar time. Phase 3 is a written UX specification, not an interactive React prototype. Phase 4 is a proposed decision/readiness package, not an approval. No CLI or build system has been added.
+Dates are proposed targets. Completed dates show actual document-work completion; progress shows phase deliverables, not calendar time. Phase 3 is a written UX specification, not an interactive React prototype. Phase 4 decisions authorize the initial manual/no-API foundation, while credential security and CSV retention decisions remain open. No CLI, package manager or build system has been added.
 
 | Phase | Status | Progress | Start | Target end | Completed | Exit outcome |
 |---|---|---:|---|---|---|---|
 | 1. Competitor and public API desk research | Complete (desk review) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-13 | 2026-11-06 | Competitor overlap and region-aware provider evidence matrix |
-| 2. Requirements, options bank and MVP proposal | Complete (decision-ready draft; Gate A pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-20 | 2026-11-06 | Deduplicated feature IDs, metric contract, settings map and testable MVP criteria documented |
-| 3. UX flows and React admin specification | Complete (review draft; Gate B pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
-| 4. Architecture and pre-development readiness | Complete (proposed package; Gate C pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-12-04 | 2026-11-06 | Storage, money/evidence model, imports, adapters/auth, security, compatibility and readiness decisions documented |
-| 5. Core plugin implementation | Not started; gates required | `░░░░░░░░░░ 0%` | 2026-12-07 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
+| 2. Requirements, options bank and MVP proposal | MVP boundary accepted; pricing/merchant validation pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-20 | 2026-11-06 | Deduplicated feature IDs, metric contract, settings map and testable MVP criteria documented |
+| 3. UX flows and React admin specification | UX baseline approved; visual QA pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
+| 4. Architecture and pre-development readiness | Initial manual/no-API boundary accepted; security/retention pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-12-04 | 2026-11-06 | Storage, money/evidence model, imports, adapters/auth, security, compatibility and readiness decisions documented |
+| 5. Core plugin implementation | In progress (bootstrap/admin shell) | `█▌░░░░░░░░ 17%` | 2026-11-06 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
 | 6. Reconciliation, API sync and Pro workflows | Not started | `░░░░░░░░░░ 0%` | 2027-01-18 | 2027-02-05 | — | Provider adapters, exception queue, alerts and scenario analysis |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Documentation, packaging, review checklist and submission candidate |
 
-**Overall planning progress:** `■■■■■░░░░░ 50%` (four of eight planning phases have draft deliverables; implementation remains 0%).
+**Overall project progress:** `■■■■■░░░░░ 52%` (four phases complete; one of six planned Phase 5 work packages complete). Phase 5 implementation progress is 17%; no tests or compatibility checks have been run.
 
 ## Phase 2 decision pack
 
 Recommended first release: Free manual order-cost ledger, provenance, basic summary and CSV export; Pro universal invoice CSV mapping/matching, exception review and shipping loss reports. One or two API adapters may be selected only after account-level evidence. Read the exact metric contract, acceptance criteria and single-home settings map in [Product requirements](docs/PRODUCT-SPEC.md).
 
-**Still pending at Gate A:** product-owner review of the proposed scope and future commercial Free/Pro boundary. This is not represented as approved or customer-validated.
+**MVP boundary accepted:** manual ledger/basic reporting/CSV export in Free and invoice reconciliation in Pro. Pricing and merchant validation remain unapproved; invoice samples are needed before CSV parsing is finalized.
 
 ## Phase 3 UX specification
 
 [UX flows and React admin interface specification](docs/UX-FLOWS.md) defines navigation, dashboard, cost records, import wizard, exception queue, integrations, reports, settings and screen states. It is a reviewable UX document; no interactive prototype/code was created.
 
-**Still pending at Gate B:** owner review of the flows. React implementation/toolchain remains deferred until the relevant gates.
+**UX baseline approved:** the documented flows guide implementation. The initial dashboard shell uses WordPress-bundled React through `wp.element`; detailed visual review and functional states remain in progress.
 
 ## Phase 4 architecture and readiness pack
 
 [Architecture decisions](docs/ARCHITECTURE-DECISIONS.md) records proposed storage boundaries, money/evidence handling, matching/import lifecycle, jobs, adapters, credential security, HPOS/language compatibility, performance and privacy controls. [Pre-development readiness](docs/PREDEVELOPMENT-READINESS.md) lists the remaining decisions and gates.
 
-**Still pending at Gate C:** approve the schema direction, credential key strategy and retention/uninstall behavior. A dated [compatibility baseline proposal](docs/COMPATIBILITY-BASELINE.md) recommends a PHP/WP/WC/database baseline and WPML/Polylang verification matrix; it is not a plugin support claim. See the [owner decision register](docs/OWNER-DECISION-REGISTER.md) for the concrete A–D choices and recommendations. The proposed controls are not implementation or security-test evidence. No provider account/API access or compatibility test was performed.
+**Initial implementation boundary accepted:** WooCommerce CRUD for order data; manual cost entry first; no carrier API credentials. Credential security must be reviewed before integrations, and anonymized invoices plus retention policy are needed before CSV upload/persistence. The dated [compatibility baseline proposal](docs/COMPATIBILITY-BASELINE.md) is not a support claim. See the [owner decision register](docs/OWNER-DECISION-REGISTER.md).
+
+## Phase 5 implementation — first slice
+
+The plugin bootstrap and React admin shell are in place:
+
+- [Plugin entry point](wpessential-shipping-cost-monitor.php)
+- [Plugin coordinator](includes/Plugin.php)
+- [WooCommerce admin page](includes/Admin/Page.php)
+- [React dashboard shell](assets/js/admin.js)
+- [Admin styles](assets/css/admin.css)
+
+This slice registers a WooCommerce submenu and renders an honest empty dashboard with confirmed-cost metric labels. It does not yet read orders, save costs, calculate reports, import CSVs or connect couriers. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress. PHP/runtime, UI, HPOS, WPML and Polylang compatibility still need verification.
 
 ## Planning documents
 
