@@ -81,7 +81,7 @@ final class AdapterRegistry {
 			} catch ( \Throwable $error ) {
 				$status[] = array(
 					'id'           => $id,
-					'label'        => sanitize_text_field( $adapter->get_label() ),
+					'label'        => $id,
 					'regions'      => array(),
 					'capabilities' => array(),
 					'state'        => 'unavailable',
