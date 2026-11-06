@@ -18,13 +18,13 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 |---|---|---|---|
 | AI-01 | Competitor feature matrix from primary listings/docs | Complete (desk review) | Overlaps and plausible differentiation recorded in MARKET-RESEARCH.md; no exclusivity claim |
 | AI-02 | Validate merchant workflow and invoice CSV examples | Needs merchant inputs | Three anonymized invoice schemas and edge cases; request files only with sensitive data removed |
-| AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Draft ready; product-owner decision pending | Proposed MVP is in PRODUCT-SPEC.md; owner decision and merchant validation remain |
-| AI-04 | Define metrics: shipping charged, actual/confirmed cost, variance, coverage, refunds, currency | In progress | Metric glossary with worked examples and consistent report rules |
+| AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Decision pack ready; owner approval pending | Decision-ready MVP, acceptance criteria and settings map in PRODUCT-SPEC.md |
+| AI-04 | Define metrics: charged, actual/confirmed cost, variance, coverage, refunds, currency | Complete (proposed metric contract) | Metric glossary, comparable-cost rules and examples/guardrails in PRODUCT-SPEC.md |
 | AI-05 | Decide storage for cost snapshots, charge rows and audit history | Planned | Schema decision record with volume/query/retention rationale |
 | AI-06 | Map React admin screens and all states | Planned | Screen flows/wireframes for dashboard, imports, exceptions, connectors and settings |
 | AI-07 | Platform compatibility baseline | Drafted; release versions need verification | PHP/WP/WC/database baseline drafted; verify current and previous supported versions during release QA |
 | AI-08 | Security/privacy and import/API threat model | Planned | Capabilities, credential strategy, provider scopes, CSV protection, retention and disclosures |
-| AI-09 | Define reconciliation matching and review controls | Drafted at concept level | Examples and acceptance criteria for duplicate, split, return, credit, reship and ambiguous rows |
+| AI-09 | Define reconciliation matching and review controls | Complete (proposed MVP rules) | Exact-ID precedence, exception states, ambiguity/manual review and audit behavior in PRODUCT-SPEC.md |
 | AI-10 | Define reporting/performance/background jobs | Planned | Query plan, pagination/caching and data-volume scenarios |
 | AI-11 | Marketplace readiness checklist | Planned | Metadata, license, docs, support and compatibility evidence |
 | AI-12 | Pre-development exit review | Planned | Product, UX, architecture, compatibility and toolchain gates reviewed |
@@ -42,8 +42,12 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Human approval gates
 
-- **Gate A — Product:** approve MVP, provider priority and Free/Pro packaging.
+- **Gate A — Product:** review and approve MVP, provider priority and Free/Pro packaging. No customer usage or owner approval is claimed until supplied.
 - **Gate B — UX:** approve React admin flows.
 - **Gate C — Architecture:** approve schema, API adapter/auth, imports, security and compatibility decisions.
 - **Gate D — Toolchain:** only after Gates A–C; decide build tooling. CLI remains prohibited until explicitly approved.
 - **Gate E — Release:** verify compatibility, provider API terms/access, privacy, docs and Marketplace requirements.
+
+## Current handoff
+
+Phase 2 requirements/options work is ready for owner review. Implementation remains prohibited until the relevant human gates and the separate toolchain gate authorize it.
