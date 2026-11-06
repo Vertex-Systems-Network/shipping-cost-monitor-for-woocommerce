@@ -10,37 +10,38 @@ namespace WPEssential\ShippingCostMonitor\Admin;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Builds a recent-order summary through WooCommerce order queries.
+ * Builds bounded, paginated reports through WooCommerce order queries.
  */
 final class Summary {
 	/**
-	 * Build a rolling 30-day dashboard snapshot.
+	 * Build the report snapshot for a selected date range.
 	 *
+	 * @param string|null $requested_start Requested inclusive start date.
+	 * @param string|null $requested_end   Requested inclusive end date.
 	 * @return array<string,mixed>
 	 */
-	public static function build(): array {
-		$now       = current_datetime();
-		$start     = $now->modify( '-29 days' )->format( 'Y-m-d' );
-		$end       = current_datetime()->format( 'Y-m-d' );
-		$page      = 1;
+	public static function build( ?string $requested_start = null, ?string $requested_end = null ): array {
+		$period = self::normalize_period( $requested_start, $requested_end );
+		$page = 1;
 		$max_pages = 1;
-		$groups    = array();
-		$orders    = 0;
-		$covered   = 0;
+		$groups = array();
+		$orders = 0;
+		$covered = 0;
 		$mismatched_currency = 0;
+		$comparable_orders = 0;
 
 		do {
 			$result = wc_get_orders(
 				array(
-					'type'       => 'shop_order',
-					'status'     => array( 'processing', 'completed' ),
-					'date_created' => $start . '...' . $end,
-					'limit'      => 100,
-					'paged'      => $page,
-					'paginate'   => true,
-					'return'     => 'objects',
-					'orderby'    => 'date',
-					'order'      => 'DESC',
+					'type'         => 'shop_order',
+					'status'       => array( 'processing', 'completed' ),
+					'date_created' => $period['start'] . '...' . $period['end'],
+					'limit'        => 100,
+					'paged'        => $page,
+					'paginate'     => true,
+					'return'       => 'objects',
+					'orderby'      => 'date',
+					'order'        => 'DESC',
 				)
 			);
 
@@ -62,18 +63,23 @@ final class Summary {
 
 				if ( ! isset( $groups[ $order_currency ] ) ) {
 					$groups[ $order_currency ] = array(
-						'currency'          => $order_currency,
-						'orders'            => 0,
-						'charged_minor'     => 0,
-						'confirmed_minor'   => 0,
-						'confirmed_orders'  => 0,
-						'currency_mismatch' => 0,
+						'currency'                => $order_currency,
+						'orders'                  => 0,
+						'charged_minor'           => 0,
+						'confirmed_minor'         => 0,
+						'confirmed_orders'        => 0,
+						'currency_mismatch'       => 0,
+						'comparable_charged_minor'=> 0,
+						'comparable_cost_minor'   => 0,
+						'variance_minor'          => 0,
+						'comparable_orders'       => 0,
 					);
 				}
 
 				++$orders;
 				++$groups[ $order_currency ]['orders'];
-				$groups[ $order_currency ]['charged_minor'] += wc_add_number_precision( (float) $order->get_shipping_total() );
+				$shipping_minor = wc_add_number_precision( (float) $order->get_shipping_total() );
+				$groups[ $order_currency ]['charged_minor'] += $shipping_minor;
 
 				$evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
 				if ( ! in_array( $evidence, array( 'invoice_final', 'merchant_confirmed' ), true ) ) {
@@ -94,9 +100,21 @@ final class Summary {
 					continue;
 				}
 
-				$groups[ $order_currency ]['confirmed_minor'] += wc_add_number_precision( (float) $cost_amount );
+				$cost_minor = wc_add_number_precision( (float) $cost_amount );
+				$groups[ $order_currency ]['confirmed_minor'] += $cost_minor;
 				++$groups[ $order_currency ]['confirmed_orders'];
 				++$covered;
+
+				$tax_basis = (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true );
+				if ( 'exclusive' !== $tax_basis ) {
+					continue;
+				}
+
+				$groups[ $order_currency ]['comparable_charged_minor'] += $shipping_minor;
+				$groups[ $order_currency ]['comparable_cost_minor'] += $cost_minor;
+				$groups[ $order_currency ]['variance_minor'] += $shipping_minor - $cost_minor;
+				++$groups[ $order_currency ]['comparable_orders'];
+				++$comparable_orders;
 			}
 
 			++$page;
@@ -106,26 +124,85 @@ final class Summary {
 		foreach ( $groups as &$group ) {
 			$group['shipping_charged'] = wc_format_decimal( wc_remove_number_precision( $group['charged_minor'] ), $precision );
 			$group['confirmed_cost']   = wc_format_decimal( wc_remove_number_precision( $group['confirmed_minor'] ), $precision );
-			unset( $group['charged_minor'], $group['confirmed_minor'] );
+			$group['comparable_shipping_charged'] = wc_format_decimal( wc_remove_number_precision( $group['comparable_charged_minor'] ), $precision );
+			$group['comparable_confirmed_cost']   = wc_format_decimal( wc_remove_number_precision( $group['comparable_cost_minor'] ), $precision );
+			$group['variance'] = wc_format_decimal( wc_remove_number_precision( $group['variance_minor'] ), $precision );
+			unset(
+				$group['charged_minor'],
+				$group['confirmed_minor'],
+				$group['comparable_charged_minor'],
+				$group['comparable_cost_minor'],
+				$group['variance_minor']
+			);
 		}
 		unset( $group );
 
 		ksort( $groups );
 
 		return array(
-			'period'                    => array(
-				'start' => $start,
-				'end'   => $end,
-				'days'  => 30,
+			'period' => array(
+				'start' => $period['start'],
+				'end'   => $period['end'],
+				'days'  => $period['days'],
 			),
-			'eligible_orders'           => $orders,
-			'confirmed_cost_orders'     => $covered,
-			'coverage_percent'          => $orders > 0 ? round( ( $covered / $orders ) * 100, 1 ) : 0,
-			'currency_mismatch_orders'  => $mismatched_currency,
-			'groups'                    => array_values( $groups ),
-			'variance_available'        => false,
-			'variance_unavailable_reason' => __( 'Shipping tax treatment is not recorded yet.', 'wpessential-shipping-cost-monitor' ),
-			'refunds_adjusted'          => false,
+			'period_reset' => $period['reset'],
+			'eligible_orders' => $orders,
+			'confirmed_cost_orders' => $covered,
+			'coverage_percent' => $orders > 0 ? round( ( $covered / $orders ) * 100, 1 ) : 0,
+			'currency_mismatch_orders' => $mismatched_currency,
+			'comparable_orders' => $comparable_orders,
+			'groups' => array_values( $groups ),
+			'variance_available' => $comparable_orders > 0,
+			'refunds_adjusted' => false,
 		);
+	}
+
+	/**
+	 * Normalize a valid report range; otherwise return the default 30-day window.
+	 *
+	 * @param string|null $requested_start Requested inclusive start date.
+	 * @param string|null $requested_end   Requested inclusive end date.
+	 * @return array{start:string,end:string,days:int,reset:bool}
+	 */
+	public static function normalize_period( ?string $requested_start = null, ?string $requested_end = null ): array {
+		$valid_start = self::valid_date( $requested_start );
+		$valid_end   = self::valid_date( $requested_end );
+
+		if ( $valid_start && $valid_end && $requested_start <= $requested_end ) {
+			$start = new \DateTimeImmutable( $requested_start, wp_timezone() );
+			$end   = new \DateTimeImmutable( $requested_end, wp_timezone() );
+			$days  = (int) $start->diff( $end )->days + 1;
+
+			if ( $days <= 366 ) {
+				return array(
+					'start' => $requested_start,
+					'end'   => $requested_end,
+					'days'  => $days,
+					'reset' => false,
+				);
+			}
+		}
+
+		$now = current_datetime();
+		return array(
+			'start' => $now->modify( '-29 days' )->format( 'Y-m-d' ),
+			'end'   => $now->format( 'Y-m-d' ),
+			'days'  => 30,
+			'reset' => null !== $requested_start || null !== $requested_end,
+		);
+	}
+
+	/**
+	 * Validate a calendar date without accepting parser normalization.
+	 *
+	 * @param string|null $value Date in YYYY-MM-DD form.
+	 */
+	private static function valid_date( ?string $value ): bool {
+		if ( null === $value || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ) {
+			return false;
+		}
+
+		$date = \DateTimeImmutable::createFromFormat( '!Y-m-d', $value, wp_timezone() );
+		return $date instanceof \DateTimeImmutable && $date->format( 'Y-m-d' ) === $value;
 	}
 }
