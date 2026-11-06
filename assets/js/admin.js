@@ -117,6 +117,7 @@
 		const [ committing, setCommitting ] = useState( false );
 		const [ commitError, setCommitError ] = useState( '' );
 		const [ rowFilter, setRowFilter ] = useState( 'all' );
+		const [ sourceFormat, setSourceFormat ] = useState( 'generic' );
 
 		useEffect( function () {
 			if ( ! rawCsv ) {
@@ -198,6 +199,7 @@
 		}
 
 		function clearPreview() {
+			setSourceFormat( 'generic' );
 			setRawCsv( '' );
 			setFileName( '' );
 			setParsed( null );
@@ -209,13 +211,28 @@
 			setCommitError( '' );
 		}
 
+		function hasRefundStatus( item ) {
+			if ( ! parsed ) {
+				return false;
+			}
+			const refundIndex = parsed.headers.findIndex( function ( header ) {
+				const normalized = header.toLowerCase().replace( /[^a-z0-9]/g, '' );
+				return [ 'refundstatus', 'refundstate', 'labelrefundstatus', 'refund' ].indexOf( normalized ) !== -1;
+			} );
+			if ( refundIndex < 0 ) {
+				return false;
+			}
+			const value = String( item.values[ refundIndex ] || '' ).toLowerCase().replace( /[^a-z0-9]/g, '' );
+			return '' !== value && [ 'none', 'norefund', 'notrefunded', 'no', 'false', 'na' ].indexOf( value ) === -1;
+		}
+
 		const validRows = parsed && mapping.reference !== '' && mapping.amount !== '' && mapping.currency !== ''
 			? parsed.rows.filter( function ( item ) {
 				const reference = item.values[ Number( mapping.reference ) ] || '';
 				const amount = parseInvoiceAmount( item.values[ Number( mapping.amount ) ], decimalMark );
 				const currency = '__order_currency__' === mapping.currency ? '' : String( item.values[ Number( mapping.currency ) ] || '' ).trim();
 				const currencyValid = '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency );
-				return '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid;
+				return '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid && ! hasRefundStatus( item );
 			} )
 			: [];
 
@@ -234,7 +251,8 @@
 			const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
 			const currency = '__order_currency__' === mapping.currency ? '' : ( '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '' );
 			const currencyValid = '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency );
-			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid;
+			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid && ! hasRefundStatus( item );
+			if ( hasRefundStatus( item ) ) { return 'refund_review'; }
 			if ( commitResults[ item.number ] ) { return 'saved'; }
 			if ( matchResults[ item.number ] ) {
 				const match = matchResults[ item.number ];
@@ -248,7 +266,7 @@
 		const previewRows = parsed
 			? parsed.rows.slice( 0, Object.keys( matchResults ).length > 0 ? 50 : 10 ).filter( function ( item ) {
 				if ( 'all' === rowFilter ) { return true; }
-				if ( 'needs_review' === rowFilter ) { return [ 'exception', 'invalid', 'unmatched' ].indexOf( getRowStatus( item ) ) !== -1; }
+				if ( 'needs_review' === rowFilter ) { return [ 'exception', 'invalid', 'unmatched', 'currency_mismatch', 'refund_review' ].indexOf( getRowStatus( item ) ) !== -1; }
 				return getRowStatus( item ) === rowFilter;
 			} )
 			: [];
@@ -452,7 +470,7 @@
 					fieldSelect( __( 'Charge amount', 'wpessential-shipping-cost-monitor' ), 'amount' ),
 					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
 				),
-				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency (or inferred order currency). Negative rows require credit review and are excluded.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency (or inferred order currency). Negative rows and rows with a refund status require review and are excluded.', 'wpessential-shipping-cost-monitor' ) ),
 				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Show rows', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: rowFilter, onChange: function ( event ) { setRowFilter( event.target.value ); } }, h( 'option', { value: 'all' }, __( 'All preview rows', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'needs_review' }, __( 'Needs review', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'ready', }, __( 'Ready to save', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'saved', }, __( 'Saved', 'wpessential-shipping-cost-monitor' ) ) ),
 				h( 'div', { className: 'wpe-scm-import-actions' },
 					h( 'button', { type: 'button', className: 'button', onClick: matchReferences, disabled: matching || validRows.length < 1 }, matching ? __( 'Matching…', 'wpessential-shipping-cost-monitor' ) : __( 'Match first 50 valid rows', 'wpessential-shipping-cost-monitor' ) ),
@@ -476,11 +494,13 @@
 							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 							const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
 							const currency = '__order_currency__' === mapping.currency ? __( 'Order currency', 'wpessential-shipping-cost-monitor' ) : ( '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '' );
-							const valid = '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && /^[A-Za-z]{3}$/.test( currency );
+							const valid = '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && ( '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency ) ) && ! hasRefundStatus( item );
 							const match = matchResults[ item.number ];
 							const commitResult = commitResults[ item.number ];
-							const status = commitResult
-								? commitResult.status
+							const status = hasRefundStatus( item )
+								? __( 'Refund status needs review', 'wpessential-shipping-cost-monitor' )
+								: commitResult
+									? commitResult.status
 								: match && 'matched' === match.status && match.order_number && '__order_currency__' !== mapping.currency && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
 									? __( 'Currency differs from order', 'wpessential-shipping-cost-monitor' ) + ' (' + match.currency + ')'
 									: match && 'existing_cost' === match.status && match.order_number
