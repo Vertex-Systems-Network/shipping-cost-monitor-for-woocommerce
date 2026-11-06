@@ -6,7 +6,7 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 1. Read README.md and the task-relevant documents in docs/ before proposing or changing code.
 2. Treat `docs/PRODUCT-SPEC.md` as the single feature bank; check feature IDs before adding options.
-3. Treat `docs/ARCHITECTURE.md` as the current system boundary; raise decisions when implementation conflicts.
+3. Treat `docs/ARCHITECTURE.md` and `docs/ARCHITECTURE-DECISIONS.md` as the system boundary and proposed decisions; raise conflicts instead of silently overriding them.
 4. Do not add plugin code, CLI, package manager, build pipeline or run tests before the human toolchain gate.
 5. Mark work complete only with evidence. Distinguish public desk research from account-level API verification and merchant validation.
 6. Do not claim compatibility, Marketplace acceptance, provider access, final invoice data or test results without evidence.
@@ -20,14 +20,14 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-02 | Validate merchant workflow and invoice CSV examples | Needs merchant inputs | Three anonymized invoice schemas and edge cases; request files only with sensitive data removed |
 | AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Decision pack ready; owner approval pending | Decision-ready MVP, acceptance criteria and settings map in PRODUCT-SPEC.md |
 | AI-04 | Define metrics: charged, actual/confirmed cost, variance, coverage, refunds, currency | Complete (proposed metric contract) | Metric glossary, comparable-cost rules and examples/guardrails in PRODUCT-SPEC.md |
-| AI-05 | Decide storage for cost snapshots, charge rows and audit history | Planned | Schema decision record with volume/query/retention rationale |
+| AI-05 | Decide storage for cost snapshots, charge rows and audit history | Complete (proposed ADR; Gate C pending) | Hybrid WooCommerce CRUD/order metadata and plugin-owned evidence/batch records documented in ARCHITECTURE-DECISIONS.md; exact schema needs volume review |
 | AI-06 | Map React admin screens, navigation and all screen states | Complete (UX specification draft) | UX-FLOWS.md defines hierarchy, primary flows, shared filters, actions, empty/loading/error/partial/success states; owner Gate B review pending |
-| AI-07 | Platform compatibility baseline | Drafted; release versions need verification | PHP/WP/WC/database baseline drafted; verify current and previous supported versions during release QA |
-| AI-08 | Security/privacy and import/API threat model | Planned | Capabilities, credential strategy, provider scopes, CSV protection, retention and disclosures |
+| AI-07 | Platform compatibility baseline | Drafted; release versions need verification | PHP/WP/WC/database baseline drafted; decide supported matrix and verify during release QA |
+| AI-08 | Security/privacy and import/API threat model | Complete (proposed controls; review pending) | Credential, endpoint, CSV, webhook, logging and data-minimization controls plus open security decisions in ARCHITECTURE-DECISIONS.md |
 | AI-09 | Define reconciliation matching and review controls | Complete (proposed MVP rules) | Exact-ID precedence, exception states, ambiguity/manual review and audit behavior in PRODUCT-SPEC.md |
-| AI-10 | Define reporting/performance/background jobs | Planned | Query plan, pagination/caching and data-volume scenarios |
+| AI-10 | Define reporting/performance/background jobs | Complete (architecture proposal; benchmark pending) | Bounded pagination, server aggregates, indexed query direction and Action Scheduler proposal in ARCHITECTURE-DECISIONS.md |
 | AI-11 | Marketplace readiness checklist | Planned | Metadata, license, docs, support and compatibility evidence |
-| AI-12 | Pre-development exit review | Planned | Product, UX, architecture, compatibility and toolchain gates reviewed |
+| AI-12 | Pre-development exit review | Draft checklist; gates open | PREDEVELOPMENT-READINESS.md maps deliverables and remaining A–E approvals |
 | AI-13 | Carrier/platform public API capability matrix | Complete (public-doc desk review) | Region-aware evidence matrix in INTEGRATION-MATRIX.md; actual invoice endpoints/account permissions remain unverified |
 | AI-14 | Verify candidate APIs with merchant accounts and account-specific docs | Not started | Top providers selected from beta usage; scopes, invoice-final fields, terms, geography and sync limits confirmed |
 
@@ -50,4 +50,4 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Current handoff
 
-Phases 1–3 have research/specification deliverables. Product and UX approvals are still pending; implementation remains prohibited until the human gates and separate toolchain gate authorize it.
+Phases 1–4 have research/specification deliverables. Phase 4 is a proposed architecture/readiness package, not an approval. Product, UX and architecture gates remain open; implementation remains prohibited until the required human gates and separate toolchain gate authorize it.
