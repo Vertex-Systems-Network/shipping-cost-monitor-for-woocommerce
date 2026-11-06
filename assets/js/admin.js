@@ -198,6 +198,34 @@
 			reader.readAsText( file );
 		}
 
+		function selectSourceFormat( event ) {
+			const format = event.target.value;
+			setSourceFormat( format );
+			if ( 'woocommerce_shipping_labels' !== format ) {
+				return;
+			}
+
+			const headers = parsed ? parsed.headers : [];
+			const findColumn = function ( aliases ) {
+				const index = headers.findIndex( function ( header ) {
+					return aliases.indexOf( header.toLowerCase().replace( /[^a-z0-9]/g, '' ) ) !== -1;
+				} );
+				return index >= 0 ? String( index ) : '';
+			};
+			setMapping( {
+				reference: findColumn( [ 'order', 'ordernumber', 'orderid', 'ordername' ] ),
+				amount: findColumn( [ 'price', 'labelprice', 'labelcost', 'amount', 'cost' ] ),
+				currency: '__order_currency__',
+			} );
+			setEvidence( 'booked_label' );
+			setTaxBasis( 'unknown' );
+			setDecimalMark( '.' );
+			setMatchResults( {} );
+			setCommitResults( {} );
+			setMatchError( '' );
+			setCommitError( '' );
+		}
+
 		function clearPreview() {
 			setSourceFormat( 'generic' );
 			setRawCsv( '' );
@@ -417,6 +445,8 @@
 			h(
 				'div',
 				{ className: 'wpe-scm-import-toolbar' },
+				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Source format', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: sourceFormat, onChange: selectSourceFormat }, h( 'option', { value: 'generic' }, __( 'Generic courier CSV', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'woocommerce_shipping_labels' }, __( 'WooCommerce Shipping label report', 'wpessential-shipping-cost-monitor' ) ) ) ),
+
 				h( 'label', { className: 'wpe-scm-file-field' }, __( 'Choose CSV file (5 MB max)', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'file', accept: '.csv,text/csv', onChange: chooseFile } ) ),
 				h(
 					'label',
@@ -459,6 +489,7 @@
 				)
 			),
 			fileName ? h( 'p', { className: 'wpe-scm-import-file' }, __( 'Selected:', 'wpessential-shipping-cost-monitor' ) + ' ' + fileName ) : null,
+			sourceFormat === 'woocommerce_shipping_labels' ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'This preset treats label prices as booked costs, uses the matched order currency and holds refund-status rows for review. Orders with multiple label rows may be marked duplicate and require separate reconciliation.', 'wpessential-shipping-cost-monitor' ) ) : null,
 			error ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, error ) : null,
 			matchError ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, matchError ) : null,
 			commitError ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, commitError ) : null,
