@@ -43,7 +43,33 @@ Every distinct user-facing capability receives one stable ID. Related options ar
 | SCM-SET-01 | Data retention and uninstall controls | Free | MVP | Explain retained order metadata; offer explicit opt-in purge setting; default uninstall must not unexpectedly delete merchant records. |
 | SCM-SET-02 | Permissions, privacy and diagnostics | Free | MVP | Least privilege, privacy notice for external integrations, opt-in diagnostics only, actionable status/errors. |
 
-### Explicitly out of scope for first release
+## Platform and compatibility baseline
+
+This is the initial support policy for development and the first release, based on official platform recommendations checked on 2026-11-06. Recheck it before implementation and Marketplace submission because platform support windows change.
+
+| Platform | Initial baseline | Compatibility policy |
+|---|---|---|
+| PHP | 8.3+ | Target currently recommended WooCommerce runtime; verify on PHP 8.3 and 8.4. Do not claim PHP 8.5 until the supported WooCommerce release is documented as tested there. |
+| WordPress | 6.9+ | Follow the selected WooCommerce baseline; test current stable and one earlier supported release where the release matrix permits. |
+| WooCommerce | 10.8+ | Follow WooCommerce 10.8 server recommendations at planning time; test current stable and the previous supported release at release time. |
+| Database | MySQL 8.0+ or MariaDB 10.6+ | Follow WooCommerce server recommendations; avoid version-specific SQL assumptions. |
+| HPOS | Supported | Use WooCommerce CRUD APIs and declare compatibility only after tests pass on HPOS and legacy order storage. |
+| React admin | React bundled through WordPress/WooCommerce-supported extension APIs | React is for admin presentation; PHP/domain services remain authoritative. Toolchain/build decision waits for pre-development Gate D. |
+| WPML | Optional compatibility target | Translate plugin-owned admin/UI strings via standard localization and WPML String Translation mechanisms where needed. Do not require WPML or alter order language/currency data. Test with the latest stable WPML stack available at release. |
+| Polylang | Optional compatibility target | Translate plugin-owned strings; do not require Polylang. If WooCommerce multilingual features are installed, test with Polylang for WooCommerce as an optional integration. Record exact tested versions at release. |
+| Memory | 256 MB recommended by WooCommerce | The plugin should avoid unnecessary memory growth; document import size limits and process large jobs in bounded batches. |
+
+WPML and Polylang are compatibility targets, not plugin dependencies. They must not create duplicated settings or change numeric cost records based on display language. Currency conversion, if ever added, requires its own feature and explicit source-rate rules; it is not implied by translation support.
+
+Official references:
+- [WordPress requirements](https://wordpress.org/about/requirements/)
+- [WooCommerce server recommendations](https://woocommerce.com/document/server-requirements/)
+- [WooCommerce HPOS extension recipe book](https://developer.woocommerce.com/docs/features/orders/high-performance-order-storage/recipe-book/)
+- [WPML minimum requirements](https://wpml.org/home/minimum-requirements)
+- [Polylang for WooCommerce changelog and compatibility requirements](https://polylang.pro/polylang-for-woocommerce-changelog/)
+- [WooCommerce React-powered admin pages](https://developer.woocommerce.com/docs/extensions/settings-and-config/working-with-woocommerce-admin-pages/)
+
+## Explicitly out of scope for first release
 
 - Checkout rate calculation or modifying customer shipping prices.
 - Label purchase, shipment tracking portal, fulfilment dispatch, or courier account replacement.
