@@ -5,7 +5,7 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Phase 5 code complete; Phase 6 invoice workflow in progress  
-> **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 5 code scope is complete; Phase 6 has five of six implementation slices delivered; dashboard smoke render is verified; full compatibility/workflow verification remains pending; no CLI or build toolchain.  
+> **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 5 code scope is complete; Phase 6 has five of six implementation packages delivered; dashboard smoke render is verified; full compatibility/workflow verification remains pending; no CLI or build toolchain.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -26,7 +26,7 @@ The progress bars measure documented or implemented deliverables only; they do n
 | 3. UX flows and React admin specification | UX baseline approved; visual QA pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
 | 4. Architecture and pre-development readiness | Initial manual/no-API boundary accepted; security/retention pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-12-04 | 2026-11-06 | Storage, money/evidence model, imports, adapters/auth, security, compatibility and readiness decisions documented |
 | 5. Core plugin implementation | Complete (code delivery; runtime verification pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2027-01-15 | 2026-11-06 | Admin shell, manual ledger, tax/refund-aware reports and privacy-minimized CSV export |
-| 6. Reconciliation, API sync and Pro workflows | Five of six implementation packages delivered; runtime CSV QA pending; live provider package blocked | `████████▍░ 83%` | 2026-11-06 (actual) | 2027-02-05 | — | Browser-local invoice preview through reviewed row commit, report breakdown and verified provider workflow
+| 6. Reconciliation, API sync and Pro workflows | Five of six implementation packages delivered; runtime CSV QA pending; live provider package blocked | `████████▍░ 83%` | 2026-11-06 (actual) | 2027-02-05 | — | Browser-local invoice preview through reviewed row commit, report breakdown and verified provider workflow |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 (planned) | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 (planned) | 2027-03-05 | — | Free WordPress.org and Paid WooCommerce.com submission tracks, review evidence and release candidate |
 
