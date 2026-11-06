@@ -73,6 +73,7 @@ final class Summary {
 						'comparable_cost_minor'   => 0,
 						'variance_minor'          => 0,
 						'comparable_orders'       => 0,
+						'shipping_methods'        => array(),
 					);
 				}
 
@@ -81,6 +82,34 @@ final class Summary {
 				$shipping_refunded = min( (float) $order->get_shipping_total(), (float) $order->get_total_shipping_refunded() );
 				$shipping_minor = wc_add_number_precision( (float) $order->get_shipping_total() - $shipping_refunded );
 				$groups[ $order_currency ]['charged_minor'] += $shipping_minor;
+
+				$method_labels = array();
+				foreach ( $order->get_items( 'shipping' ) as $shipping_item ) {
+					$method_id = method_exists( $shipping_item, 'get_method_id' ) ? (string) $shipping_item->get_method_id() : '';
+					$instance_id = method_exists( $shipping_item, 'get_instance_id' ) ? (string) $shipping_item->get_instance_id() : '';
+					$label = trim( (string) $shipping_item->get_method_title() );
+					$key = '' !== $method_id ? $method_id . ':' . $instance_id : 'label:' . strtolower( $label );
+					$method_labels[ $key ] = '' !== $label ? $label : __( 'Unspecified shipping method', 'wpessential-shipping-cost-monitor' );
+				}
+			ksort( $method_labels );
+			$method_key = implode( '|', array_keys( $method_labels ) );
+			$method_label = implode( ' + ', array_values( $method_labels ) );
+			if ( '' === $method_key ) {
+				$method_key = 'unknown';
+				$method_label = __( 'Unspecified shipping method', 'wpessential-shipping-cost-monitor' );
+			}
+			if ( ! isset( $groups[ $order_currency ]['shipping_methods'][ $method_key ] ) ) {
+				$groups[ $order_currency ]['shipping_methods'][ $method_key ] = array(
+					'label'                    => $method_label,
+					'orders'                   => 0,
+					'charged_minor'            => 0,
+					'comparable_cost_minor'    => 0,
+					'variance_minor'           => 0,
+					'comparable_orders'        => 0,
+				);
+			}
+			++$groups[ $order_currency ]['shipping_methods'][ $method_key ]['orders'];
+			$groups[ $order_currency ]['shipping_methods'][ $method_key ]['charged_minor'] += $shipping_minor;
 
 				$evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
 				if ( ! in_array( $evidence, array( 'invoice_final', 'merchant_confirmed' ), true ) ) {
@@ -115,6 +144,9 @@ final class Summary {
 				$groups[ $order_currency ]['comparable_cost_minor'] += $cost_minor;
 				$groups[ $order_currency ]['variance_minor'] += $shipping_minor - $cost_minor;
 				++$groups[ $order_currency ]['comparable_orders'];
+				$groups[ $order_currency ]['shipping_methods'][ $method_key ]['comparable_cost_minor'] += $cost_minor;
+				$groups[ $order_currency ]['shipping_methods'][ $method_key ]['variance_minor'] += $shipping_minor - $cost_minor;
+				++$groups[ $order_currency ]['shipping_methods'][ $method_key ]['comparable_orders'];
 				++$comparable_orders;
 			}
 
@@ -128,6 +160,18 @@ final class Summary {
 			$group['comparable_shipping_charged'] = wc_format_decimal( wc_remove_number_precision( $group['comparable_charged_minor'] ), $precision );
 			$group['comparable_confirmed_cost']   = wc_format_decimal( wc_remove_number_precision( $group['comparable_cost_minor'] ), $precision );
 			$group['variance'] = wc_format_decimal( wc_remove_number_precision( $group['variance_minor'] ), $precision );
+			$method_rows = array();
+			foreach ( $group['shipping_methods'] as $method ) {
+				$method['shipping_charged'] = wc_format_decimal( wc_remove_number_precision( $method['charged_minor'] ), $precision );
+				$method['comparable_confirmed_cost'] = wc_format_decimal( wc_remove_number_precision( $method['comparable_cost_minor'] ), $precision );
+				$method['variance'] = wc_format_decimal( wc_remove_number_precision( $method['variance_minor'] ), $precision );
+				unset( $method['charged_minor'], $method['comparable_cost_minor'], $method['variance_minor'] );
+				$method_rows[] = $method;
+			}
+			usort( $method_rows, static function ( $left, $right ) {
+				return (float) $left['variance'] <=> (float) $right['variance'];
+			} );
+			$group['shipping_methods'] = $method_rows;
 			unset(
 				$group['charged_minor'],
 				$group['confirmed_minor'],
