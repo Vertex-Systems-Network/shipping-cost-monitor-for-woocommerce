@@ -5,7 +5,7 @@
  * @package WPEssentialShippingCostMonitor
  */
 
-namespace WPEssential\\ShippingCostMonitor;
+namespace WPEssential\ShippingCostMonitor;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -38,10 +38,10 @@ final class Plugin {
 	 * Register plugin hooks.
 	 */
 	public function init(): void {
-		$page = new Admin\\Page();
+		$page = new Admin\Page();
 		$page->register();
 
-		$order_cost_fields = new Admin\\OrderCostFields();
+		$order_cost_fields = new Admin\OrderCostFields();
 		$order_cost_fields->register();
 	}
 }
