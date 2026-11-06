@@ -63,7 +63,7 @@ final class ReferenceMatcher {
 			}
 
 			$reference = trim( sanitize_text_field( (string) $row['reference'] ) );
-			$reference = preg_replace( '/^#\\s*/', '', $reference );
+			$reference = preg_replace( '/^#\s*/', '', $reference );
 			if ( '' === $reference || strlen( $reference ) > 100 ) {
 				wp_send_json_error(
 					array( 'message' => __( 'Each reference must contain 1 to 100 characters.', 'wpessential-shipping-cost-monitor' ) ),
