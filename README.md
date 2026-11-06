@@ -5,7 +5,7 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Pre-development planning  
-> **Current overall progress:** `■■░░░░░░░░ 20%` — desk research complete; MVP/options decision pack drafted; no plugin code or CLI.  
+> **Current overall progress:** `■■■░░░░░░░ 25%` — desk research and decision-ready requirements complete; product-owner review pending; no plugin code or CLI.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -13,28 +13,30 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 Record what customers paid for shipping and what merchants paid to fulfil shipments, then surface margin loss and mismatched charges. Connect optional carriers/platforms where APIs support useful shipment or cost evidence.
 
-**Evidence rule:** rate quotes are estimates; label/manifest amounts are booked charges; invoice rows or explicitly reviewed merchant values may represent final cost. Do not silently treat one class as another. The public API review did not confirm final-invoice endpoints for every shortlisted provider.
+**Evidence rule:** rate quotes are estimates; label/manifest amounts are booked charges; invoice rows or explicitly reviewed merchant values may represent final cost. Do not silently treat one class as another. Public API research did not confirm final-invoice endpoints for every shortlisted provider.
 
 ## Roadmap
 
-Dates are proposed targets; progress reflects completed evidence and draft work. “Completed” records actual phase completion; later phases remain unstarted. No development code, CLI or build system has been added.
+Dates are proposed targets. Completed dates show actual work completion; progress shows phase deliverables, not calendar time. “Decision-ready” means the documented proposal is complete, not approved by the product owner. No development code, CLI or build system has been added.
 
 | Phase | Status | Progress | Start | Target end | Completed | Exit outcome |
 |---|---|---:|---|---|---|---|
-| 1. Competitor and public API desk research | Complete (desk review) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-13 | 2026-11-06 | Competitor overlaps, region-aware provider matrix and evidence caveats documented |
-| 2. Requirements, options bank and MVP proposal | In progress (draft) | `■■■■■░░░░░ 50%` | 2026-11-06 | 2026-11-20 | — | Deduplicated options and proposed Free/Pro MVP; merchant validation/owner decision remains |
-| 3. UX flows and React admin prototype | Planned | `░░░░░░░░░░ 0%` | 2026-11-21 | 2026-11-27 | — | Dashboard, connector setup, sync and exception states |
+| 1. Competitor and public API desk research | Complete (desk review) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-13 | 2026-11-06 | Competitor overlap and region-aware provider evidence matrix |
+| 2. Requirements, options bank and MVP proposal | Complete (decision-ready draft; Gate A pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-20 | 2026-11-06 | Deduplicated feature IDs, metric contract, settings map and testable MVP criteria documented |
+| 3. UX flows and React admin prototype | Planned (starts after Gate A) | `░░░░░░░░░░ 0%` | 2026-11-21 | 2026-11-27 | — | Dashboard, import, connector, sync and exception flows |
 | 4. Architecture and pre-development readiness | Planned | `░░░░░░░░░░ 0%` | 2026-11-28 | 2026-12-04 | — | Data model, API adapter/auth, security and compatibility decisions |
 | 5. Core plugin implementation | Not started | `░░░░░░░░░░ 0%` | 2026-12-07 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
 | 6. Reconciliation, API sync and Pro workflows | Not started | `░░░░░░░░░░ 0%` | 2027-01-18 | 2027-02-05 | — | Provider adapters, exception queue, alerts and scenario analysis |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Documentation, packaging, review checklist and submission candidate |
 
-**Overall planning progress:** `■■░░░░░░░░ 20%` (approximate, phase-weighted planning status; implementation remains 0%).
+**Overall planning progress:** `■■■░░░░░░░ 25%` (two of eight planning phases complete; implementation remains 0%).
 
-## Current recommendation
+## Phase 2 decision pack
 
-Proposed first release: Free manual order cost ledger + basic summary/export; Pro universal invoice CSV import/matching, exception review and shipping loss reports. Add one or two optional API adapters only after beta merchant usage and account-level evidence confirm useful shipment/cost fields. CSV remains the general path for final invoice charges.
+Recommended first release: Free manual order-cost ledger, provenance, basic summary and CSV export; Pro universal invoice CSV mapping/matching, exception review and shipping loss reports. One or two API adapters may be selected only after account-level evidence. Read the exact metric contract, acceptance criteria and single-home settings map in [Product requirements](docs/PRODUCT-SPEC.md).
+
+**Still pending at Gate A:** product-owner review of the proposed scope and future commercial Free/Pro boundary. This is not represented as approved or customer-validated.
 
 ## Planning documents
 
@@ -61,7 +63,7 @@ Proposed first release: Free manual order cost ledger + basic summary/export; Pr
 
 **Pro:** invoice CSV mapping/reconciliation, mismatch queue, shipping loss breakdowns and selected API sync. Alerts, historical comparisons, rate scenarios, scheduled reports and broad provider coverage remain later candidates.
 
-Pricing and final packaging await merchant validation and Marketplace review.
+Pricing and final packaging await owner and merchant validation and Marketplace review.
 
 ## Scope guardrails
 
