@@ -83,7 +83,7 @@ final class InvoiceImporter {
 
 		$row_number = absint( $row['row'] );
 		$order_id   = absint( $row['order_id'] );
-		$reference  = is_scalar( $row['reference'] ) ? preg_replace( '/^#\\s*/', '', trim( sanitize_text_field( (string) $row['reference'] ) ) ) : '';
+		$reference  = is_scalar( $row['reference'] ) ? preg_replace( '/^#\s*/', '', trim( sanitize_text_field( (string) $row['reference'] ) ) ) : '';
 		$raw_amount = is_scalar( $row['amount'] ) ? trim( (string) $row['amount'] ) : '';
 		$currency   = is_scalar( $row['currency'] ) ? strtoupper( sanitize_text_field( (string) $row['currency'] ) ) : '';
 		$batch_hash = is_scalar( $row['batch'] ) ? strtolower( sanitize_text_field( (string) $row['batch'] ) ) : '';
