@@ -3,7 +3,7 @@
  * Plugin Name: WPEssential Shipping Cost Monitor
  * Description: Shipping cost intelligence and margin reporting for WooCommerce.
  * Version: 0.1.0
- * Requires at least: 6.9
+ * Requires at least: 7.0
  * Requires PHP: 8.1
  * WC requires at least: 11.2
  * Requires Plugins: woocommerce
