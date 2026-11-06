@@ -86,6 +86,8 @@ final class Page {
 			admin_url( 'admin-post.php' )
 		);
 		$dashboard['export_url'] = wp_nonce_url( $export_url, 'wpe_scm_export_report' );
+		$dashboard['ajax_url'] = admin_url( 'admin-ajax.php' );
+		$dashboard['match_nonce'] = wp_create_nonce( 'wpe_scm_match_preview' );
 
 		wp_localize_script(
 			'wpe-scm-admin',
