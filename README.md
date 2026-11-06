@@ -43,6 +43,21 @@ The progress bars measure documented or implemented deliverables only; they do n
 | 5 | Currency-separated shipping-method variance breakdown | Implemented; Playground and staging smoke passed | Playground verified one order; staging flat-rate breakdown matched two synthetic orders and PKR -1,200 total variance. Multi-currency and mixed-method cases remain untested. |
 | 6 | Live provider adapter and account-level final-cost verification | Blocked | No provider account or final billed-cost schema is verified; Gate C-3 still blocks credentials and live sync. |
 
+### Targeted staging edge-case verification (2026-11-06)
+
+All rows below were synthetic, previewed in the browser and matched only where eligible. No cost was committed from this edge-case file.
+
+| Scenario | Status | Staging evidence / limit |
+|---|---|---|
+| Duplicate references in one CSV | Passed | Order references 51 and # 51 normalized to the same order; both were marked duplicate and excluded from commit. |
+| Invalid amounts | Passed | Non-numeric amount was rejected; negative amount was held for credit/refund review. |
+| Unmatched reference | Passed | Synthetic reference 987654321 returned unmatched. |
+| Refund-status row | Passed | Refunded status was held for review and excluded from matching; No refund remained eligible for match preview. |
+| Re-import / retry safety | Passed with limit | Re-importing an order that already has a stored cost showed existing-cost evidence and did not allow overwrite. The exact same AJAX commit replay response (already_imported) was not directly stimulated; it remains a lower-level idempotency verification item. |
+| Ambiguous order reference | Not exercised | The staging store has unique native order IDs/numbers and no custom order-number fixture to create a collision. Matcher code has an explicit ambiguous result, but runtime behavior still needs a controlled collision fixture. |
+
+**Progress remains:** Phase 6 83%; overall 73%. The blocked provider package and broad compatibility verification are unchanged.
+
 **Next verification target:** test duplicate references within a file, unmatched/ambiguous/invalid rows, retries, refund handling, currency mismatch, HPOS/legacy storage and multilingual behavior with synthetic data. The staging happy path already exercised CSV parse → exact match → review → explicit commit, and duplicate re-import confirmed existing-cost protection. Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
 
 ## Phase 2 decision pack
