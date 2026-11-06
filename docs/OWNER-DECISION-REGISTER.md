@@ -29,7 +29,7 @@ The owner said “start” after reviewing the gate register. For the initial sc
 | C-2 | Money and comparisons | Preserve source amount, ISO currency and tax/basis; decimal-safe arithmetic; no implicit cross-currency totals. | Accepted from the metric contract. | Accepted |
 | C-3 | Credential security | No credential collection or API connections in the initial implementation. Revisit authenticated encryption/key lifecycle before adding integrations. | No plaintext storage; API work remains excluded until security review. | Deferred; blocks integrations only |
 | C-4 | Data retention | No uploads/raw payloads in the bootstrap milestone. Final retention/export/delete/uninstall policy is required before CSV import and Marketplace release. | The first shell has no customer data persistence. | Deferred to data/import milestone |
-| C-5 | Compatibility target | PHP 8.1 minimum / 8.3 recommended; WP 6.9+; WooCommerce 11.2+ development baseline; revise at release. | Accepted as declared development baseline only; compatibility testing and support claims remain pending. | Accepted as proposal |
+| C-5 | Compatibility target | PHP 8.1 minimum / 8.3 recommended; WP 7.0+; WooCommerce 11.2+ development baseline; revise at release. | Updated after WooCommerce 11.2.2 reported WP 7.0 minimum and an official WooCommerce readme declared 7.0; support claims and matrix testing remain pending. | Accepted as proposal |
 
 ## Gate D — toolchain
 
