@@ -6,7 +6,7 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 > **Project status:** Phases 1–5 documented/code-delivered for their defined scope; Phase 6 remains in progress  
 > **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 6 has five of six implementation packages delivered. Staging verifies synthetic reconciliation edge cases and report CSV download; provider, compatibility and broader QA remain open. No CLI or build toolchain.  
-> **Last status update:** 2026-11-07 — deep audit of Phases 1–6 recorded; staging report CSV download verified.  
+> **Last status update:** 2026-11-06 — deep audit of Phases 1–6 recorded; staging report CSV download verified.  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -58,7 +58,7 @@ All rows below were synthetic, previewed in the browser and matched only where e
 
 **Progress remains:** Phase 6 83%; overall 73%. The blocked provider package and broad compatibility verification are unchanged.
 
-**Remaining verification:** runtime-test an ambiguous match using a controlled duplicate order-number provider/fixture, and directly replay an identical commit request to observe the server’s already-imported response. The current UI prevents a second commit once a row is saved, so it cannot exercise that lower-level retry branch. Report CSV download was verified on staging on 2026-11-07. Currency-mismatch, HPOS/legacy, multilingual, lower-bound and performance checks also remain. See [Phase 1–6 deep audit](docs/PHASE-1-6-DEEP-AUDIT.md). Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
+**Remaining verification:** runtime-test an ambiguous match using a controlled duplicate order-number provider/fixture, and directly replay an identical commit request to observe the server’s already-imported response. The current UI prevents a second commit once a row is saved, so it cannot exercise that lower-level retry branch. Report CSV download was verified on staging on 2026-11-06. Currency-mismatch, HPOS/legacy, multilingual, lower-bound and performance checks also remain. See [Phase 1–6 deep audit](docs/PHASE-1-6-DEEP-AUDIT.md). Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
 
 ## Phase 2 decision pack
 
