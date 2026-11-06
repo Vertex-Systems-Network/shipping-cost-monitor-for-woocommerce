@@ -50,7 +50,7 @@ final class Page {
 	 * @param string $hook Current admin screen hook.
 	 */
 	public function enqueue_assets( string $hook ): void {
-		if ( '' === $this->page_hook || $this->page_hook !== $hook ) {
+		if ( '' === $this->page_hook || $this->page_hook !== $hook || ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
 
@@ -76,10 +76,21 @@ final class Page {
 			? sanitize_text_field( wp_unslash( $_GET['wpe_scm_end'] ) )
 			: null;
 
+		$dashboard = Summary::build( $requested_start, $requested_end );
+		$export_url = add_query_arg(
+			array(
+				'action'        => 'wpe_scm_export_report',
+				'wpe_scm_start' => $dashboard['period']['start'],
+				'wpe_scm_end'   => $dashboard['period']['end'],
+			),
+			admin_url( 'admin-post.php' )
+		);
+		$dashboard['export_url'] = wp_nonce_url( $export_url, 'wpe_scm_export_report' );
+
 		wp_localize_script(
 			'wpe-scm-admin',
 			'wpeScmDashboard',
-			Summary::build( $requested_start, $requested_end )
+			$dashboard
 		);
 
 		wp_set_script_translations(
