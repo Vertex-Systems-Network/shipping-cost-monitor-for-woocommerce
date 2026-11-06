@@ -29,6 +29,7 @@ final class Summary {
 		$covered = 0;
 		$mismatched_currency = 0;
 		$comparable_orders = 0;
+		$refunds_adjusted = false;
 
 		do {
 			$result = wc_get_orders(
@@ -80,6 +81,7 @@ final class Summary {
 				++$orders;
 				++$groups[ $order_currency ]['orders'];
 				$shipping_refunded = min( (float) $order->get_shipping_total(), (float) $order->get_total_shipping_refunded() );
+				$refunds_adjusted = $refunds_adjusted || $shipping_refunded > 0;
 				$shipping_minor = wc_add_number_precision( (float) $order->get_shipping_total() - $shipping_refunded );
 				$groups[ $order_currency ]['charged_minor'] += $shipping_minor;
 
@@ -199,7 +201,7 @@ final class Summary {
 			'comparable_orders' => $comparable_orders,
 			'groups' => array_values( $groups ),
 			'variance_available' => $comparable_orders > 0,
-			'refunds_adjusted' => false,
+			'refunds_adjusted' => $refunds_adjusted,
 		);
 	}
 
