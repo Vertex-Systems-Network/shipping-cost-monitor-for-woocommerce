@@ -4,47 +4,46 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Rules for every contributor
 
-1. Read README.md and the relevant documents in docs/ before proposing or changing code.
-2. Treat `docs/PRODUCT-SPEC.md` as the single feature bank. Search by feature ID before adding an option; extend an existing ID or explain why a new capability is distinct. Never create duplicate settings under different screens.
-3. Treat `docs/ARCHITECTURE.md` as the current system boundary. Raise an architecture decision when implementation conflicts with it; do not silently fork the design.
-4. Do not add or run a CLI, package manager, build pipeline or plugin code before the pre-development exit review explicitly changes this constraint.
-5. Do not claim an item is complete because a draft or code snippet exists. Update status only with evidence and a human-readable summary.
-6. Do not invent compatibility claims, Marketplace approval, competitor exclusivity, provider API access or test results.
-7. Use focused changes; explain files changed, decisions, risks, and unverified assumptions in each handoff.
+1. Read README.md and the task-relevant documents in docs/ before proposing or changing code.
+2. Treat `docs/PRODUCT-SPEC.md` as the single feature bank; check feature IDs before adding options.
+3. Treat `docs/ARCHITECTURE.md` as the current system boundary; raise decisions when implementation conflicts.
+4. Do not add plugin code, CLI, package manager, build pipeline or run tests before the human toolchain gate.
+5. Mark work complete only with evidence. Distinguish public desk research from account-level API verification and merchant validation.
+6. Do not claim compatibility, Marketplace acceptance, provider access, final invoice data or test results without evidence.
+7. Report changed files, decisions, assumptions, evidence and unresolved items.
 
 ## Backlog
 
 | ID | Work item | Status | Exit evidence |
 |---|---|---|---|
-| AI-01 | Recheck competitor feature matrix from primary listings/docs | In progress | Sources, checked date, overlaps and product gaps recorded |
-| AI-02 | Validate merchant workflow and CSV invoice examples (with permission-safe sample data) | Planned | At least three representative anonymized schemas and edge cases |
-| AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Planned | Product owner sign-off on SCM feature IDs |
-| AI-04 | Define terms: charged shipping, actual cost, variance, coverage, refunds and currencies | Planned | Metric glossary with worked examples |
-| AI-05 | Decide canonical storage for snapshots, components, imported rows and audit history | Planned | Schema decision record with query/performance rationale |
-| AI-06 | Map React admin screens, navigation, connector setup, sync status and exception states | Planned | Screen flow and reviewed wireframes/prototype |
-| AI-07 | Platform compatibility baseline drafted | Drafted; release versions need verification | PHP/WP/WC/database baseline documented; HPOS, WPML and Polylang release matrix verified and recorded |
-| AI-08 | Define security/privacy review and import/API threat model | Planned | Capability matrix, credential storage, scopes, CSV rules, retention and data disclosure |
-| AI-09 | Define reconciliation matching rules and human review controls | Planned | Examples for duplicates, splits, returns, credits and ambiguity |
-| AI-10 | Define report query, pagination, caching and background-job strategy | Planned | Performance budget and volume test scenarios |
-| AI-11 | Write release and WooCommerce Marketplace readiness checklist | Planned | Metadata, documentation, license, support and compatibility evidence |
-| AI-12 | Pre-development exit review | Planned | Product, UX, architecture, requirements and toolchain decision approved |
-| AI-13 | Create carrier/platform API capability matrix | Planned | For each candidate: regions, auth/scopes, shipment identifiers, quote vs final billing, adjustments, webhooks, limits and approval requirements |
+| AI-01 | Competitor feature matrix from primary listings/docs | Complete (desk review) | Overlaps and plausible differentiation recorded in MARKET-RESEARCH.md; no exclusivity claim |
+| AI-02 | Validate merchant workflow and invoice CSV examples | Needs merchant inputs | Three anonymized invoice schemas and edge cases; request files only with sensitive data removed |
+| AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Draft ready; product-owner decision pending | Proposed MVP is in PRODUCT-SPEC.md; owner decision and merchant validation remain |
+| AI-04 | Define metrics: shipping charged, actual/confirmed cost, variance, coverage, refunds, currency | In progress | Metric glossary with worked examples and consistent report rules |
+| AI-05 | Decide storage for cost snapshots, charge rows and audit history | Planned | Schema decision record with volume/query/retention rationale |
+| AI-06 | Map React admin screens and all states | Planned | Screen flows/wireframes for dashboard, imports, exceptions, connectors and settings |
+| AI-07 | Platform compatibility baseline | Drafted; release versions need verification | PHP/WP/WC/database baseline drafted; verify current and previous supported versions during release QA |
+| AI-08 | Security/privacy and import/API threat model | Planned | Capabilities, credential strategy, provider scopes, CSV protection, retention and disclosures |
+| AI-09 | Define reconciliation matching and review controls | Drafted at concept level | Examples and acceptance criteria for duplicate, split, return, credit, reship and ambiguous rows |
+| AI-10 | Define reporting/performance/background jobs | Planned | Query plan, pagination/caching and data-volume scenarios |
+| AI-11 | Marketplace readiness checklist | Planned | Metadata, license, docs, support and compatibility evidence |
+| AI-12 | Pre-development exit review | Planned | Product, UX, architecture, compatibility and toolchain gates reviewed |
+| AI-13 | Carrier/platform public API capability matrix | Complete (public-doc desk review) | Region-aware evidence matrix in INTEGRATION-MATRIX.md; actual invoice endpoints/account permissions remain unverified |
+| AI-14 | Verify candidate APIs with merchant accounts and account-specific docs | Not started | Top providers selected from beta usage; scopes, invoice-final fields, terms, geography and sync limits confirmed |
 
 ## Agent task template
 
-When assigning work, provide:
-
-- **Task ID(s):** exact backlog or SCM feature IDs.
+- **Task ID(s):** exact backlog/feature IDs.
 - **Goal:** one bounded outcome.
-- **Allowed files/scope:** explicit paths or document/code area.
+- **Allowed files/scope:** explicit files.
 - **Constraints:** compatibility, security, UI, performance, privacy and no-CLI rule.
-- **Evidence required:** sources, screenshots, decisions or implementation evidence.
-- **Completion report:** changed files, feature IDs covered, decisions, assumptions, unresolved items, and status proposal.
+- **Evidence required:** sources or decision record.
+- **Completion report:** files changed, decisions, assumptions, unresolved items and status proposal.
 
 ## Human approval gates
 
-- **Gate A — Product:** MVP, provider priority and Free/Pro boundary approved.
-- **Gate B — UX:** React admin information architecture and connector flows approved.
-- **Gate C — Architecture:** data model, API adapter/auth strategy, imports, security and compatibility decisions approved.
-- **Gate D — Toolchain:** only after Gates A–C, decide build tooling; no CLI/tooling is assumed before this gate.
-- **Gate E — Release:** compatibility evidence, provider API terms/permissions, documentation, privacy and Marketplace checks reviewed.
+- **Gate A — Product:** approve MVP, provider priority and Free/Pro packaging.
+- **Gate B — UX:** approve React admin flows.
+- **Gate C — Architecture:** approve schema, API adapter/auth, imports, security and compatibility decisions.
+- **Gate D — Toolchain:** only after Gates A–C; decide build tooling. CLI remains prohibited until explicitly approved.
+- **Gate E — Release:** verify compatibility, provider API terms/access, privacy, docs and Marketplace requirements.
