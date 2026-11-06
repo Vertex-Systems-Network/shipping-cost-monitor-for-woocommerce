@@ -121,7 +121,7 @@
 					'string' === typeof profile.mapping.reference &&
 					'string' === typeof profile.mapping.amount &&
 					'string' === typeof profile.mapping.currency &&
-					[ ',', ';', '\\t' ].indexOf( profile.delimiter ) !== -1 &&
+					[ ',', ';', '\t' ].indexOf( profile.delimiter ) !== -1 &&
 					[ '.', ',' ].indexOf( profile.decimalMark ) !== -1 &&
 					[ 'invoice_final', 'booked_label', 'merchant_confirmed' ].indexOf( profile.evidence ) !== -1 &&
 					[ 'unknown', 'exclusive', 'inclusive' ].indexOf( profile.taxBasis ) !== -1;
