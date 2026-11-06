@@ -21,7 +21,7 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Decision pack ready; owner approval pending | Decision-ready MVP, acceptance criteria and settings map in PRODUCT-SPEC.md |
 | AI-04 | Define metrics: charged, actual/confirmed cost, variance, coverage, refunds, currency | Complete (proposed metric contract) | Metric glossary, comparable-cost rules and examples/guardrails in PRODUCT-SPEC.md |
 | AI-05 | Decide storage for cost snapshots, charge rows and audit history | Planned | Schema decision record with volume/query/retention rationale |
-| AI-06 | Map React admin screens and all states | Planned | Screen flows/wireframes for dashboard, imports, exceptions, connectors and settings |
+| AI-06 | Map React admin screens, navigation and all screen states | Complete (UX specification draft) | UX-FLOWS.md defines hierarchy, primary flows, shared filters, actions, empty/loading/error/partial/success states; owner Gate B review pending |
 | AI-07 | Platform compatibility baseline | Drafted; release versions need verification | PHP/WP/WC/database baseline drafted; verify current and previous supported versions during release QA |
 | AI-08 | Security/privacy and import/API threat model | Planned | Capabilities, credential strategy, provider scopes, CSV protection, retention and disclosures |
 | AI-09 | Define reconciliation matching and review controls | Complete (proposed MVP rules) | Exact-ID precedence, exception states, ambiguity/manual review and audit behavior in PRODUCT-SPEC.md |
@@ -43,11 +43,11 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 ## Human approval gates
 
 - **Gate A — Product:** review and approve MVP, provider priority and Free/Pro packaging. No customer usage or owner approval is claimed until supplied.
-- **Gate B — UX:** approve React admin flows.
+- **Gate B — UX:** review and approve UX flows before visual implementation.
 - **Gate C — Architecture:** approve schema, API adapter/auth, imports, security and compatibility decisions.
 - **Gate D — Toolchain:** only after Gates A–C; decide build tooling. CLI remains prohibited until explicitly approved.
 - **Gate E — Release:** verify compatibility, provider API terms/access, privacy, docs and Marketplace requirements.
 
 ## Current handoff
 
-Phase 2 requirements/options work is ready for owner review. Implementation remains prohibited until the relevant human gates and the separate toolchain gate authorize it.
+Phases 1–3 have research/specification deliverables. Product and UX approvals are still pending; implementation remains prohibited until the human gates and separate toolchain gate authorize it.
