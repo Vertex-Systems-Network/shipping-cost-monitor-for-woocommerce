@@ -209,3 +209,22 @@
 		flex-direction: column;
 	}
 }
+
+
+.wpe-scm-period {
+	margin: 8px 0 0;
+	color: var(--wpe-scm-muted);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.wpe-scm-report-notice {
+	margin: 0 0 14px;
+	padding: 11px 14px;
+	border-left: 3px solid #b7791f;
+	border-radius: 3px;
+	background: #fff8e5;
+	color: #674b16;
+	font-size: 12px;
+	line-height: 1.55;
+}
