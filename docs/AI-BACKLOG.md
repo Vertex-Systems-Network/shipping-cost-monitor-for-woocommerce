@@ -9,7 +9,7 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 3. Treat `docs/ARCHITECTURE.md` as the current system boundary. Raise an architecture decision when implementation conflicts with it; do not silently fork the design.
 4. Do not add or run a CLI, package manager, build pipeline or plugin code before the pre-development exit review explicitly changes this constraint.
 5. Do not claim an item is complete because a draft or code snippet exists. Update status only with evidence and a human-readable summary.
-6. Do not invent compatibility claims, Marketplace approval, competitor exclusivity or test results.
+6. Do not invent compatibility claims, Marketplace approval, competitor exclusivity, provider API access or test results.
 7. Use focused changes; explain files changed, decisions, risks, and unverified assumptions in each handoff.
 
 ## Backlog
@@ -21,13 +21,14 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-03 | Approve Free/Pro boundary and MVP acceptance criteria | Planned | Product owner sign-off on SCM feature IDs |
 | AI-04 | Define terms: charged shipping, actual cost, variance, coverage, refunds and currencies | Planned | Metric glossary with worked examples |
 | AI-05 | Decide canonical storage for snapshots, components, imported rows and audit history | Planned | Schema decision record with query/performance rationale |
-| AI-06 | Map React admin screens, navigation, empty/loading/error/success states | Planned | Screen flow and reviewed wireframes/prototype |
+| AI-06 | Map React admin screens, navigation, connector setup, sync status and exception states | Planned | Screen flow and reviewed wireframes/prototype |
 | AI-07 | Platform compatibility baseline drafted | Drafted; release versions need verification | PHP/WP/WC/database baseline documented; HPOS, WPML and Polylang release matrix verified and recorded |
-| AI-08 | Define security/privacy review and import threat model | Planned | Capability matrix, CSV rules, retention and external-service disclosure |
+| AI-08 | Define security/privacy review and import/API threat model | Planned | Capability matrix, credential storage, scopes, CSV rules, retention and data disclosure |
 | AI-09 | Define reconciliation matching rules and human review controls | Planned | Examples for duplicates, splits, returns, credits and ambiguity |
 | AI-10 | Define report query, pagination, caching and background-job strategy | Planned | Performance budget and volume test scenarios |
 | AI-11 | Write release and WooCommerce Marketplace readiness checklist | Planned | Metadata, documentation, license, support and compatibility evidence |
 | AI-12 | Pre-development exit review | Planned | Product, UX, architecture, requirements and toolchain decision approved |
+| AI-13 | Create carrier/platform API capability matrix | Planned | For each candidate: regions, auth/scopes, shipment identifiers, quote vs final billing, adjustments, webhooks, limits and approval requirements |
 
 ## Agent task template
 
@@ -42,8 +43,8 @@ When assigning work, provide:
 
 ## Human approval gates
 
-- **Gate A — Product:** MVP and Free/Pro boundary approved.
-- **Gate B — UX:** React admin information architecture and flows approved.
-- **Gate C — Architecture:** data model, imports, security and compatibility decisions approved.
+- **Gate A — Product:** MVP, provider priority and Free/Pro boundary approved.
+- **Gate B — UX:** React admin information architecture and connector flows approved.
+- **Gate C — Architecture:** data model, API adapter/auth strategy, imports, security and compatibility decisions approved.
 - **Gate D — Toolchain:** only after Gates A–C, decide build tooling; no CLI/tooling is assumed before this gate.
-- **Gate E — Release:** compatibility evidence, documentation, privacy and Marketplace checks reviewed.
+- **Gate E — Release:** compatibility evidence, provider API terms/permissions, documentation, privacy and Marketplace checks reviewed.
