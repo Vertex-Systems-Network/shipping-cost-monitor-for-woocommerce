@@ -28,7 +28,7 @@ Dates are proposed targets. Completed dates show actual document-work completion
 | 5. Core plugin implementation | In progress (bootstrap/admin shell) | `█▌░░░░░░░░ 17%` | 2026-11-06 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
 | 6. Reconciliation, API sync and Pro workflows | Not started | `░░░░░░░░░░ 0%` | 2027-01-18 | 2027-02-05 | — | Provider adapters, exception queue, alerts and scenario analysis |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
-| 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Documentation, packaging, review checklist and submission candidate |
+| 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Free WordPress.org and Paid WooCommerce.com submission tracks, review evidence and release candidate |
 
 **Overall project progress:** `■■■■■░░░░░ 52%` (four phases complete; one of six planned Phase 5 work packages complete). Phase 5 implementation progress is 17%; no tests or compatibility checks have been run.
 
