@@ -94,7 +94,11 @@
 			value = value.replace( /,/g, '' );
 		}
 
-		return /^-?\d+(?:\.\d+)?$/.test( value ) ? Number( value ) : null;
+		if ( ! /^-?\d+(?:\.\d+)?$/.test( value ) ) {
+			return null;
+		}
+		const amount = Number( value );
+		return Number.isFinite( amount ) ? amount : null;
 	}
 
 	function CsvInvoicePreview() {
@@ -161,6 +165,9 @@
 			if ( ! file ) {
 				return;
 			}
+			setRawCsv( '' );
+			setParsed( null );
+			setMatchResults( {} );
 			if ( file.size > 5242880 ) {
 				setRawCsv( '' );
 				setFileName( '' );
@@ -269,7 +276,7 @@
 		return h(
 			'section',
 			{ className: 'wpe-scm-card wpe-scm-import-card' },
-			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'PRO IMPORT PREVIEW', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'INVOICE CSV PREVIEW', 'wpessential-shipping-cost-monitor' ) ),
 			h( 'h2', null, __( 'Preview a courier invoice CSV', 'wpessential-shipping-cost-monitor' ) ),
 			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Preview-only: the file stays in this browser. If you request exact matching, only mapped references are sent to WordPress; no file or cost rows are saved and no order costs change.', 'wpessential-shipping-cost-monitor' ) ),
 			h(
