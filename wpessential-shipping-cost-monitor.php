@@ -48,7 +48,7 @@ add_action( 'plugins_loaded', 'wpe_scm_initialize', 20 );
  * Tell administrators that WooCommerce must be active.
  */
 function wpe_scm_missing_woocommerce_notice(): void {
-	if ( ! current_user_can( 'activate_plugins' ) ) {
+	if ( ! current_user_can( 'activate_plugins' ) && ! current_user_can( 'manage_woocommerce' ) ) {
 		return;
 	}
 
