@@ -134,6 +134,15 @@ final class InvoiceImporter {
 			);
 		}
 
+		if ( strtoupper( $order->get_currency() ) !== $currency ) {
+			return array(
+				'row'    => $row_number,
+				'status' => 'currency_mismatch',
+				'order'  => $order->get_order_number(),
+				'currency' => $order->get_currency(),
+			);
+		}
+
 		$fingerprint = hash( 'sha256', $batch_hash . ':' . $row_number . ':' . $order_id );
 		$saved_fingerprint = (string) $order->get_meta( '_wpe_scm_cost_import_fingerprint', true );
 
