@@ -62,6 +62,14 @@ The plugin bootstrap and React admin shell are in place:
 
 This slice registers a WooCommerce submenu and renders an honest empty dashboard with confirmed-cost metric labels. It does not yet read orders, save costs, calculate reports, import CSVs or connect couriers. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress. PHP/runtime, UI, HPOS, WPML and Polylang compatibility still need verification.
 
+## Marketplace submission plan
+
+The target is **Free on WordPress.org** and **Paid/Pro on WooCommerce.com**. [Submission strategy](docs/SUBMISSION-STRATEGY.md) documents both tracks, package boundaries, review criteria and open Marketplace questions.
+
+WordPress.org Free must remain useful on its own and comply with directory rules. WooCommerce.com Paid requires an approved vendor account, technical/security/UX review, HPOS support and its current QIT checks. Woo's freemium workflow may require separate Free and Paid submissions that later merge into one product page; confirm whether a WordPress.org Free package satisfies that requirement before finalizing distribution.
+
+This repository is not a submission package. Neither channel has been submitted to, and no approval, vendor account, production ZIP or Marketplace test result is claimed.
+
 ## Planning documents
 
 - [Market research](docs/MARKET-RESEARCH.md)
@@ -73,6 +81,7 @@ This slice registers a WooCommerce submenu and renders an honest empty dashboard
 - [Pre-development readiness checklist](docs/PREDEVELOPMENT-READINESS.md)
 - [PHP, WordPress, WooCommerce and multilingual compatibility baseline](docs/COMPATIBILITY-BASELINE.md)
 - [Owner decision register for Gates A–D](docs/OWNER-DECISION-REGISTER.md)
+- [WordPress.org Free and WooCommerce.com Paid submission strategy](docs/SUBMISSION-STRATEGY.md)
 - [AI-assisted development backlog](docs/AI-BACKLOG.md)
 - [AI start-here instructions](docs/AI-START-HERE.md)
 
