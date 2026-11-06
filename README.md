@@ -5,7 +5,7 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Initial implementation in progress  
-> **Current overall progress:** `■■■■■░░░░░ 52%` — four planning phases have reviewable deliverables; the first Phase 5 bootstrap/admin-shell slice is in place; implementation is 17%; no CLI or build toolchain.  
+> **Current overall progress:** `■■■■■░░░░░ 54%` — four planning phases have reviewable deliverables; two of six Phase 5 work packages are implemented; runtime verification remains pending; no CLI or build toolchain.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -25,12 +25,12 @@ Dates are proposed targets. Completed dates show actual document-work completion
 | 2. Requirements, options bank and MVP proposal | MVP boundary accepted; pricing/merchant validation pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-20 | 2026-11-06 | Deduplicated feature IDs, metric contract, settings map and testable MVP criteria documented |
 | 3. UX flows and React admin specification | UX baseline approved; visual QA pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
 | 4. Architecture and pre-development readiness | Initial manual/no-API boundary accepted; security/retention pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-12-04 | 2026-11-06 | Storage, money/evidence model, imports, adapters/auth, security, compatibility and readiness decisions documented |
-| 5. Core plugin implementation | In progress (bootstrap/admin shell) | `█▌░░░░░░░░ 17%` | 2026-11-06 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
+| 5. Core plugin implementation | In progress (admin shell + manual order ledger; verification pending) | `███▍░░░░░░ 33%` | 2026-11-06 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
 | 6. Reconciliation, API sync and Pro workflows | Not started | `░░░░░░░░░░ 0%` | 2027-01-18 | 2027-02-05 | — | Provider adapters, exception queue, alerts and scenario analysis |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Free WordPress.org and Paid WooCommerce.com submission tracks, review evidence and release candidate |
 
-**Overall project progress:** `■■■■■░░░░░ 52%` (four phases complete; one of six planned Phase 5 work packages complete). Phase 5 implementation progress is 17%; no tests or compatibility checks have been run.
+**Overall project progress:** `■■■■■░░░░░ 54%` (four phases complete; two of six planned Phase 5 work packages implemented). Phase 5 implementation progress is 33%. Tests, runtime verification and compatibility checks have not been run.
 
 ## Phase 2 decision pack
 
@@ -50,17 +50,20 @@ Recommended first release: Free manual order-cost ledger, provenance, basic summ
 
 **Initial implementation boundary accepted:** WooCommerce CRUD for order data; manual cost entry first; no carrier API credentials. Credential security must be reviewed before integrations, and anonymized invoices plus retention policy are needed before CSV upload/persistence. The dated [compatibility baseline proposal](docs/COMPATIBILITY-BASELINE.md) is not a support claim. See the [owner decision register](docs/OWNER-DECISION-REGISTER.md).
 
-## Phase 5 implementation — first slice
+## Phase 5 implementation — current slices
 
-The plugin bootstrap and React admin shell are in place:
+The plugin bootstrap, React admin shell and manual order-cost ledger are implemented:
 
 - [Plugin entry point](wpessential-shipping-cost-monitor.php)
 - [Plugin coordinator](includes/Plugin.php)
 - [WooCommerce admin page](includes/Admin/Page.php)
+- [Order cost fields and CRUD persistence](includes/Admin/OrderCostFields.php)
 - [React dashboard shell](assets/js/admin.js)
 - [Admin styles](assets/css/admin.css)
 
-This slice registers a WooCommerce submenu and renders an honest empty dashboard with confirmed-cost metric labels. It does not yet read orders, save costs, calculate reports, import CSVs or connect couriers. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress. PHP/runtime, UI, HPOS, WPML and Polylang compatibility still need verification.
+The WooCommerce order editor now provides manual merchant-paid cost, currency, evidence type and source/note fields. Values are stored through the WooCommerce order object; private order notes record amount/currency/evidence changes and record removal. The dashboard copy explains how to enter costs and that summary reporting is still in development.
+
+Aggregate reports, CSV import/export, courier connections and multilingual UI remain unimplemented. This code slice has not been runtime-verified. No tests were run; PHP/runtime, UI, HPOS, WPML and Polylang compatibility remain unverified. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress.
 
 ## Marketplace submission plan
 
