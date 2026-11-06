@@ -78,7 +78,8 @@ final class Summary {
 
 				++$orders;
 				++$groups[ $order_currency ]['orders'];
-				$shipping_minor = wc_add_number_precision( (float) $order->get_shipping_total() );
+				$shipping_refunded = min( (float) $order->get_shipping_total(), (float) $order->get_total_shipping_refunded() );
+				$shipping_minor = wc_add_number_precision( (float) $order->get_shipping_total() - $shipping_refunded );
 				$groups[ $order_currency ]['charged_minor'] += $shipping_minor;
 
 				$evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
