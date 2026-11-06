@@ -52,18 +52,21 @@ Recommended first release: Free manual order-cost ledger, provenance, basic summ
 
 ## Phase 5 implementation — current slices
 
-The plugin bootstrap, React admin shell and manual order-cost ledger are implemented:
+The plugin bootstrap, React admin shell, manual order-cost ledger and first dashboard summary are implemented:
 
 - [Plugin entry point](wpessential-shipping-cost-monitor.php)
 - [Plugin coordinator](includes/Plugin.php)
 - [WooCommerce admin page](includes/Admin/Page.php)
 - [Order cost fields and CRUD persistence](includes/Admin/OrderCostFields.php)
-- [React dashboard shell](assets/js/admin.js)
+- [Read-only dashboard summary](includes/Admin/Summary.php)
+- [React dashboard and metrics](assets/js/admin.js)
 - [Admin styles](assets/css/admin.css)
 
-The WooCommerce order editor now provides manual merchant-paid cost, currency, evidence type and source/note fields. Values are stored through the WooCommerce order object; private order notes record amount/currency/evidence changes and record removal. The dashboard copy explains how to enter costs and that summary reporting is still in development.
+The order editor provides manual merchant-paid cost, currency, evidence type and source/note fields. Values are stored through the WooCommerce order object; private order notes record amount/currency/evidence changes and record removal. The dashboard queries the last 30 days of Processing and Completed orders with WooCommerce shipping lines, using paginated order queries. It displays shipping line totals and confirmed-cost totals separated by order currency, plus cost coverage for eligible orders.
 
-Aggregate reports, CSV import/export, courier connections and multilingual UI remain unimplemented. This code slice has not been runtime-verified. No tests were run; PHP/runtime, UI, HPOS, WPML and Polylang compatibility remain unverified. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress.
+Known report limits: shipping refunds are not adjusted; confirmed costs entered in another currency are excluded from the confirmed-cost total and coverage; shipping variance is hidden until cost tax treatment is captured. The date range is fixed to the last 30 days. CSV import/export, courier connections and multilingual UI remain unimplemented.
+
+This code slice has not been runtime-verified. No tests were run; PHP/runtime, UI, HPOS, WPML and Polylang compatibility remain unverified. No CLI, package manager, bundler or build pipeline was added; the UI uses the React runtime supplied by WordPress.
 
 ## Marketplace submission plan
 
