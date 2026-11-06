@@ -158,8 +158,27 @@ final class OrderCostFields {
 		$raw_amount = trim( sanitize_text_field( wp_unslash( $_POST['wpe_scm_cost_amount'] ) ) );
 
 		if ( '' === $raw_amount ) {
+			$previous_amount   = (string) $order->get_meta( '_wpe_scm_cost_amount', true );
+			$previous_currency = (string) $order->get_meta( '_wpe_scm_cost_currency', true );
+			$previous_evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
+
+			if ( '' === $previous_amount ) {
+				return;
+			}
+
 			$this->delete_cost_meta( $order );
 			$order->save();
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: currency code, 2: amount, 3: evidence label. */
+					__( 'Shipping cost record removed: %1$s %2$s (%3$s).', 'wpessential-shipping-cost-monitor' ),
+					$previous_currency,
+					$previous_amount,
+					$this->evidence_label( $previous_evidence )
+				),
+				0,
+				true
+			);
 			return;
 		}
 
@@ -181,10 +200,15 @@ final class OrderCostFields {
 		if (
 			! is_numeric( $amount )
 			|| ! preg_match( '/^[A-Z]{3}$/', $currency )
+			|| ! array_key_exists( $currency, get_woocommerce_currencies() )
 			|| ! array_key_exists( $evidence, $this->evidence_options() )
 		) {
 			return;
 		}
+
+		$previous_amount   = (string) $order->get_meta( '_wpe_scm_cost_amount', true );
+		$previous_currency = (string) $order->get_meta( '_wpe_scm_cost_currency', true );
+		$previous_evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
 
 		$order->update_meta_data( '_wpe_scm_cost_amount', $amount );
 		$order->update_meta_data( '_wpe_scm_cost_currency', $currency );
@@ -193,6 +217,29 @@ final class OrderCostFields {
 		$order->update_meta_data( '_wpe_scm_cost_updated_at', gmdate( 'Y-m-d H:i:s' ) );
 		$order->update_meta_data( '_wpe_scm_cost_updated_by', get_current_user_id() );
 		$order->save();
+
+		if (
+			$previous_amount !== $amount
+			|| $previous_currency !== $currency
+			|| $previous_evidence !== $evidence
+		) {
+			$action = '' === $previous_amount ? 'added' : 'updated';
+			$order->add_order_note(
+				sprintf(
+					/* translators: 1: action, 2: old currency, 3: old amount, 4: old evidence, 5: new currency, 6: new amount, 7: new evidence. */
+					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s).', 'wpessential-shipping-cost-monitor' ),
+					$action,
+					$previous_currency,
+					$previous_amount,
+					$this->evidence_label( $previous_evidence ),
+					$currency,
+					$amount,
+					$this->evidence_label( $evidence )
+				),
+				0,
+				true
+			);
+		}
 	}
 
 	/**
