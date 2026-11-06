@@ -48,7 +48,7 @@ Recommended first release: Free manual order-cost ledger, provenance, basic summ
 
 [Architecture decisions](docs/ARCHITECTURE-DECISIONS.md) records proposed storage boundaries, money/evidence handling, matching/import lifecycle, jobs, adapters, credential security, HPOS/language compatibility, performance and privacy controls. [Pre-development readiness](docs/PREDEVELOPMENT-READINESS.md) lists the remaining decisions and gates.
 
-**Still pending at Gate C:** approve the schema direction, credential key strategy and retention/uninstall behavior. A dated [compatibility baseline proposal](docs/COMPATIBILITY-BASELINE.md) now recommends a PHP/WP/WC/database baseline and WPML/Polylang verification matrix; it is not a plugin support claim. The proposed controls are not implementation or security-test evidence. No provider account/API access or compatibility test was performed.
+**Still pending at Gate C:** approve the schema direction, credential key strategy and retention/uninstall behavior. A dated [compatibility baseline proposal](docs/COMPATIBILITY-BASELINE.md) recommends a PHP/WP/WC/database baseline and WPML/Polylang verification matrix; it is not a plugin support claim. See the [owner decision register](docs/OWNER-DECISION-REGISTER.md) for the concrete A–D choices and recommendations. The proposed controls are not implementation or security-test evidence. No provider account/API access or compatibility test was performed.
 
 ## Planning documents
 
@@ -60,6 +60,7 @@ Recommended first release: Free manual order-cost ledger, provenance, basic summ
 - [Architecture decisions](docs/ARCHITECTURE-DECISIONS.md)
 - [Pre-development readiness checklist](docs/PREDEVELOPMENT-READINESS.md)
 - [PHP, WordPress, WooCommerce and multilingual compatibility baseline](docs/COMPATIBILITY-BASELINE.md)
+- [Owner decision register for Gates A–D](docs/OWNER-DECISION-REGISTER.md)
 - [AI-assisted development backlog](docs/AI-BACKLOG.md)
 - [AI start-here instructions](docs/AI-START-HERE.md)
 
