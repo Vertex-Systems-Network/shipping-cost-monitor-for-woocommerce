@@ -1,7 +1,7 @@
 # Compatibility baseline — proposal
 
 **Research snapshot:** 2026-11-06  
-**Status:** Proposed implementation baseline; no compatibility tests have been run.  
+**Status:** Proposed implementation baseline. One temporary Playground smoke run installed WordPress 7.1.4, WooCommerce 11.2.2 and PHP 8.3; this is not a compatibility matrix or support claim.  
 **Scope:** WPEssential Shipping Cost Monitor core plus optional WPML and Polylang multilingual-store coexistence.
 
 ## Recommended baseline for the first release
@@ -9,7 +9,7 @@
 | Layer | Proposed baseline | Evidence / implementation note |
 |---|---|---|
 | PHP | **8.1 minimum; 8.3+ recommended.** Test 8.1–8.4; add 8.5 only when WooCommerce and the chosen dependencies officially support it. | WooCommerce plans to require PHP 8.1 from 11.6; WooCommerce recommends 8.3+. Selecting 8.1 now avoids shipping on a runtime already scheduled to leave the supported baseline. |
-| WordPress | **6.9 minimum**, then test the newest stable WordPress at release time. | WooCommerce 10.8 raised its minimum WordPress to 6.9; current core requirements recommend PHP 8.3 and secure database versions. Recheck the minimum when the target WooCommerce stable release is selected. |
+| WordPress | **7.0 minimum** for the current WooCommerce 11.2.2 development target; then test the newest stable WordPress at release time. | The WooCommerce 11.2.2 activation check reported WordPress 7.0 as its minimum; the official WooCommerce plugin readme on its current repository also declares 7.0. WooCommerce 10.8's earlier 6.9 floor does not apply to this later target. Recheck at release.
 | WooCommerce | **11.2.2 current stable at snapshot; target 11.2+ for initial development.** Add latest stable and next beta to pre-release verification when available. | 11.3 is beta and scheduled for the week of 2026-11-09; do not declare it supported until stable and tested. WooCommerce documents per-version minimum WordPress/PHP requirements. |
 | Database | MySQL **8.0+** or MariaDB **10.6+** recommended; test both if infrastructure permits. | Align with WooCommerce server recommendations. Plugin tables must use WordPress database APIs/upgrade conventions. |
 | Memory / transport | WordPress memory limit **256 MB+** recommended; HTTPS required for provider connections. | Align with current WooCommerce server recommendations. This is not a guarantee of capacity for large imports. |
@@ -23,8 +23,8 @@ These are project recommendations, not claims that the plugin currently supports
 
 | Test lane | WordPress | WooCommerce | PHP | Database | Multilingual |
 |---|---|---|---|---|---|
-| Minimum supported | 6.9 | Lowest release approved for first release (proposed 11.2+) | 8.1 | MySQL 8.0 | None |
-| Recommended baseline | Latest stable at release (7.1 at research snapshot) | Latest stable at release (11.2.2 at snapshot) | 8.3 | MariaDB 10.6 | WPML current |
+| Minimum supported | 7.0 | WooCommerce 11.2.2 development target | 8.1 | MySQL 8.0 | None |
+| Recommended baseline | Latest stable at release (7.1.4 observed in Playground) | 11.2.2 stable at snapshot | 8.3 | MariaDB 10.6 | WPML current |
 | PHP upper lane | Latest stable WP | Latest stable WC | 8.4; 8.5 after official stack support | One supported DB | Polylang + Polylang for WooCommerce current |
 | Forward check | Latest stable WP | Next WooCommerce beta before release, then stable | New PHP minor after official support | Both DB families where available | Run integrations independently and together only if supported |
 
