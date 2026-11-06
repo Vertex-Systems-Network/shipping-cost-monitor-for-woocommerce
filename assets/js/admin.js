@@ -55,7 +55,7 @@
 				h( 'div', { className: 'wpe-scm-empty-icon', 'aria-hidden': 'true' }, '↗' ),
 				h( 'div', null,
 					h( 'h2', null, __( 'Your shipping picture will appear here', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'The dashboard is ready. Order cost entry and verified reporting are the next implementation steps; no sample figures are shown.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', null, __( 'Record merchant-paid cost and its evidence on each WooCommerce order. Summary reporting is still being built; no sample figures are shown.', 'wpessential-shipping-cost-monitor' ) )
 				)
 			),
 			h(
@@ -64,10 +64,10 @@
 				h(
 					'section',
 					{ className: 'wpe-scm-card wpe-scm-next-card' },
-					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'NEXT IN THE BUILD', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'h2', null, __( 'Start with reliable cost evidence', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'The first workflow will record a shipping cost against an order, keep its evidence type visible and preserve an audit trail.', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'span', { className: 'wpe-scm-status-pill' }, __( 'In progress', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'NEXT: VERIFIED REPORTING', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'h2', null, __( 'Manual order cost records', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'p', null, __( 'Use the WooCommerce order editor to save a cost, currency, evidence type and source note. Cost changes are recorded in the order's private notes.', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'span', { className: 'wpe-scm-status-pill' }, __( 'Reporting next', 'wpessential-shipping-cost-monitor' ) )
 				),
 				h(
 					'aside',
