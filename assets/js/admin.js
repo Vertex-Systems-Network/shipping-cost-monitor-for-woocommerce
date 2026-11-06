@@ -94,11 +94,7 @@
 			value = value.replace( /,/g, '' );
 		}
 
-		if ( ! /^-?\d+(?:\.\d+)?$/.test( value ) ) {
-			return null;
-		}
-		const amount = Number( value );
-		return Number.isFinite( amount ) ? amount : null;
+		return /^-?\d+(?:\.\d+)?$/.test( value ) ? value : null;
 	}
 
 	function CsvInvoicePreview() {
@@ -221,7 +217,9 @@
 			: [];
 
 		const matchedRows = validRows.slice( 0, 50 ).filter( function ( item ) {
-			return matchResults[ item.number ] && 'matched' === matchResults[ item.number ].status;
+			return matchResults[ item.number ]
+				&& 'matched' === matchResults[ item.number ].status
+				&& ! commitResults[ item.number ];
 		} );
 
 		function matchReferences() {
