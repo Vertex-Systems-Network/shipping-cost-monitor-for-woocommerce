@@ -89,6 +89,7 @@ final class Page {
 		$dashboard['ajax_url'] = admin_url( 'admin-ajax.php' );
 		$dashboard['match_nonce'] = wp_create_nonce( 'wpe_scm_match_preview' );
 		$dashboard['import_nonce'] = wp_create_nonce( 'wpe_scm_commit_invoice_rows' );
+		$dashboard['carrier_adapters'] = ( new \\WPEssential\\ShippingCostMonitor\\Integrations\\AdapterRegistry() )->get_public_status();
 
 		wp_localize_script(
 			'wpe-scm-admin',
