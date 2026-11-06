@@ -154,7 +154,7 @@
 				setCommitResults( {} );
 				setMapping( {
 					reference: findHeader( [ 'order', 'ordernumber', 'orderid' ] ),
-					amount: findHeader( [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total' ] ),
+					amount: findHeader( [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total', 'price', 'labelprice', 'labelcost' ] ),
 					currency: findHeader( [ 'currency', 'currencycode', 'iso' ] ),
 				} );
 				setError( '' );
@@ -213,14 +213,15 @@
 			? parsed.rows.filter( function ( item ) {
 				const reference = item.values[ Number( mapping.reference ) ] || '';
 				const amount = parseInvoiceAmount( item.values[ Number( mapping.amount ) ], decimalMark );
-				const currency = String( item.values[ Number( mapping.currency ) ] || '' ).trim();
-				return '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && /^[A-Za-z]{3}$/.test( currency );
+				const currency = '__order_currency__' === mapping.currency ? '' : String( item.values[ Number( mapping.currency ) ] || '' ).trim();
+				const currencyValid = '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency );
+				return '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid;
 			} )
 			: [];
 
 		const matchedRows = validRows.slice( 0, 50 ).filter( function ( item ) {
 			const match = matchResults[ item.number ];
-			const invoiceCurrency = String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
+			const invoiceCurrency = '__order_currency__' === mapping.currency ? String( match && match.currency || '' ).toUpperCase() : String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
 			return match
 				&& 'matched' === match.status
 				&& invoiceCurrency === String( match.currency || '' ).toUpperCase()
@@ -231,13 +232,14 @@
 			const reference = '' !== mapping.reference ? String( item.values[ Number( mapping.reference ) ] || '' ).trim() : '';
 			const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 			const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
-			const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
-			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && /^[A-Za-z]{3}$/.test( currency );
+			const currency = '__order_currency__' === mapping.currency ? '' : ( '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '' );
+			const currencyValid = '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency );
+			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid;
 			if ( commitResults[ item.number ] ) { return 'saved'; }
 			if ( matchResults[ item.number ] ) {
 				const match = matchResults[ item.number ];
 				if ( 'matched' !== match.status ) { return 'exception'; }
-				const invoiceCurrency = String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
+				const invoiceCurrency = '__order_currency__' === mapping.currency ? String( match.currency || '' ).toUpperCase() : String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
 				return invoiceCurrency === String( match.currency || '' ).toUpperCase() ? 'ready' : 'currency_mismatch';
 			}
 			return valid ? 'unmatched' : 'invalid';
@@ -259,7 +261,7 @@
 
 			const rowsToMatch = validRows.slice( 0, 50 );
 			if ( rowsToMatch.length < 1 ) {
-				setMatchError( __( 'Map the order ID/number, amount and currency columns first.', 'wpessential-shipping-cost-monitor' ) );
+				setMatchError( __( 'Map the order ID/number and amount columns, then map a currency column or choose the matched order currency.', 'wpessential-shipping-cost-monitor' ) );
 				return;
 			}
 
@@ -380,6 +382,7 @@
 						},
 					},
 					h( 'option', { value: '' }, __( 'Choose a column', 'wpessential-shipping-cost-monitor' ) ),
+					field === 'currency' ? h( 'option', { value: '__order_currency__' }, __( 'Use matched order currency', 'wpessential-shipping-cost-monitor' ) ) : null,
 					parsed ? parsed.headers.map( function ( header, index ) {
 						return h( 'option', { key: index, value: String( index ) }, header );
 					} ) : null
@@ -449,7 +452,7 @@
 					fieldSelect( __( 'Charge amount', 'wpessential-shipping-cost-monitor' ), 'amount' ),
 					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
 				),
-				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency. Negative rows require credit review and are excluded.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency (or inferred order currency). Negative rows require credit review and are excluded.', 'wpessential-shipping-cost-monitor' ) ),
 				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Show rows', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: rowFilter, onChange: function ( event ) { setRowFilter( event.target.value ); } }, h( 'option', { value: 'all' }, __( 'All preview rows', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'needs_review' }, __( 'Needs review', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'ready', }, __( 'Ready to save', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'saved', }, __( 'Saved', 'wpessential-shipping-cost-monitor' ) ) ),
 				h( 'div', { className: 'wpe-scm-import-actions' },
 					h( 'button', { type: 'button', className: 'button', onClick: matchReferences, disabled: matching || validRows.length < 1 }, matching ? __( 'Matching…', 'wpessential-shipping-cost-monitor' ) : __( 'Match first 50 valid rows', 'wpessential-shipping-cost-monitor' ) ),
@@ -472,13 +475,13 @@
 							const reference = '' !== mapping.reference ? item.values[ Number( mapping.reference ) ] || '' : '';
 							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 							const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
-							const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
+							const currency = '__order_currency__' === mapping.currency ? __( 'Order currency', 'wpessential-shipping-cost-monitor' ) : ( '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '' );
 							const valid = '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && /^[A-Za-z]{3}$/.test( currency );
 							const match = matchResults[ item.number ];
 							const commitResult = commitResults[ item.number ];
 							const status = commitResult
 								? commitResult.status
-								: match && 'matched' === match.status && match.order_number && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
+								: match && 'matched' === match.status && match.order_number && '__order_currency__' !== mapping.currency && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
 									? __( 'Currency differs from order', 'wpessential-shipping-cost-monitor' ) + ' (' + match.currency + ')'
 									: match && 'existing_cost' === match.status && match.order_number
 										? __( 'Existing cost on order', 'wpessential-shipping-cost-monitor' ) + ' #' + match.order_number
