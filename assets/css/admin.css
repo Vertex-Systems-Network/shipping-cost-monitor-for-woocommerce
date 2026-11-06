@@ -361,3 +361,14 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+
+.wpe-scm-import-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.wpe-scm-import-actions .button {
+	min-height: 34px;
+}
