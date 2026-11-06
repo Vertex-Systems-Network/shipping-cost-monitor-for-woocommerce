@@ -99,7 +99,7 @@ Pricing and final packaging await owner and merchant validation and Marketplace 
 - No general P&L/COGS suite, label platform, tracking portal or fulfilment replacement.
 - Carrier integrations are optional, adapter-based and prioritized by merchant usage, final-cost evidence, regional coverage, access terms and maintenance cost.
 - No runtime AI service or customer-data transmission to LLMs.
-- No CLI, build pipeline or plugin code until pre-development gates and toolchain approval are complete.
+- CLI, package managers, bundlers and build pipelines remain prohibited until the plugin is final; the initial React shell uses WordPress-bundled `wp.element`.
 
 ## For AI coding tools
 
