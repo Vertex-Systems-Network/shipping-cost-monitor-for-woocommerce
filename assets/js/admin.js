@@ -153,17 +153,22 @@
 				setParsed( { headers: headers, rows: rows } );
 				setMatchResults( {} );
 				setCommitResults( {} );
+				const isWooCommerceShipping = 'woocommerce_shipping_labels' === sourceFormat;
 				setMapping( {
-					reference: findHeader( [ 'order', 'ordernumber', 'orderid' ] ),
-					amount: findHeader( [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total', 'price', 'labelprice', 'labelcost' ] ),
-					currency: findHeader( [ 'currency', 'currencycode', 'iso' ] ),
+					reference: findHeader( isWooCommerceShipping ? [ 'order', 'ordernumber', 'orderid', 'ordername' ] : [ 'order', 'ordernumber', 'orderid' ] ),
+					amount: findHeader( isWooCommerceShipping ? [ 'price', 'labelprice', 'labelcost', 'amount', 'cost' ] : [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total', 'price', 'labelprice', 'labelcost' ] ),
+					currency: isWooCommerceShipping ? '__order_currency__' : findHeader( [ 'currency', 'currencycode', 'iso' ] ),
 				} );
+				if ( isWooCommerceShipping ) {
+					setEvidence( 'booked_label' );
+					setTaxBasis( 'unknown' );
+				}
 				setError( '' );
 			} catch ( parseError ) {
 				setParsed( null );
 				setError( parseError.message || __( 'Could not read this CSV.', 'wpessential-shipping-cost-monitor' ) );
 			}
-		}, [ rawCsv, delimiter ] );
+		}, [ rawCsv, delimiter, sourceFormat ] );
 
 		function chooseFile( event ) {
 			const file = event.target.files && event.target.files[ 0 ];
