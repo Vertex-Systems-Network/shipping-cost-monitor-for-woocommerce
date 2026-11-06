@@ -99,7 +99,7 @@
 				h( 'div', { className: 'wpe-scm-empty-icon', 'aria-hidden': 'true' }, hasOrders ? '✓' : '↗' ),
 				h( 'div', null,
 					h( 'h2', null, hasOrders ? __( 'Currency-separated order summary', 'wpessential-shipping-cost-monitor' ) : __( 'No eligible shipping orders found', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, hasOrders ? __( 'This first report includes Processing and Completed orders with shipping lines. Shipping refunds are not adjusted yet; variance remains hidden until cost tax treatment is recorded.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are non-virtual Processing or Completed orders with a shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', null, hasOrders ? __( 'This first report includes Processing and Completed orders with shipping lines. Shipping refunds are not adjusted yet; variance remains hidden until cost tax treatment is recorded.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
 				)
 			),
 			h(
