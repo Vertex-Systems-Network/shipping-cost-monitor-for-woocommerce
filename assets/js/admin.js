@@ -337,7 +337,7 @@
 				matchedRows.forEach( function ( item, index ) {
 					const match = matchResults[ item.number ];
 					const amount = parseInvoiceAmount( item.values[ Number( mapping.amount ) ], decimalMark );
-					const currency = String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
+					const currency = '__order_currency__' === mapping.currency ? String( match.currency || '' ).toUpperCase() : String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
 					body.append( 'rows[' + index + '][row]', String( item.number ) );
 					body.append( 'rows[' + index + '][order_id]', String( match.order_id ) );
 					body.append( 'rows[' + index + '][reference]', String( item.values[ Number( mapping.reference ) ] || '' ) );
