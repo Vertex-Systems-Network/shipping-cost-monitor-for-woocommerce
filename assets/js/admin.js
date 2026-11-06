@@ -448,9 +448,12 @@
 							const commitResult = commitResults[ item.number ];
 							const status = commitResult
 								? commitResult.status
-								: match && match.status === 'matched' && match.order_number
-									? 'matched: #' + match.order_number + ' (' + match.order_status + ')'
-									: match ? match.status : valid ? __( 'Ready to match', 'wpessential-shipping-cost-monitor' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'wpessential-shipping-cost-monitor' ) : __( 'Missing or invalid required value', 'wpessential-shipping-cost-monitor' );
+								:
+									match && 'existing_cost' === match.status && match.order_number
+										? __( 'Existing cost on order', 'wpessential-shipping-cost-monitor' ) + ' #' + match.order_number
+										: match && 'matched' === match.status && match.order_number
+											? 'matched: #' + match.order_number + ' (' + match.order_status + ')'
+											: match ? match.status : valid ? __( 'Ready to match', 'wpessential-shipping-cost-monitor' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'wpessential-shipping-cost-monitor' ) : __( 'Missing or invalid required value', 'wpessential-shipping-cost-monitor' );
 							return h( 'tr', { key: item.number },
 								h( 'td', null, item.number ),
 								h( 'td', null, reference ),
