@@ -69,6 +69,8 @@ final class Page {
 			true
 		);
 
+		wp_localize_script( 'wpe-scm-admin', 'wpeScmDashboard', Summary::build() );
+
 		wp_set_script_translations(
 			'wpe-scm-admin',
 			'wpessential-shipping-cost-monitor',
