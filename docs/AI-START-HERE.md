@@ -6,7 +6,7 @@ AI tools only know the project files they can access and actually load. Reposito
 
 ## Copy/paste prompt
 
-> Work on the GitHub repository `Vertex-Systems-Network/wpessential-shipping-cost-monitor`. First read `AGENTS.md`, `README.md`, and the task-relevant files in `docs/`. Follow the feature IDs in `docs/PRODUCT-SPEC.md` and the task gates in `docs/AI-BACKLOG.md`. This project is still in documentation-only pre-development: do not add plugin code, CLI, package manager, build pipeline, or tests until the documented human approval gate. For this task: [describe one bounded task]. Before editing, summarize the applicable requirements and files you will change. Afterward, report changes, evidence, assumptions, unresolved issues, and proposed status updates.
+> Work on the GitHub repository `Vertex-Systems-Network/wpessential-shipping-cost-monitor`. First read `AGENTS.md`, `README.md`, and the task-relevant files in `docs/`. Follow the feature IDs in `docs/PRODUCT-SPEC.md` and the task gates in `docs/AI-BACKLOG.md`. Initial implementation is authorized within `docs/OWNER-DECISION-REGISTER.md`. Use React through WordPress-bundled `wp.element` and plain JavaScript. Do not add CLI, package managers, bundlers or build pipelines; these remain prohibited until the plugin is final. API credentials and CSV upload persistence remain deferred pending evidence/review. For this task: [describe one bounded task]. Before editing, summarize the applicable requirements and files you will change. Afterward, report changes, evidence, assumptions, unresolved issues, and proposed status updates.
 
 ## Tool entry points
 
