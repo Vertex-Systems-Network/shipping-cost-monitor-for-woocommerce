@@ -38,12 +38,9 @@ The owner said “start” after reviewing the gate register. For the initial sc
 | D-1 | Development tooling authorization | Start a no-build implementation using WordPress-bundled React (`wp.element`) and plain JavaScript; PHP owns server behavior. No npm, package manager, bundler or build pipeline. | Accepted under the explicit start instruction; stop for a new approval if compilation/tooling becomes necessary. | Accepted; constrained path |
 | D-2 | CLI policy | CLI remains absent until the plugin is final and the owner explicitly changes this instruction. | Preserves the standing no-CLI requirement. | Accepted; prohibited for now |
 
-## How to record a decision
+## Remaining decisions
 
-Copy the ID and reply in this format:
-
-- `A-1 Accept`
-- `C-5 Change: PHP 8.3 minimum`
-- `D-1 Defer`
-
-No decision is inferred from this recommendation sheet or from the fact that planning documents exist. After decisions are supplied, update README.md, the relevant source-of-truth document and AI-BACKLOG.md before implementation begins.
+- Provide anonymized merchant invoice samples before CSV parsing/matching is finalized (A-3).
+- Complete credential-security and retention reviews before adding API credentials or CSV upload persistence (C-3/C-4).
+- Recheck compatibility versions and run the matrix before making support claims (C-5).
+- Keep CLI, package managers, bundlers and build pipelines out until the plugin is final (D-2).
