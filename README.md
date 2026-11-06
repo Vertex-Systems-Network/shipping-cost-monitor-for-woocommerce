@@ -71,13 +71,13 @@ The CSV export uses capability and nonce checks, paginated WooCommerce order que
 
 ## Phase 6 implementation — current slices
 
-The Pro invoice workflow has a browser-local CSV preview and exact, read-only order-reference matching:
+The Pro invoice workflow has a browser-local CSV preview and exact, read-only WooCommerce order ID/number matching:
 
 - [CSV preview, mapping and matching UI](assets/js/admin.js)
 - [Exact order-reference matcher](includes/Admin/ReferenceMatcher.php)
 - [Dashboard request wiring](includes/Admin/Page.php)
 
-The preview reads .csv files in the browser (maximum 5 MB and 5,000 data rows), supports comma/semicolon/tab delimiters and decimal-mark selection, and maps reference, amount and currency columns. The selected file and full invoice rows are not uploaded or persisted. If the merchant clicks the match action, only the mapped references for up to 50 valid rows are sent to WordPress. Exact order ID/order-number matches, duplicate source references, ambiguous results and unmatched references are reported without changing orders.
+The preview reads .csv files in the browser (maximum 5 MB and 5,000 data rows), supports comma/semicolon/tab delimiters and decimal-mark selection, and maps reference, amount and currency columns. The selected file and full invoice rows are not uploaded or persisted. If the merchant clicks the match action, only the mapped references for up to 50 valid rows are sent to WordPress. Exact WooCommerce order ID/order-number matches, duplicate source references, ambiguous results and unmatched references are reported without changing orders. Tracking/AWB matching is not part of this preview.
 
 Persistent import, mapping-profile storage, order-cost commits, exception review, carrier API connections and provider sync remain incomplete. Invoice samples and retention review are still needed before saving invoice rows; API credentials remain blocked on credential-security design. This Phase 6 code has not been runtime-verified and no tests were run.
 
