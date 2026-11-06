@@ -88,7 +88,7 @@
 	}
 
 	function normalizeOrderReference( value ) {
-		return String( value || '' ).trim().replace( /^#\\s*/, '' );
+		return String( value || '' ).trim().replace( /^#\s*/, '' );
 	}
 
 	function parseInvoiceAmount( rawValue, decimalMark ) {
