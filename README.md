@@ -30,7 +30,7 @@ Dates are proposed targets. Completed dates show actual document-work completion
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Free WordPress.org and Paid WooCommerce.com submission tracks, review evidence and release candidate |
 
-**Overall project progress:** `■■■■■■█░░░ 71%` (Phases 1–5 code delivery is complete; Phase 6 has completed five of six implementation packages). Phase 5 is 100%; Phase 6 is 83%. Runtime verification and compatibility checks are deferred to Phase 7. Tests have not been run.
+**Overall project progress:** `■■■■■■█░░░ 73%` (Phases 1–5 code delivery is complete; Phase 6 has completed five of six implementation packages). Phase 5 is 100%; Phase 6 is 83%. Runtime verification and compatibility checks are deferred to Phase 7. Tests have not been run.
 
 ## Phase 2 decision pack
 
