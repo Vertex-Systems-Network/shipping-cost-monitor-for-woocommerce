@@ -6,7 +6,7 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 > **Project status:** Phase 5 code complete; Phase 6 invoice workflow in progress  
 > **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 5 code scope is complete; Phase 6 has five of six implementation packages delivered; dashboard smoke render is verified; full compatibility/workflow verification remains pending; no CLI or build toolchain.  
-> **Last status update:** 2026-11-06 — staging evidence and AI backlog wording reconciled; progress unchanged.  
+> **Last status update:** 2026-11-06 — Composer PSR-4 mapping and source fallback added; runtime/package verification pending.  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -143,6 +143,10 @@ This repository is not a submission package. Neither channel has been submitted 
 
 Pricing and final packaging await owner and merchant validation and Marketplace review.
 
+## Composer PSR-4 autoloading
+
+`composer.json` maps `WPEssential\\ShippingCostMonitor\\` to `includes/`. The plugin bootstrap loads the generated `vendor/autoload.php` when it is present; until final packaging, a small source fallback autoloader resolves the same namespace without invoking Composer CLI. Manual class includes were removed from the plugin coordinator. Composer's generated `vendor/` files have not been created or runtime-tested because CLI/package tooling remains deferred until the plugin is final.
+
 ## Scope guardrails
 
 - No general P&L/COGS suite, label platform, tracking portal or fulfilment replacement.
@@ -159,3 +163,4 @@ Repository-aware agents should load [AGENTS.md](AGENTS.md) before acting. Tool e
 
 - **2026-11-06:** Cleaned a duplicated sentence in AI-34 and reconciled the README with the verified state: WordPress staging has official WooCommerce 11.2.2 active, but the project ZIP could not be loaded. Code review also found a stale hard-coded refund-status flag in the report response; it now reflects whether shipping refunds reduced charged totals in the selected period (AI-35). Refund scenario runtime verification remains pending. Phase 6 stays at 83% and overall progress stays at 73%; CSV import runtime QA and provider verification remain open.
 - **2026-11-06:** Retried the GitHub ZIP download once through the browser's download event; it timed out again. The staging installer only offers standard ZIP upload, so no project plugin install or CSV runtime verification occurred. Public provider recheck confirms PostEx Pakistan advertises API/WooCommerce integration but still publishes no reviewed final-cost schema; iMile Express documents settled billing fields, but is a distinct HK/Far East service and merchant-account fit remains unverified. No live adapter is enabled. Phase 6 remains 83%, overall 73%; both blockers remain open pending a usable plugin archive and account-level provider/security evidence.
+- **2026-11-06:** Added the Composer PSR-4 namespace map, bootstrap preference for generated Composer autoload, and source-only PSR-4 fallback; removed manual includes from the coordinator. No Composer CLI was run, so generated vendor files and runtime verification remain pending. Phase progress is unchanged.
