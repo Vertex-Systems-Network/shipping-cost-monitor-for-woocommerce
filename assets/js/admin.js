@@ -42,7 +42,7 @@
 				)
 			),
 			h(
-				'div',
+				'section',
 				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
 				h( MetricCard, { label: __( 'Shipping charged', 'wpessential-shipping-cost-monitor' ), note: __( 'Customer-paid shipping', 'wpessential-shipping-cost-monitor' ) } ),
 				h( MetricCard, { label: __( 'Confirmed cost', 'wpessential-shipping-cost-monitor' ), note: __( 'Invoice-final or merchant-confirmed', 'wpessential-shipping-cost-monitor' ) } ),
@@ -82,7 +82,13 @@
 
 	function mount() {
 		const root = document.getElementById( 'wpe-scm-root' );
-		if ( root && wp.element.render ) {
+		if ( ! root ) {
+			return;
+		}
+
+		if ( wp.element.createRoot ) {
+			wp.element.createRoot( root ).render( h( App ) );
+		} else if ( wp.element.render ) {
 			wp.element.render( h( App ), root );
 		}
 	}
