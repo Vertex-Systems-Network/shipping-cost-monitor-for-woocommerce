@@ -517,6 +517,9 @@
 		const confirmedValue = moneyByCurrency( 'confirmed_cost', 'confirmed_orders' );
 		const varianceValue = report.variance_available ? moneyByCurrency( 'variance', 'comparable_orders' ) : __( 'Not available', 'wpessential-shipping-cost-monitor' );
 		const hasOrders = eligible > 0;
+		const methodRows = groups.reduce( function ( rows, group ) {
+			return rows.concat( ( group.shipping_methods || [] ).filter( function ( method ) { return Number( method.comparable_orders ) > 0; } ).map( function ( method ) { return Object.assign( { currency: group.currency }, method ); } ) );
+		}, [] );
 		const periodLabel = period.start && period.end ? period.start + ' — ' + period.end + ' (' + ( period.timezone || 'UTC' ) + ')' : __( 'Last 30 days', 'wpessential-shipping-cost-monitor' );
 
 		return h(
@@ -585,6 +588,33 @@
 				'p',
 				{ className: 'wpe-scm-report-notice', role: 'status' },
 				mismatchCount + ' ' + __( 'confirmed cost record(s) use a different currency and are excluded from the confirmed-cost total and coverage.', 'wpessential-shipping-cost-monitor' )
+			) : null,
+			methodRows.length > 0 ? h(
+				'section',
+				{ className: 'wpe-scm-card wpe-scm-method-report' },
+				h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'COST BY SHIPPING METHOD', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'h2', null, __( 'Comparable shipping cost by method', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Variance includes only currency-matched, confirmed tax-exclusive cost records. Mixed-method orders are grouped by their method combination.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'div', { className: 'wpe-scm-import-table-wrap' },
+					h( 'table', { className: 'widefat striped wpe-scm-import-table' },
+						h( 'thead', null, h( 'tr', null,
+							h( 'th', null, __( 'Shipping method', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Orders', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Shipping charged', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Confirmed cost', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Variance', 'wpessential-shipping-cost-monitor' ) )
+						) ),
+						h( 'tbody', null, methodRows.map( function ( method, index ) {
+							return h( 'tr', { key: method.currency + '-' + index },
+								h( 'td', null, method.label + ' (' + method.currency + ')' ),
+								h( 'td', null, method.comparable_orders ),
+								h( 'td', null, method.currency + ' ' + method.shipping_charged ),
+								h( 'td', null, method.currency + ' ' + method.comparable_confirmed_cost ),
+								h( 'td', null, method.currency + ' ' + method.variance )
+							);
+						} ) )
+					)
+				)
 			) : null,
 			h(
 				'section',
