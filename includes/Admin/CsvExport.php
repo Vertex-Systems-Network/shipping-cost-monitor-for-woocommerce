@@ -62,7 +62,8 @@ final class CsvExport {
 				__( 'Order date', 'wpessential-shipping-cost-monitor' ),
 				__( 'Status', 'wpessential-shipping-cost-monitor' ),
 				__( 'Currency', 'wpessential-shipping-cost-monitor' ),
-				__( 'Shipping charged (ex tax)', 'wpessential-shipping-cost-monitor' ),
+				__( 'Shipping refunded (ex tax)', 'wpessential-shipping-cost-monitor' ),
+				__( 'Shipping charged net (ex tax)', 'wpessential-shipping-cost-monitor' ),
 				__( 'Recorded cost', 'wpessential-shipping-cost-monitor' ),
 				__( 'Cost currency', 'wpessential-shipping-cost-monitor' ),
 				__( 'Evidence', 'wpessential-shipping-cost-monitor' ),
@@ -107,6 +108,8 @@ final class CsvExport {
 				$evidence     = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
 				$tax_basis    = (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true );
 				$cost_currency = '' !== $cost_currency ? $cost_currency : $currency;
+				$shipping_refunded = min( (float) $order->get_shipping_total(), (float) $order->get_total_shipping_refunded() );
+				$shipping_net = (float) $order->get_shipping_total() - $shipping_refunded;
 				$variance     = '';
 				$comparison   = __( 'No confirmed cost', 'wpessential-shipping-cost-monitor' );
 
@@ -121,7 +124,7 @@ final class CsvExport {
 						$comparison = __( 'Tax basis not comparable', 'wpessential-shipping-cost-monitor' );
 					} else {
 						$variance = wc_format_decimal(
-							(float) $order->get_shipping_total() - (float) $cost_amount,
+							$shipping_net - (float) $cost_amount,
 							wc_get_price_decimals()
 						);
 						$comparison = __( 'Comparable', 'wpessential-shipping-cost-monitor' );
@@ -137,7 +140,8 @@ final class CsvExport {
 					$created ? wp_date( 'Y-m-d H:i:s', $created->getTimestamp() ) : '',
 					self::safe_text( $order->get_status() ),
 					self::safe_text( $currency ),
-					wc_format_decimal( $order->get_shipping_total(), wc_get_price_decimals() ),
+					wc_format_decimal( $shipping_refunded, wc_get_price_decimals() ),
+					wc_format_decimal( $shipping_net, wc_get_price_decimals() ),
 					is_numeric( $cost_amount ) ? wc_format_decimal( $cost_amount, wc_get_price_decimals() ) : '',
 					self::safe_text( $cost_currency ),
 					self::safe_text( $evidence ),
