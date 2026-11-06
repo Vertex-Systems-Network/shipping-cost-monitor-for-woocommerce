@@ -46,7 +46,7 @@ final class Plugin {
 		$order_cost_fields = new Admin\OrderCostFields();
 		$order_cost_fields->register();
 
-		$csv_export = new Admin\\CsvExport();
+		$csv_export = new Admin\CsvExport();
 		$csv_export->register();
 	}
 }
