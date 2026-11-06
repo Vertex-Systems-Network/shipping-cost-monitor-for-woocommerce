@@ -2,4 +2,4 @@
 
 Before acting, read `AGENTS.md`, `README.md`, and the task-relevant files under `docs/`. The canonical feature bank is `docs/PRODUCT-SPEC.md`; architecture is `docs/ARCHITECTURE.md`; AI task IDs/gates are `docs/AI-BACKLOG.md`.
 
-This repository is in documentation-only pre-development. Do not add plugin code, run tests, introduce CLI/package/build tooling, or claim compatibility until the human gate in `AGENTS.md` authorizes it. Keep options unique by feature ID. Carrier API estimates are not final billed costs. Report evidence and assumptions in every handoff.
+Initial implementation is authorized within `docs/OWNER-DECISION-REGISTER.md`. Use WordPress-bundled React (`wp.element`) with no build step. Do not introduce CLI, package managers, bundlers or build systems; these remain prohibited until the plugin is final. API credentials and CSV upload persistence are deferred. Do not claim tests or compatibility unless actually verified. Keep options unique by feature ID. Carrier API estimates are not final billed costs. Report evidence and assumptions in every handoff.
