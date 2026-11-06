@@ -5,7 +5,7 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Pre-development planning  
-> **Current overall progress:** `■■■░░░░░░░ 25%` — desk research and decision-ready requirements complete; product-owner review pending; no plugin code or CLI.  
+> **Current overall progress:** `■■■■░░░░░░ 38%` — desk research, requirements and UX flow specification drafted; product-owner review pending; no plugin code or CLI.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -17,20 +17,20 @@ Record what customers paid for shipping and what merchants paid to fulfil shipme
 
 ## Roadmap
 
-Dates are proposed targets. Completed dates show actual work completion; progress shows phase deliverables, not calendar time. “Decision-ready” means the documented proposal is complete, not approved by the product owner. No development code, CLI or build system has been added.
+Dates are proposed targets. Completed dates show actual work completion; progress shows phase deliverables, not calendar time. UX flows are documented for review; no interactive React prototype or plugin implementation has been built. No CLI or build system has been added.
 
 | Phase | Status | Progress | Start | Target end | Completed | Exit outcome |
 |---|---|---:|---|---|---|---|
 | 1. Competitor and public API desk research | Complete (desk review) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-13 | 2026-11-06 | Competitor overlap and region-aware provider evidence matrix |
 | 2. Requirements, options bank and MVP proposal | Complete (decision-ready draft; Gate A pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-20 | 2026-11-06 | Deduplicated feature IDs, metric contract, settings map and testable MVP criteria documented |
-| 3. UX flows and React admin prototype | Planned (starts after Gate A) | `░░░░░░░░░░ 0%` | 2026-11-21 | 2026-11-27 | — | Dashboard, import, connector, sync and exception flows |
+| 3. UX flows and React admin specification | Complete (review draft; Gate B pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
 | 4. Architecture and pre-development readiness | Planned | `░░░░░░░░░░ 0%` | 2026-11-28 | 2026-12-04 | — | Data model, API adapter/auth, security and compatibility decisions |
 | 5. Core plugin implementation | Not started | `░░░░░░░░░░ 0%` | 2026-12-07 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
 | 6. Reconciliation, API sync and Pro workflows | Not started | `░░░░░░░░░░ 0%` | 2027-01-18 | 2027-02-05 | — | Provider adapters, exception queue, alerts and scenario analysis |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Documentation, packaging, review checklist and submission candidate |
 
-**Overall planning progress:** `■■■░░░░░░░ 25%` (two of eight planning phases complete; implementation remains 0%).
+**Overall planning progress:** `■■■■░░░░░░ 38%` (three of eight planning phases have draft deliverables; implementation remains 0%).
 
 ## Phase 2 decision pack
 
@@ -38,11 +38,18 @@ Recommended first release: Free manual order-cost ledger, provenance, basic summ
 
 **Still pending at Gate A:** product-owner review of the proposed scope and future commercial Free/Pro boundary. This is not represented as approved or customer-validated.
 
+## Phase 3 UX specification
+
+[UX flows and React admin interface specification](docs/UX-FLOWS.md) defines navigation, dashboard, cost records, import wizard, exception queue, integrations, reports, settings and screen states. It is a reviewable UX document; no interactive prototype/code was created.
+
+**Still pending at Gate B:** owner review of the flows. React implementation/toolchain remains deferred until the relevant gates.
+
 ## Planning documents
 
 - [Market research](docs/MARKET-RESEARCH.md)
 - [Carrier and platform API capability matrix](docs/INTEGRATION-MATRIX.md)
 - [Product requirements and options bank](docs/PRODUCT-SPEC.md)
+- [UX flows and interface states](docs/UX-FLOWS.md)
 - [Systems architecture, adapters and data flow](docs/ARCHITECTURE.md)
 - [AI-assisted development backlog](docs/AI-BACKLOG.md)
 - [AI start-here instructions](docs/AI-START-HERE.md)
