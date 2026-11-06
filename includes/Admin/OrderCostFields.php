@@ -46,6 +46,8 @@ final class OrderCostFields {
 		$amount    = (string) $order->get_meta( '_wpe_scm_cost_amount', true );
 		$currency  = (string) $order->get_meta( '_wpe_scm_cost_currency', true );
 		$evidence  = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
+		$tax_basis = (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true );
+		$tax_basis = '' !== $tax_basis ? $tax_basis : 'unknown';
 		$note      = (string) $order->get_meta( '_wpe_scm_cost_note', true );
 		$currency  = '' !== $currency ? $currency : $order->get_currency();
 		$precision = wc_get_price_decimals();
@@ -113,6 +115,29 @@ final class OrderCostFields {
 
 		echo '<p class="form-field form-field-wide">';
 		printf(
+			'<label for="wpe_scm_cost_tax_basis">%s</label>',
+			esc_html__( 'Cost tax treatment', 'wpessential-shipping-cost-monitor' )
+		);
+		echo '<select class="short" id="wpe_scm_cost_tax_basis" name="wpe_scm_cost_tax_basis">';
+		$tax_options = array(
+			'unknown'   => __( 'Unknown — do not compare', 'wpessential-shipping-cost-monitor' ),
+			'exclusive' => __( 'Tax-exclusive', 'wpessential-shipping-cost-monitor' ),
+			'inclusive' => __( 'Tax-inclusive', 'wpessential-shipping-cost-monitor' ),
+		);
+		foreach ( $tax_options as $value => $label ) {
+			printf(
+				'<option value="%1$s" %2$s>%3$s</option>',
+				esc_attr( $value ),
+				selected( $tax_basis, $value, false ),
+				esc_html( $label )
+			);
+		}
+		echo '</select>';
+		echo '<span class="description">' . esc_html__( 'Variance is calculated only when the entered courier amount is tax-exclusive, matching the shipping total shown in reports.', 'wpessential-shipping-cost-monitor' ) . '</span>';
+		echo '</p>';
+
+		echo '<p class="form-field form-field-wide">';
+		printf(
 			'<label for="wpe_scm_cost_note">%s</label>',
 			esc_html__( 'Source or note', 'wpessential-shipping-cost-monitor' )
 		);
@@ -161,6 +186,7 @@ final class OrderCostFields {
 			$previous_amount   = (string) $order->get_meta( '_wpe_scm_cost_amount', true );
 			$previous_currency = (string) $order->get_meta( '_wpe_scm_cost_currency', true );
 			$previous_evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
+			$previous_tax_basis = (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true );
 
 			if ( '' === $previous_amount ) {
 				return;
@@ -193,6 +219,9 @@ final class OrderCostFields {
 		$evidence = isset( $_POST['wpe_scm_cost_evidence'] )
 			? sanitize_key( wp_unslash( $_POST['wpe_scm_cost_evidence'] ) )
 			: '';
+		$tax_basis = isset( $_POST['wpe_scm_cost_tax_basis'] )
+			? sanitize_key( wp_unslash( $_POST['wpe_scm_cost_tax_basis'] ) )
+			: 'unknown';
 		$note     = isset( $_POST['wpe_scm_cost_note'] )
 			? sanitize_textarea_field( wp_unslash( $_POST['wpe_scm_cost_note'] ) )
 			: '';
@@ -202,6 +231,7 @@ final class OrderCostFields {
 			|| ! preg_match( '/^[A-Z]{3}$/', $currency )
 			|| ! array_key_exists( $currency, get_woocommerce_currencies() )
 			|| ! array_key_exists( $evidence, $this->evidence_options() )
+			|| ! in_array( $tax_basis, array( 'unknown', 'exclusive', 'inclusive' ), true )
 		) {
 			return;
 		}
@@ -209,10 +239,12 @@ final class OrderCostFields {
 		$previous_amount   = (string) $order->get_meta( '_wpe_scm_cost_amount', true );
 		$previous_currency = (string) $order->get_meta( '_wpe_scm_cost_currency', true );
 		$previous_evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
+		$previous_tax_basis = (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true );
 
 		$order->update_meta_data( '_wpe_scm_cost_amount', $amount );
 		$order->update_meta_data( '_wpe_scm_cost_currency', $currency );
 		$order->update_meta_data( '_wpe_scm_cost_evidence', $evidence );
+		$order->update_meta_data( '_wpe_scm_cost_tax_basis', $tax_basis );
 		$order->update_meta_data( '_wpe_scm_cost_note', $note );
 		$order->update_meta_data( '_wpe_scm_cost_updated_at', gmdate( 'Y-m-d H:i:s' ) );
 		$order->update_meta_data( '_wpe_scm_cost_updated_by', get_current_user_id() );
@@ -222,19 +254,21 @@ final class OrderCostFields {
 			$previous_amount !== $amount
 			|| $previous_currency !== $currency
 			|| $previous_evidence !== $evidence
+			|| $previous_tax_basis !== $tax_basis
 		) {
 			$action = '' === $previous_amount ? 'added' : 'updated';
 			$order->add_order_note(
 				sprintf(
-					/* translators: 1: action, 2: old currency, 3: old amount, 4: old evidence, 5: new currency, 6: new amount, 7: new evidence. */
-					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s).', 'wpessential-shipping-cost-monitor' ),
+					/* translators: 1: action, 2: old currency, 3: old amount, 4: old evidence, 5: new currency, 6: new amount, 7: new evidence, 8: new tax basis. */
+					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s; tax %8$s).', 'wpessential-shipping-cost-monitor' ),
 					$action,
 					$previous_currency,
 					$previous_amount,
 					$this->evidence_label( $previous_evidence ),
 					$currency,
 					$amount,
-					$this->evidence_label( $evidence )
+					$this->evidence_label( $evidence ),
+					$tax_basis
 				),
 				0,
 				true
@@ -253,6 +287,7 @@ final class OrderCostFields {
 				'_wpe_scm_cost_amount',
 				'_wpe_scm_cost_currency',
 				'_wpe_scm_cost_evidence',
+				'_wpe_scm_cost_tax_basis',
 				'_wpe_scm_cost_note',
 				'_wpe_scm_cost_updated_at',
 				'_wpe_scm_cost_updated_by',
