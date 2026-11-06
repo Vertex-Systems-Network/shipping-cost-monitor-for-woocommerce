@@ -9,6 +9,8 @@ namespace WPEssential\ShippingCostMonitor;
 
 defined( 'ABSPATH' ) || exit;
 
+require_once WPE_SCM_DIR . 'includes/Integrations/CarrierAdapterInterface.php';
+require_once WPE_SCM_DIR . 'includes/Integrations/AdapterRegistry.php';
 require_once WPE_SCM_DIR . 'includes/Admin/Page.php';
 require_once WPE_SCM_DIR . 'includes/Admin/Summary.php';
 require_once WPE_SCM_DIR . 'includes/Admin/CsvExport.php';
