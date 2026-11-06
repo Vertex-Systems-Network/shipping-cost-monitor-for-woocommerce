@@ -149,7 +149,7 @@
 				setParsed( { headers: headers, rows: rows } );
 				setMatchResults( {} );
 				setMapping( {
-					reference: findHeader( [ 'order', 'ordernumber', 'orderid', 'tracking', 'trackingnumber', 'awb', 'shipmentid', 'referencenumber' ] ),
+					reference: findHeader( [ 'order', 'ordernumber', 'orderid' ] ),
 					amount: findHeader( [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total' ] ),
 					currency: findHeader( [ 'currency', 'currencycode', 'iso' ] ),
 				} );
@@ -198,6 +198,7 @@
 			setFileName( '' );
 			setParsed( null );
 			setMapping( { reference: '', amount: '', currency: '' } );
+			setMatchResults( {} );
 			setError( '' );
 		}
 
@@ -309,7 +310,7 @@
 				'div',
 				{ className: 'wpe-scm-import-preview' },
 				h( 'div', { className: 'wpe-scm-import-mapping' },
-					fieldSelect( __( 'Order / shipment reference', 'wpessential-shipping-cost-monitor' ), 'reference' ),
+					fieldSelect( __( 'Order ID / number', 'wpessential-shipping-cost-monitor' ), 'reference' ),
 					fieldSelect( __( 'Charge amount', 'wpessential-shipping-cost-monitor' ), 'amount' ),
 					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
 				),
@@ -326,7 +327,7 @@
 							h( 'th', null, __( 'Currency', 'wpessential-shipping-cost-monitor' ) ),
 							h( 'th', null, __( 'Validation', 'wpessential-shipping-cost-monitor' ) )
 						) ),
-						h( 'tbody', null, parsed.rows.slice( 0, 10 ).map( function ( item ) {
+						h( 'tbody', null, parsed.rows.slice( 0, Object.keys( matchResults ).length > 0 ? 50 : 10 ).map( function ( item ) {
 							const reference = '' !== mapping.reference ? item.values[ Number( mapping.reference ) ] || '' : '';
 							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 							const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
