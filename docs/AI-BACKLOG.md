@@ -27,7 +27,7 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-09 | Define reconciliation matching and review controls | Complete (proposed MVP rules) | Exact-ID precedence, exception states, ambiguity/manual review and audit behavior in PRODUCT-SPEC.md |
 | AI-10 | Define reporting/performance/background jobs | Complete (architecture proposal; benchmark pending) | Bounded pagination, server aggregates, indexed query direction and Action Scheduler proposal in ARCHITECTURE-DECISIONS.md |
 | AI-11 | Marketplace readiness checklist | Planned | Metadata, license, docs, support and compatibility evidence |
-| AI-12 | Pre-development exit review | Draft checklist; gates open | PREDEVELOPMENT-READINESS.md maps deliverables and remaining A–E approvals |
+| AI-12 | Pre-development exit review | Decision register ready; owner responses pending | OWNER-DECISION-REGISTER.md gives recommended defaults for Gates A–D; PREDEVELOPMENT-READINESS.md tracks remaining work |
 | AI-13 | Carrier/platform public API capability matrix | Complete (public-doc desk review) | Region-aware evidence matrix in INTEGRATION-MATRIX.md; actual invoice endpoints/account permissions remain unverified |
 | AI-14 | Verify candidate APIs with merchant accounts and account-specific docs | Not started | Top providers selected from beta usage; scopes, invoice-final fields, terms, geography and sync limits confirmed |
 
@@ -50,4 +50,4 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Current handoff
 
-Phases 1–4 have research/specification deliverables. Phase 4 includes a dated compatibility proposal but remains subject to owner/security review; none of the proposed versions are verified plugin support claims. Product, UX and architecture gates remain open; implementation remains prohibited until the required human gates and separate toolchain gate authorize it.
+Phases 1–4 have research/specification deliverables. OWNER-DECISION-REGISTER.md makes open Gates A–D concrete with recommended defaults; no response or approval is inferred. Product, UX and architecture gates remain open; implementation remains prohibited until the required human gates and separate toolchain gate authorize it.
