@@ -670,7 +670,17 @@
 								h( 'td', null, reference ),
 								h( 'td', null, amountRaw ),
 								h( 'td', null, currency ),
-								h( 'td', null, status )
+								h( 'td', null,
+									status,
+									match && 'existing_cost' === match.status && match.existing_cost
+										? h( 'div', { className: 'wpe-scm-import-review-detail' },
+											h( 'strong', null, __( 'Review comparison:', 'wpessential-shipping-cost-monitor' ) ),
+											' ' + __( 'Recorded', 'wpessential-shipping-cost-monitor' ) + ': ' + match.existing_cost.currency + ' ' + match.existing_cost.amount + ' (' + match.existing_cost.evidence + '; tax ' + match.existing_cost.tax_basis + '). ',
+											__( 'CSV row', 'wpessential-shipping-cost-monitor' ) + ': ' + ( '__order_currency__' === mapping.currency ? match.currency : currency.toUpperCase() ) + ' ' + ( amount || amountRaw ) + '. ',
+											__( 'Existing value is kept; review the difference before changing the order.', 'wpessential-shipping-cost-monitor' )
+										)
+										: null
+								)
 							);
 						} ) )
 					)
