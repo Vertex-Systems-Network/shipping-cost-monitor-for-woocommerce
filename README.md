@@ -58,7 +58,7 @@ All rows below were synthetic, previewed in the browser and matched only where e
 
 **Progress remains:** Phase 6 83%; overall 73%. The blocked provider package and broad compatibility verification are unchanged.
 
-**Next verification target:** test duplicate references within a file, unmatched/ambiguous/invalid rows, retries, refund handling, currency mismatch, HPOS/legacy storage and multilingual behavior with synthetic data. The staging happy path already exercised CSV parse → exact match → review → explicit commit, and duplicate re-import confirmed existing-cost protection. Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
+**Next verification target:** create a controlled duplicate order-number fixture to exercise the ambiguous response; directly replay one identical commit request to verify the server’s already-imported response; then continue currency-mismatch, HPOS/legacy, multilingual, lower-bound and performance checks. The staging CSV happy path and reproducible duplicate/invalid/unmatched/refund checks are recorded above. Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
 
 ## Phase 2 decision pack
 
