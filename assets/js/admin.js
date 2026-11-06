@@ -109,7 +109,22 @@
 			const stored = window.localStorage.getItem( mappingProfileStorageKey );
 			const profiles = stored ? JSON.parse( stored ) : [];
 			return Array.isArray( profiles ) ? profiles.filter( function ( profile ) {
-				return profile && 'string' === typeof profile.name && Array.isArray( profile.headers ) && profile.mapping;
+				return profile &&
+					'string' === typeof profile.id &&
+					'string' === typeof profile.name &&
+					profile.name.length <= 60 &&
+					[ 'generic', 'woocommerce_shipping_labels' ].indexOf( profile.sourceFormat ) !== -1 &&
+					Array.isArray( profile.headers ) &&
+					profile.headers.length <= 500 &&
+					profile.headers.every( function ( header ) { return 'string' === typeof header && header.length <= 200; } ) &&
+					profile.mapping &&
+					'string' === typeof profile.mapping.reference &&
+					'string' === typeof profile.mapping.amount &&
+					'string' === typeof profile.mapping.currency &&
+					[ ',', ';', '\\t' ].indexOf( profile.delimiter ) !== -1 &&
+					[ '.', ',' ].indexOf( profile.decimalMark ) !== -1 &&
+					[ 'invoice_final', 'booked_label', 'merchant_confirmed' ].indexOf( profile.evidence ) !== -1 &&
+					[ 'unknown', 'exclusive', 'inclusive' ].indexOf( profile.taxBasis ) !== -1;
 			} ).slice( 0, 20 ) : [];
 		} catch ( error ) {
 			return [];
