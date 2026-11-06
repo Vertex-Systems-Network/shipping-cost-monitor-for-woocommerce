@@ -53,12 +53,12 @@ All rows below were synthetic, previewed in the browser and matched only where e
 | Invalid amounts | Passed | Non-numeric amount was rejected; negative amount was held for credit/refund review. |
 | Unmatched reference | Passed | Synthetic reference 987654321 returned unmatched. |
 | Refund-status row | Passed | Refunded status was held for review and excluded from matching; No refund remained eligible for match preview. |
-| Re-import / retry safety | Passed with limit | Re-importing an order that already has a stored cost showed existing-cost evidence and did not allow overwrite. The exact same AJAX commit replay response (already_imported) was not directly stimulated; it remains a lower-level idempotency verification item. |
-| Ambiguous order reference | Not exercised | The staging store has unique native order IDs/numbers and no custom order-number fixture to create a collision. Matcher code has an explicit ambiguous result, but runtime behavior still needs a controlled collision fixture. |
+| Re-import / retry safety | User-facing retry guard passed; internal replay code reviewed | Re-import showed existing-cost evidence and prevented overwrite. The server checks the saved row fingerprint before existing-cost protection; the exact same AJAX replay response was not directly stimulated through the UI. |
+| Ambiguous order reference | Matcher branch reviewed; runtime fixture unavailable | The active staging plugin list has no order-number customization extension, and native order IDs/numbers are unique. The matcher returns ambiguous when multiple exact shipping-order candidates are found, but that outcome was not runtime-generated. |
 
 **Progress remains:** Phase 6 83%; overall 73%. The blocked provider package and broad compatibility verification are unchanged.
 
-**Next verification target:** create a controlled duplicate order-number fixture to exercise the ambiguous response; directly replay one identical commit request to verify the server’s already-imported response; then continue currency-mismatch, HPOS/legacy, multilingual, lower-bound and performance checks. The staging CSV happy path and reproducible duplicate/invalid/unmatched/refund checks are recorded above. Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
+**Remaining verification:** runtime-test an ambiguous match using a controlled duplicate order-number provider/fixture, and directly replay an identical commit request to observe the server’s already-imported response. The current UI prevents a second commit once a row is saved, so it cannot exercise that lower-level retry branch. Currency-mismatch, HPOS/legacy, multilingual, lower-bound and performance checks also remain. Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
 
 ## Phase 2 decision pack
 
