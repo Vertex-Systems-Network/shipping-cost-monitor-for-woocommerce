@@ -102,6 +102,20 @@
 		return /^-?\d+(?:\.\d+)?$/.test( value ) ? value : null;
 	}
 
+	const mappingProfileStorageKey = 'wpeScmCsvMappingProfilesV1';
+
+	function readMappingProfiles() {
+		try {
+			const stored = window.localStorage.getItem( mappingProfileStorageKey );
+			const profiles = stored ? JSON.parse( stored ) : [];
+			return Array.isArray( profiles ) ? profiles.filter( function ( profile ) {
+				return profile && 'string' === typeof profile.name && Array.isArray( profile.headers ) && profile.mapping;
+			} ).slice( 0, 20 ) : [];
+		} catch ( error ) {
+			return [];
+		}
+	}
+
 	function CsvInvoicePreview() {
 		const useState = wp.element.useState;
 		const useEffect = wp.element.useEffect;
@@ -122,6 +136,9 @@
 		const [ commitError, setCommitError ] = useState( '' );
 		const [ rowFilter, setRowFilter ] = useState( 'all' );
 		const [ sourceFormat, setSourceFormat ] = useState( 'generic' );
+		const [ mappingProfiles, setMappingProfiles ] = useState( readMappingProfiles );
+		const [ selectedProfileId, setSelectedProfileId ] = useState( '' );
+		const [ profileNotice, setProfileNotice ] = useState( '' );
 
 		useEffect( function () {
 			if ( ! rawCsv ) {
@@ -173,6 +190,75 @@
 				setError( parseError.message || __( 'Could not read this CSV.', 'wpessential-shipping-cost-monitor' ) );
 			}
 		}, [ rawCsv, delimiter, sourceFormat ] );
+
+		function saveMappingProfile() {
+			if ( ! parsed || ! mapping.reference || ! mapping.amount ) {
+				setProfileNotice( __( 'Choose a file and map its order reference and amount columns first.', 'wpessential-shipping-cost-monitor' ) );
+				return;
+			}
+
+			const name = window.prompt( __( 'Name this CSV mapping profile', 'wpessential-shipping-cost-monitor' ) );
+			if ( ! name ) {
+				return;
+			}
+			const cleanName = name.trim().slice( 0, 60 );
+			if ( ! cleanName ) {
+				return;
+			}
+			const profile = {
+				id: String( Date.now() ),
+				name: cleanName,
+				sourceFormat: sourceFormat,
+				headers: parsed.headers,
+				mapping: mapping,
+				delimiter: delimiter,
+				decimalMark: decimalMark,
+				evidence: evidence,
+				taxBasis: taxBasis,
+			};
+			const nextProfiles = mappingProfiles.filter( function ( item ) {
+				return item.name.toLowerCase() !== cleanName.toLowerCase();
+			} ).concat( [ profile ] ).slice( -20 );
+			try {
+				window.localStorage.setItem( mappingProfileStorageKey, JSON.stringify( nextProfiles ) );
+				setMappingProfiles( nextProfiles );
+				setSelectedProfileId( profile.id );
+				setProfileNotice( __( 'Mapping profile saved in this browser. It contains column names and import settings only.', 'wpessential-shipping-cost-monitor' ) );
+			} catch ( error ) {
+				setProfileNotice( __( 'Browser storage is unavailable, so the mapping profile was not saved.', 'wpessential-shipping-cost-monitor' ) );
+			}
+		}
+
+		function applyMappingProfile() {
+			const profile = mappingProfiles.find( function ( item ) { return item.id === selectedProfileId; } );
+			if ( ! profile || ! parsed ) {
+				return;
+			}
+			if ( profile.sourceFormat !== sourceFormat || JSON.stringify( profile.headers ) !== JSON.stringify( parsed.headers ) ) {
+				setProfileNotice( __( 'This profile belongs to a different source format or header layout.', 'wpessential-shipping-cost-monitor' ) );
+				return;
+			}
+			setMapping( profile.mapping );
+			setDelimiter( profile.delimiter );
+			setDecimalMark( profile.decimalMark );
+			setEvidence( profile.evidence );
+			setTaxBasis( profile.taxBasis );
+			setMatchResults( {} );
+			setCommitResults( {} );
+			setProfileNotice( __( 'Mapping profile applied to the current preview.', 'wpessential-shipping-cost-monitor' ) );
+		}
+
+		function deleteMappingProfile() {
+			const nextProfiles = mappingProfiles.filter( function ( item ) { return item.id !== selectedProfileId; } );
+			try {
+				window.localStorage.setItem( mappingProfileStorageKey, JSON.stringify( nextProfiles ) );
+				setMappingProfiles( nextProfiles );
+				setSelectedProfileId( '' );
+				setProfileNotice( __( 'Mapping profile deleted from this browser.', 'wpessential-shipping-cost-monitor' ) );
+			} catch ( error ) {
+				setProfileNotice( __( 'Browser storage is unavailable, so the mapping profile could not be deleted.', 'wpessential-shipping-cost-monitor' ) );
+			}
+		}
 
 		function chooseFile( event ) {
 			const file = event.target.files && event.target.files[ 0 ];
@@ -450,7 +536,14 @@
 			{ className: 'wpe-scm-card wpe-scm-import-card' },
 			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'INVOICE CSV PREVIEW', 'wpessential-shipping-cost-monitor' ) ),
 			h( 'h2', null, __( 'Preview a courier invoice CSV', 'wpessential-shipping-cost-monitor' ) ),
-			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'The file stays in this browser. Matching sends mapped order references to WordPress. Saving sends only matched row values and order IDs; the raw file and other columns are not stored.', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'The file stays in this browser. Matching sends mapped order references to WordPress. Saving sends only matched row values and order IDs; the raw file and other columns are not stored. Mapping profiles are saved only in this browser and contain column names/settings, not invoice rows.', 'wpessential-shipping-cost-monitor' ) ),
+			mappingProfiles.length ? h( 'div', { className: 'wpe-scm-import-toolbar' },
+				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Saved mapping profile', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: selectedProfileId, onChange: function ( event ) { setSelectedProfileId( event.target.value ); } }, h( 'option', { value: '' }, __( 'Choose a saved profile', 'wpessential-shipping-cost-monitor' ) ), mappingProfiles.map( function ( profile ) { return h( 'option', { key: profile.id, value: profile.id }, profile.name ); } ) ) ),
+				h( 'button', { type: 'button', className: 'button', onClick: applyMappingProfile, disabled: ! parsed || ! selectedProfileId }, __( 'Apply profile', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'button', { type: 'button', className: 'button', onClick: deleteMappingProfile, disabled: ! selectedProfileId }, __( 'Delete profile', 'wpessential-shipping-cost-monitor' ) )
+			) : null,
+			parsed ? h( 'div', { className: 'wpe-scm-import-toolbar' }, h( 'button', { type: 'button', className: 'button', onClick: saveMappingProfile }, __( 'Save current mapping', 'wpessential-shipping-cost-monitor' ) ) ) : null,
+			profileNotice ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, profileNotice ) : null,
 			h(
 				'div',
 				{ className: 'wpe-scm-import-toolbar' },
