@@ -145,6 +145,7 @@ final class Summary {
 				'start' => $period['start'],
 				'end'   => $period['end'],
 				'days'  => $period['days'],
+				'timezone' => wp_timezone_string(),
 			),
 			'period_reset' => $period['reset'],
 			'eligible_orders' => $orders,
