@@ -22,7 +22,7 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-04 | Define metrics: charged, actual/confirmed cost, variance, coverage, refunds, currency | Complete (proposed metric contract) | Metric glossary, comparable-cost rules and examples/guardrails in PRODUCT-SPEC.md |
 | AI-05 | Decide storage for cost snapshots, charge rows and audit history | Complete (proposed ADR; Gate C pending) | Hybrid WooCommerce CRUD/order metadata and plugin-owned evidence/batch records documented in ARCHITECTURE-DECISIONS.md; exact schema needs volume review |
 | AI-06 | Map React admin screens, navigation and all screen states | Complete (UX specification draft) | UX-FLOWS.md defines hierarchy, primary flows, shared filters, actions, empty/loading/error/partial/success states; owner Gate B review pending |
-| AI-07 | Platform compatibility baseline | Drafted; release versions need verification | PHP/WP/WC/database baseline drafted; decide supported matrix and verify during release QA |
+| AI-07 | Platform compatibility baseline | Complete (dated proposal; verification pending) | PHP/WP/WC/database minimum and WPML/Polylang integration test matrix in COMPATIBILITY-BASELINE.md; not a plugin support claim |
 | AI-08 | Security/privacy and import/API threat model | Complete (proposed controls; review pending) | Credential, endpoint, CSV, webhook, logging and data-minimization controls plus open security decisions in ARCHITECTURE-DECISIONS.md |
 | AI-09 | Define reconciliation matching and review controls | Complete (proposed MVP rules) | Exact-ID precedence, exception states, ambiguity/manual review and audit behavior in PRODUCT-SPEC.md |
 | AI-10 | Define reporting/performance/background jobs | Complete (architecture proposal; benchmark pending) | Bounded pagination, server aggregates, indexed query direction and Action Scheduler proposal in ARCHITECTURE-DECISIONS.md |
@@ -50,4 +50,4 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Current handoff
 
-Phases 1–4 have research/specification deliverables. Phase 4 is a proposed architecture/readiness package, not an approval. Product, UX and architecture gates remain open; implementation remains prohibited until the required human gates and separate toolchain gate authorize it.
+Phases 1–4 have research/specification deliverables. Phase 4 includes a dated compatibility proposal but remains subject to owner/security review; none of the proposed versions are verified plugin support claims. Product, UX and architecture gates remain open; implementation remains prohibited until the required human gates and separate toolchain gate authorize it.
