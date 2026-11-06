@@ -218,8 +218,11 @@
 			: [];
 
 		const matchedRows = validRows.slice( 0, 50 ).filter( function ( item ) {
-			return matchResults[ item.number ]
-				&& 'matched' === matchResults[ item.number ].status
+			const match = matchResults[ item.number ];
+			const invoiceCurrency = String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
+			return match
+				&& 'matched' === match.status
+				&& invoiceCurrency === String( match.currency || '' ).toUpperCase()
 				&& ! commitResults[ item.number ];
 		} );
 
@@ -230,7 +233,12 @@
 			const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
 			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && /^[A-Za-z]{3}$/.test( currency );
 			if ( commitResults[ item.number ] ) { return 'saved'; }
-			if ( matchResults[ item.number ] ) { return 'matched' === matchResults[ item.number ].status ? 'ready' : 'exception'; }
+			if ( matchResults[ item.number ] ) {
+				const match = matchResults[ item.number ];
+				if ( 'matched' !== match.status ) { return 'exception'; }
+				const invoiceCurrency = String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
+				return invoiceCurrency === String( match.currency || '' ).toUpperCase() ? 'ready' : 'currency_mismatch';
+			}
 			return valid ? 'unmatched' : 'invalid';
 		}
 
@@ -469,8 +477,9 @@
 							const commitResult = commitResults[ item.number ];
 							const status = commitResult
 								? commitResult.status
-								:
-									match && 'existing_cost' === match.status && match.order_number
+								: match && 'matched' === match.status && match.order_number && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
+									? __( 'Currency differs from order', 'wpessential-shipping-cost-monitor' ) + ' (' + match.currency + ')'
+									: match && 'existing_cost' === match.status && match.order_number
 										? __( 'Existing cost on order', 'wpessential-shipping-cost-monitor' ) + ' #' + match.order_number
 										: match && 'matched' === match.status && match.order_number
 											? 'matched: #' + match.order_number + ' (' + match.order_status + ')'
