@@ -157,4 +157,4 @@ Repository-aware agents should load [AGENTS.md](AGENTS.md) before acting. Tool e
 
 ### Update log
 
-- **2026-11-06:** Cleaned a duplicated sentence in AI-34 and reconciled the README with the verified state: WordPress staging has official WooCommerce 11.2.2 active, but the project ZIP could not be loaded. Phase 6 stays at 83% and overall progress stays at 73%; CSV import runtime QA and provider verification remain open.
+- **2026-11-06:** Cleaned a duplicated sentence in AI-34 and reconciled the README with the verified state: WordPress staging has official WooCommerce 11.2.2 active, but the project ZIP could not be loaded. Code review also found a stale hard-coded refund-status flag in the report response; it now reflects whether shipping refunds reduced charged totals in the selected period (AI-35). Refund scenario runtime verification remains pending. Phase 6 stays at 83% and overall progress stays at 73%; CSV import runtime QA and provider verification remain open.
