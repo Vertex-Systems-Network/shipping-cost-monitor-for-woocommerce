@@ -38,6 +38,7 @@
 		const period = report.period || {};
 		const mismatchCount = Number( report.currency_mismatch_orders || 0 );
 		const confirmedValue = moneyByCurrency( 'confirmed_cost', 'confirmed_orders' );
+		const varianceValue = report.variance_available ? moneyByCurrency( 'variance', 'comparable_orders' ) : __( 'Not available', 'wpessential-shipping-cost-monitor' );
 		const hasOrders = eligible > 0;
 		const periodLabel = period.start && period.end ? period.start + ' — ' + period.end : __( 'Last 30 days', 'wpessential-shipping-cost-monitor' );
 
@@ -65,6 +66,20 @@
 				)
 			),
 			h(
+				'div',
+				{ className: 'wpe-scm-report-toolbar' },
+				h(
+					'form',
+					{ className: 'wpe-scm-report-controls', method: 'get' },
+					h( 'input', { type: 'hidden', name: 'page', value: 'wpessential-shipping-cost-monitor' } ),
+					h( 'label', null, __( 'From', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'date', name: 'wpe_scm_start', value: period.start || '' } ) ),
+					h( 'label', null, __( 'To', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'date', name: 'wpe_scm_end', value: period.end || '' } ) ),
+					h( 'button', { type: 'submit', className: 'button button-primary' }, __( 'Update report', 'wpessential-shipping-cost-monitor' ) )
+				),
+				report.export_url ? h( 'a', { className: 'button wpe-scm-export-action', href: report.export_url }, __( 'Export CSV', 'wpessential-shipping-cost-monitor' ) ) : null
+			),
+			report.period_reset ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'The selected dates were invalid or exceeded 366 days. Showing the default 30-day period.', 'wpessential-shipping-cost-monitor' ) ) : null,
+			h(
 				'section',
 				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
 				h( MetricCard, {
@@ -79,8 +94,8 @@
 				} ),
 				h( MetricCard, {
 					label: __( 'Shipping variance', 'wpessential-shipping-cost-monitor' ),
-					value: __( 'Not available', 'wpessential-shipping-cost-monitor' ),
-					note: __( 'Cost tax treatment is not recorded yet', 'wpessential-shipping-cost-monitor' ),
+					value: varianceValue,
+					note: report.variance_available ? report.comparable_orders + ' ' + __( 'orders with matching currency and tax-exclusive cost', 'wpessential-shipping-cost-monitor' ) : __( 'No comparable confirmed costs in this period', 'wpessential-shipping-cost-monitor' ),
 				} ),
 				h( MetricCard, {
 					label: __( 'Cost coverage', 'wpessential-shipping-cost-monitor' ),
@@ -99,7 +114,7 @@
 				h( 'div', { className: 'wpe-scm-empty-icon', 'aria-hidden': 'true' }, hasOrders ? '✓' : '↗' ),
 				h( 'div', null,
 					h( 'h2', null, hasOrders ? __( 'Currency-separated order summary', 'wpessential-shipping-cost-monitor' ) : __( 'No eligible shipping orders found', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, hasOrders ? __( 'This first report includes Processing and Completed orders with shipping lines. Shipping refunds are not adjusted yet; variance remains hidden until cost tax treatment is recorded.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', null, hasOrders ? __( 'Variance includes only currency-matched, tax-exclusive confirmed costs. Shipping refunds are not adjusted yet.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
 				)
 			),
 			h(
@@ -110,7 +125,7 @@
 					{ className: 'wpe-scm-card wpe-scm-next-card' },
 					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'NEXT: REPORT CONTROLS', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'h2', null, __( 'Reporting scope', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'The initial summary separates currencies and counts only invoice-final or merchant-confirmed costs. Date filters, shipping refund allocation and tax-basis comparison remain to be implemented.', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export and shipping refund allocation are still to come; currency conversion is never applied.', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'span', { className: 'wpe-scm-status-pill' }, __( 'Initial summary', 'wpessential-shipping-cost-monitor' ) )
 				),
 				h(
