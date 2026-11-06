@@ -73,7 +73,7 @@ final class Summary {
 
 				++$orders;
 				++$groups[ $order_currency ]['orders'];
-				$groups[ $order_currency ]['charged_minor'] += (int) wc_add_number_precision( (float) $order->get_shipping_total() );
+				$groups[ $order_currency ]['charged_minor'] += wc_add_number_precision( (float) $order->get_shipping_total() );
 
 				$evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
 				if ( ! in_array( $evidence, array( 'invoice_final', 'merchant_confirmed' ), true ) ) {
@@ -94,7 +94,7 @@ final class Summary {
 					continue;
 				}
 
-				$groups[ $order_currency ]['confirmed_minor'] += (int) wc_add_number_precision( (float) $cost_amount );
+				$groups[ $order_currency ]['confirmed_minor'] += wc_add_number_precision( (float) $cost_amount );
 				++$groups[ $order_currency ]['confirmed_orders'];
 				++$covered;
 			}
