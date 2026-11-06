@@ -4,8 +4,8 @@
 
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
-> **Project status:** Phase 5 code complete; Phase 6 import/matching workflow in progress  
-> **Current overall progress:** `■■■■■■▋░░░ 67%` — Phase 5 code scope is complete; Phase 6 preview and exact-match workflow has started; runtime and compatibility verification remain pending; no CLI or build toolchain.  
+> **Project status:** Phase 5 code complete; Phase 6 invoice workflow in progress  
+> **Current overall progress:** `■■■■■■▋░░░ 67%` — Phase 5 code scope is complete; Phase 6 has three of six implementation slices delivered; runtime and compatibility verification remain pending; no CLI or build toolchain.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -26,11 +26,11 @@ Dates are proposed targets. Completed dates show actual document-work completion
 | 3. UX flows and React admin specification | UX baseline approved; visual QA pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
 | 4. Architecture and pre-development readiness | Initial manual/no-API boundary accepted; security/retention pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-12-04 | 2026-11-06 | Storage, money/evidence model, imports, adapters/auth, security, compatibility and readiness decisions documented |
 | 5. Core plugin implementation | Complete (code delivery; runtime verification pending) | `■■■■■■■■■■ 100%` | 2026-11-06 | 2027-01-15 | 2026-11-06 | Admin shell, manual ledger, tax/refund-aware reports and privacy-minimized CSV export |
-| 6. Reconciliation, API sync and Pro workflows | In progress (local preview + read-only exact matching; persistent import gated) | `███▍░░░░░░ 33%` | 2027-01-18 | 2027-02-05 | — | Pro invoice CSV import/reconciliation, provider adapters and verified API workflows |
+| 6. Reconciliation, API sync and Pro workflows | In progress (preview, matching + explicit row commit; API/exception work remains) | `█████░░░░░ 50%` | 2027-01-18 | 2027-02-05 | — | Pro invoice CSV import/reconciliation, provider adapters and verified API workflows |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Free WordPress.org and Paid WooCommerce.com submission tracks, review evidence and release candidate |
 
-**Overall project progress:** `■■■■■■▋░░░ 67%` (Phases 1–5 code delivery is complete; Phase 6 has completed two of six implementation packages). Phase 5 is 100%; Phase 6 is 33%. Runtime verification and compatibility checks are deferred to Phase 7. Tests have not been run.
+**Overall project progress:** `■■■■■■▋░░░ 69%` (Phases 1–5 code delivery is complete; Phase 6 has completed three of six implementation packages). Phase 5 is 100%; Phase 6 is 50%. Runtime verification and compatibility checks are deferred to Phase 7. Tests have not been run.
 
 ## Phase 2 decision pack
 
@@ -71,16 +71,18 @@ The CSV export uses capability and nonce checks, paginated WooCommerce order que
 
 ## Phase 6 implementation — current slices
 
-The Pro invoice workflow has a browser-local CSV preview and exact, read-only WooCommerce order ID/number matching:
+The Pro invoice workflow now supports browser-local preview, read-only matching, and an explicit reviewed-row commit:
 
-- [CSV preview, mapping and matching UI](assets/js/admin.js)
+- [CSV preview, mapping, matching and commit UI](assets/js/admin.js)
 - [Exact order-reference matcher](includes/Admin/ReferenceMatcher.php)
+- [Explicit invoice row importer](includes/Admin/InvoiceImporter.php)
 - [Dashboard request wiring](includes/Admin/Page.php)
 
-The preview reads .csv files in the browser (maximum 5 MB and 5,000 data rows), supports comma/semicolon/tab delimiters and decimal-mark selection, and maps reference, amount and currency columns. The selected file and full invoice rows are not uploaded or persisted. If the merchant clicks the match action, only the mapped references for up to 50 valid rows are sent to WordPress. Exact WooCommerce order ID/order-number matches, duplicate source references, ambiguous results and unmatched references are reported without changing orders. Tracking/AWB matching is not part of this preview.
+The preview reads CSV files in the browser (maximum 5 MB and 5,000 data rows), supports comma/semicolon/tab delimiters and decimal-mark selection, and maps reference, amount and currency columns. The file and full invoice rows are not uploaded or persisted. Matching sends only mapped references for up to 50 valid rows. It accepts exact WooCommerce order ID/order-number matches only for standard shipping orders; duplicate, ambiguous, unmatched, and orders with an existing cost are identified without changing order data. Tracking/AWB matching is not supported.
 
-Persistent import, mapping-profile storage, order-cost commits, exception review, carrier API connections and provider sync remain incomplete. Invoice samples and retention review are still needed before saving invoice rows; API credentials remain blocked on credential-security design. This Phase 6 code has not been runtime-verified and no tests were run.
+A merchant must explicitly confirm the commit action. The server rechecks capability, nonce, order identity, shipping-line presence and editable-order permission, then saves only the normalized amount, currency, evidence, tax basis and source-row reference through WooCommerce order CRUD. Existing costs are never overwritten. A row fingerprint supports idempotent retry handling. The raw invoice file and unrelated columns are not stored; negative credit/refund rows are held for review and are not committed.
 
+Persistent mapping profiles, richer exception resolution, carrier API adapters/sync and rate simulation remain incomplete. Merchant invoice samples are needed to validate template coverage; API credentials remain gated on security design. This Phase 6 code has not been runtime-verified, compatibility-checked or tested.
 ## Marketplace submission plan
 
 The target is **Free on WordPress.org** and **Paid/Pro on WooCommerce.com**. [Submission strategy](docs/SUBMISSION-STRATEGY.md) documents both tracks, package boundaries, review criteria and open Marketplace questions.
