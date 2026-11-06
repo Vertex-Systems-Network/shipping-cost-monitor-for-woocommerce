@@ -192,9 +192,9 @@
 
 		const validRows = parsed && mapping.reference !== '' && mapping.amount !== '' && mapping.currency !== ''
 			? parsed.rows.filter( function ( item ) {
-				const reference = item.values[ Number( mapping.reference ) ] || '';
-				const amount = parseInvoiceAmount( item.values[ Number( mapping.amount ) ], decimalMark );
-				const currency = String( item.values[ Number( mapping.currency ) ] || '' ).trim();
+				const reference = '' !== mapping.reference ? item.values[ Number( mapping.reference ) ] || '' : '';
+				const amount = '' !== mapping.amount ? parseInvoiceAmount( item.values[ Number( mapping.amount ) ], decimalMark ) : null;
+				const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
 				return '' !== reference.trim() && null !== amount && /^[A-Za-z]{3}$/.test( currency );
 			} )
 			: [];
@@ -273,9 +273,9 @@
 							h( 'th', null, __( 'Validation', 'wpessential-shipping-cost-monitor' ) )
 						) ),
 						h( 'tbody', null, parsed.rows.slice( 0, 10 ).map( function ( item ) {
-							const reference = item.values[ Number( mapping.reference ) ] || '';
-							const amountRaw = item.values[ Number( mapping.amount ) ] || '';
-							const currency = String( item.values[ Number( mapping.currency ) ] || '' ).trim();
+							const reference = '' !== mapping.reference ? item.values[ Number( mapping.reference ) ] || '' : '';
+							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
+							const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
 							const valid = '' !== reference.trim() && null !== parseInvoiceAmount( amountRaw, decimalMark ) && /^[A-Za-z]{3}$/.test( currency );
 							return h( 'tr', { key: item.number },
 								h( 'td', null, item.number ),
