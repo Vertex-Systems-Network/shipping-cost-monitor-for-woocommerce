@@ -178,7 +178,7 @@ Initial policy based on official recommendations checked 2026-11-06. Recheck at 
 | Platform | Initial baseline | Compatibility policy |
 |---|---|---|
 | PHP | 8.1 minimum; 8.3+ recommended | Test supported versions at release; Marketplace requires current published PHP minimum and strongly recommends 8.3+. |
-| WordPress | 6.9+ | Follow WooCommerce baseline; test current stable and an earlier supported version at release where viable. |
+| WordPress | 7.0+ | Follow WooCommerce baseline; test current stable and an earlier supported version at release where viable. |
 | WooCommerce | 11.2+ development baseline | Recheck release-time latest two major WooCommerce releases for Marketplace support; this baseline is not a compatibility claim. |
 | Database | MySQL 8.0+ or MariaDB 10.6+ | Avoid version-specific SQL assumptions. |
 | HPOS | Supported | Use WooCommerce CRUD APIs; declare only after HPOS and legacy storage tests pass. |
