@@ -250,6 +250,9 @@ final class OrderCostFields {
 		$order->update_meta_data( '_wpe_scm_cost_note', $note );
 		$order->update_meta_data( '_wpe_scm_cost_updated_at', gmdate( 'Y-m-d H:i:s' ) );
 		$order->update_meta_data( '_wpe_scm_cost_updated_by', get_current_user_id() );
+		$order->delete_meta_data( '_wpe_scm_cost_import_fingerprint' );
+		$order->delete_meta_data( '_wpe_scm_cost_import_batch' );
+		$order->delete_meta_data( '_wpe_scm_cost_import_row' );
 		$order->save();
 
 		if (
@@ -300,6 +303,9 @@ final class OrderCostFields {
 				'_wpe_scm_cost_note',
 				'_wpe_scm_cost_updated_at',
 				'_wpe_scm_cost_updated_by',
+				'_wpe_scm_cost_import_fingerprint',
+				'_wpe_scm_cost_import_batch',
+				'_wpe_scm_cost_import_row',
 			) as $meta_key
 		) {
 			$order->delete_meta_data( $meta_key );
