@@ -5,7 +5,7 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Initial implementation in progress  
-> **Current overall progress:** `■■■■■░░░░░ 54%` — four planning phases have reviewable deliverables; two of six Phase 5 work packages are implemented; runtime verification remains pending; no CLI or build toolchain.  
+> **Current overall progress:** `■■■■■▋░░░░ 56%` — four planning phases have reviewable deliverables; three of six Phase 5 work packages are implemented; runtime verification remains pending; no CLI or build toolchain.  
 > **Last status update:** 2026-11-06  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
@@ -25,12 +25,12 @@ Dates are proposed targets. Completed dates show actual document-work completion
 | 2. Requirements, options bank and MVP proposal | MVP boundary accepted; pricing/merchant validation pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-20 | 2026-11-06 | Deduplicated feature IDs, metric contract, settings map and testable MVP criteria documented |
 | 3. UX flows and React admin specification | UX baseline approved; visual QA pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-11-27 | 2026-11-06 | Dashboard, cost records, invoice import, exceptions, integrations and UI states specified |
 | 4. Architecture and pre-development readiness | Initial manual/no-API boundary accepted; security/retention pending | `■■■■■■■■■■ 100%` | 2026-11-06 | 2026-12-04 | 2026-11-06 | Storage, money/evidence model, imports, adapters/auth, security, compatibility and readiness decisions documented |
-| 5. Core plugin implementation | In progress (admin shell + manual order ledger; verification pending) | `███▍░░░░░░ 33%` | 2026-11-06 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
+| 5. Core plugin implementation | In progress (admin shell + manual ledger + initial summary; verification pending) | `█████░░░░░ 50%` | 2026-11-06 | 2027-01-15 | — | Order cost ledger, reports, CSV import and integration foundation |
 | 6. Reconciliation, API sync and Pro workflows | Not started | `░░░░░░░░░░ 0%` | 2027-01-18 | 2027-02-05 | — | Provider adapters, exception queue, alerts and scenario analysis |
 | 7. Compatibility, quality and beta | Not started | `░░░░░░░░░░ 0%` | 2027-02-08 | 2027-02-19 | — | Supported-platform/provider verification and beta feedback |
 | 8. Marketplace readiness | Not started | `░░░░░░░░░░ 0%` | 2027-02-22 | 2027-03-05 | — | Free WordPress.org and Paid WooCommerce.com submission tracks, review evidence and release candidate |
 
-**Overall project progress:** `■■■■■░░░░░ 54%` (four phases complete; two of six planned Phase 5 work packages implemented). Phase 5 implementation progress is 33%. Tests, runtime verification and compatibility checks have not been run.
+**Overall project progress:** `■■■■■▋░░░░ 56%` (four phases complete; three of six planned Phase 5 work packages implemented). Phase 5 implementation progress is 50%. Tests, runtime verification and compatibility checks have not been run.
 
 ## Phase 2 decision pack
 
