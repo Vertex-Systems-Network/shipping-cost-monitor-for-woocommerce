@@ -42,10 +42,10 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Human approval gates
 
-- **Gate A — Product:** review and approve MVP, provider priority and Free/Pro packaging. No customer usage or owner approval is claimed until supplied.
-- **Gate B — UX:** review and approve UX flows before visual implementation.
-- **Gate C — Architecture:** approve schema, API adapter/auth, imports, security and compatibility decisions.
-- **Gate D — Toolchain:** only after Gates A–C; decide build tooling. CLI remains prohibited until explicitly approved.
+- **Gate A — Product:** initial manual/no-API MVP boundary accepted; pricing and merchant validation remain open.
+- **Gate B — UX:** UX-FLOWS.md accepted as the implementation baseline.
+- **Gate C — Architecture:** initial WooCommerce CRUD/manual-entry boundary accepted; credentials and CSV persistence remain deferred pending security, merchant samples and retention decisions.
+- **Gate D — Toolchain:** no-build React via WordPress `wp.element` accepted. CLI, package managers, bundlers and build pipelines remain prohibited until the plugin is final.
 - **Gate E — Release:** verify compatibility, provider API terms/access, privacy, docs and Marketplace requirements.
 
 ## Current handoff
