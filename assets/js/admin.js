@@ -83,9 +83,9 @@
 				'section',
 				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
 				h( MetricCard, {
-					label: __( 'Shipping charged', 'wpessential-shipping-cost-monitor' ),
+					label: __( 'Shipping charged net', 'wpessential-shipping-cost-monitor' ),
 					value: moneyByCurrency( 'shipping_charged', 'orders' ),
-					note: __( 'Shipping line totals, before shipping tax', 'wpessential-shipping-cost-monitor' ),
+					note: __( 'After allocated shipping refunds; before shipping tax', 'wpessential-shipping-cost-monitor' ),
 				} ),
 				h( MetricCard, {
 					label: __( 'Confirmed cost', 'wpessential-shipping-cost-monitor' ),
@@ -114,7 +114,7 @@
 				h( 'div', { className: 'wpe-scm-empty-icon', 'aria-hidden': 'true' }, hasOrders ? '✓' : '↗' ),
 				h( 'div', null,
 					h( 'h2', null, hasOrders ? __( 'Currency-separated order summary', 'wpessential-shipping-cost-monitor' ) : __( 'No eligible shipping orders found', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, hasOrders ? __( 'Variance includes only currency-matched, tax-exclusive confirmed costs. Shipping refunds are not adjusted yet.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', null, hasOrders ? __( 'Variance uses net shipping after allocated refunds and only currency-matched, tax-exclusive confirmed costs.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
 				)
 			),
 			h(
@@ -125,7 +125,7 @@
 					{ className: 'wpe-scm-card wpe-scm-next-card' },
 					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'NEXT: REPORT CONTROLS', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'h2', null, __( 'Reporting scope', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export and shipping refund allocation are still to come; currency conversion is never applied.', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export includes refund allocation; custom statuses and multi-currency conversion are not supported.', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'span', { className: 'wpe-scm-status-pill' }, __( 'Initial summary', 'wpessential-shipping-cost-monitor' ) )
 				),
 				h(
