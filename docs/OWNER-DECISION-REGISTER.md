@@ -1,42 +1,42 @@
 # Owner decision register
 
-**Status:** Recommendations prepared for review; no owner decisions recorded.  
+**Status:** Gates A and B approved; Gate C approved for the initial no-API foundation with credential handling deferred; Gate D approved for a no-CLI/no-build React path. This status records the owner's instruction to start on 2026-11-06.  
 **Updated:** 2026-11-06  
 **Purpose:** Resolve the gates that block implementation without treating draft documents as approval.
 
-Choose **Accept recommendation**, **Change**, or **Defer** for each row. A change should name the replacement decision. Deferral leaves that gate open.
+The owner said “start” after reviewing the gate register. For the initial scope, the proposed defaults below are accepted where they directly match prior instructions; unresolved or evidence-dependent items stay deferred.
 
 ## Gate A — product scope
 
 | ID | Decision needed | Recommended default | Evidence / impact | State |
 |---|---|---|---|---|
-| A-1 | MVP feature boundary | Accept the Free/Pro proposal in PRODUCT-SPEC.md: Free manual cost ledger/basic reporting/CSV export; Pro invoice CSV mapping, reconciliation and loss reports. | Reuses the deduplicated feature bank; keeps manual + CSV useful without any carrier connection. Pricing is not approved by this choice. | Open |
-| A-2 | Provider priority | No provider API in MVP until merchant usage and account-specific cost evidence are verified; prioritize generic invoice CSV. | Public documentation does not prove merchant account scopes, region availability or invoice-final access. | Open |
-| A-3 | Merchant validation | Collect three anonymized invoice formats and confirm primary merchant workflow before freezing import design. | Reveals currency, decimal, identifier, surcharge, credit and split-shipment cases. | Open |
+| A-1 | MVP feature boundary | Free manual cost ledger/basic reporting/CSV export; Pro invoice CSV mapping, reconciliation and loss reports. | Scope accepted to start; pricing and market validation remain open. | Accepted for development |
+| A-2 | Provider priority | No provider API in the initial build; prioritize manual entry and generic CSV after sample validation. | Accepted; credentials and provider sync are out of initial scope pending account/security evidence. | Accepted; API deferred |
+| A-3 | Merchant validation | Gather anonymized invoice examples before finalizing CSV parsing/matching. | Needed before import implementation; does not block the admin/bootstrap foundation. | Deferred to import phase |
 
 ## Gate B — UX
 
 | ID | Decision needed | Recommended default | Evidence / impact | State |
 |---|---|---|---|---|
-| B-1 | Admin navigation and flows | Accept UX-FLOWS.md as the review baseline, including dashboard, cost records, import wizard, exceptions, integrations, reports and settings. | Approving the document allows visual implementation planning only after Gate D. | Open |
-| B-2 | React scope | React for the app-like workflow screens; server-side PHP remains authoritative for permissions, validation, matching and persistence. | Keeps UX choice aligned to WooCommerce extension guidance without locking an experimental settings UI. | Open |
+| B-1 | Admin navigation and flows | UX-FLOWS.md is the approved navigation/workflow baseline. | Accepted for development. | Accepted |
+| B-2 | React scope | React via WordPress-bundled `wp.element`; PHP remains authoritative for permissions, validation, matching and persistence. | Accepted; plain JavaScript source avoids a build pipeline. | Accepted |
 
 ## Gate C — architecture, privacy and compatibility
 
 | ID | Decision needed | Recommended default | Evidence / impact | State |
 |---|---|---|---|---|
-| C-1 | Order-linked storage | WooCommerce CRUD/order metadata for selected per-order cost; plugin tables for import/evidence/audit records when cross-order query needs justify them. | Avoids direct order-table assumptions and permits indexed reconciliation queries; exact schema follows sample volume. | Open |
-| C-2 | Money and comparisons | Store source amount, ISO currency and tax/basis explicitly; use decimal-safe arithmetic; never combine currencies implicitly. | Prevents false margin totals; agrees with metric contract. | Open |
-| C-3 | Credential security | Do not accept credentials until a security review approves authenticated encryption, key lifecycle, rotation, revoke/disconnect and fail-closed behavior. | No plaintext fallback. This remains a release blocker for API integrations. | Open |
-| C-4 | Data retention | Delete temporary uploads/raw payloads promptly after normalization; retain minimal normalized evidence/audit data; decide export/delete/uninstall behavior before coding. | Merchant record retention and privacy obligations need an explicit policy. | Open |
-| C-5 | Compatibility target | Use COMPATIBILITY-BASELINE.md as a proposal; choose PHP 8.1 minimum / 8.3 recommended, WP 6.9+, WooCommerce 11.2+ as development baseline, then revise to latest stable before release. | No tested compatibility is claimed. HPOS and legacy storage plus WPML/Polylang add-ons need verification. | Open |
+| C-1 | Order-linked storage | WooCommerce CRUD/order metadata for selected per-order cost; defer plugin tables until CSV/evidence volume justifies them. | Accepted as the initial implementation boundary; exact metadata contract still follows the feature spec. | Accepted for initial build |
+| C-2 | Money and comparisons | Preserve source amount, ISO currency and tax/basis; decimal-safe arithmetic; no implicit cross-currency totals. | Accepted from the metric contract. | Accepted |
+| C-3 | Credential security | No credential collection or API connections in the initial implementation. Revisit authenticated encryption/key lifecycle before adding integrations. | No plaintext storage; API work remains excluded until security review. | Deferred; blocks integrations only |
+| C-4 | Data retention | No uploads/raw payloads in the bootstrap milestone. Final retention/export/delete/uninstall policy is required before CSV import and Marketplace release. | The first shell has no customer data persistence. | Deferred to data/import milestone |
+| C-5 | Compatibility target | PHP 8.1 minimum / 8.3 recommended; WP 6.9+; WooCommerce 11.2+ development baseline; revise at release. | Accepted as declared development baseline only; compatibility testing and support claims remain pending. | Accepted as proposal |
 
 ## Gate D — toolchain
 
 | ID | Decision needed | Recommended default | Evidence / impact | State |
 |---|---|---|---|---|
-| D-1 | Development tooling authorization | Defer code/toolchain setup until A–C are resolved; then approve a minimal React/WooCommerce-compatible toolchain as a separate decision. | Repository rule prohibits plugin code, CLI, package manager, build system and tests before this gate. | Open |
-| D-2 | CLI policy | Keep CLI absent until explicit owner approval; record any later exception here before use. | Preserves the standing project constraint that CLI is not added before the plugin is final. | Open |
+| D-1 | Development tooling authorization | Start a no-build implementation using WordPress-bundled React (`wp.element`) and plain JavaScript; PHP owns server behavior. No npm, package manager, bundler or build pipeline. | Accepted under the explicit start instruction; stop for a new approval if compilation/tooling becomes necessary. | Accepted; constrained path |
+| D-2 | CLI policy | CLI remains absent until the plugin is final and the owner explicitly changes this instruction. | Preserves the standing no-CLI requirement. | Accepted; prohibited for now |
 
 ## How to record a decision
 
