@@ -1,0 +1,6 @@
+---
+description: Always follow the WPEssential Shipping Cost Monitor project brief and planning gates.
+alwaysApply: true
+---
+
+Read and follow the repository-root `AGENTS.md`. Before changing anything, read `README.md` and the task-relevant product/architecture/backlog documents. The project is documentation-only pre-development: do not add plugin code, CLI, package manager, build tooling, or tests before the documented human approval gate. Treat the feature ID bank as canonical and avoid duplicate options.
