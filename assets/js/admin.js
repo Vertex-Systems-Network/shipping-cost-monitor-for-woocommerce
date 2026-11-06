@@ -119,6 +119,7 @@
 	function CsvInvoicePreview() {
 		const useState = wp.element.useState;
 		const useEffect = wp.element.useEffect;
+		const useRef = wp.element.useRef;
 		const [ rawCsv, setRawCsv ] = useState( '' );
 		const [ fileName, setFileName ] = useState( '' );
 		const [ delimiter, setDelimiter ] = useState( ',' );
@@ -139,6 +140,7 @@
 		const [ mappingProfiles, setMappingProfiles ] = useState( readMappingProfiles );
 		const [ selectedProfileId, setSelectedProfileId ] = useState( '' );
 		const [ profileNotice, setProfileNotice ] = useState( '' );
+		const applyingProfileRef = useRef( false );
 
 		useEffect( function () {
 			if ( ! rawCsv ) {
@@ -174,15 +176,19 @@
 				setParsed( { headers: headers, rows: rows } );
 				setMatchResults( {} );
 				setCommitResults( {} );
-				const isWooCommerceShipping = 'woocommerce_shipping_labels' === sourceFormat;
-				setMapping( {
-					reference: findHeader( isWooCommerceShipping ? [ 'order', 'ordernumber', 'orderid', 'ordername' ] : [ 'order', 'ordernumber', 'orderid' ] ),
-					amount: findHeader( isWooCommerceShipping ? [ 'price', 'labelprice', 'labelcost', 'amount', 'cost' ] : [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total', 'price', 'labelprice', 'labelcost' ] ),
-					currency: isWooCommerceShipping ? '__order_currency__' : findHeader( [ 'currency', 'currencycode', 'iso' ] ),
-				} );
-				if ( isWooCommerceShipping ) {
-					setEvidence( 'booked_label' );
-					setTaxBasis( 'unknown' );
+				if ( applyingProfileRef.current ) {
+					applyingProfileRef.current = false;
+				} else {
+					const isWooCommerceShipping = 'woocommerce_shipping_labels' === sourceFormat;
+					setMapping( {
+						reference: findHeader( isWooCommerceShipping ? [ 'order', 'ordernumber', 'orderid', 'ordername' ] : [ 'order', 'ordernumber', 'orderid' ] ),
+						amount: findHeader( isWooCommerceShipping ? [ 'price', 'labelprice', 'labelcost', 'amount', 'cost' ] : [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total', 'price', 'labelprice', 'labelcost' ] ),
+						currency: isWooCommerceShipping ? '__order_currency__' : findHeader( [ 'currency', 'currencycode', 'iso' ] ),
+					} );
+					if ( isWooCommerceShipping ) {
+						setEvidence( 'booked_label' );
+						setTaxBasis( 'unknown' );
+					}
 				}
 				setError( '' );
 			} catch ( parseError ) {
@@ -239,7 +245,10 @@
 				return;
 			}
 			setMapping( profile.mapping );
-			setDelimiter( profile.delimiter );
+			if ( profile.delimiter !== delimiter ) {
+				applyingProfileRef.current = true;
+				setDelimiter( profile.delimiter );
+			}
 			setDecimalMark( profile.decimalMark );
 			setEvidence( profile.evidence );
 			setTaxBasis( profile.taxBasis );
