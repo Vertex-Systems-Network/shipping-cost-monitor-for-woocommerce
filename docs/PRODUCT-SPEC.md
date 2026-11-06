@@ -16,6 +16,7 @@ WooCommerce records the shipping amount charged to a customer, but merchants may
 - Duplicate, unmatched, and materially different charges are surfaced without silently overwriting a merchant's record.
 - Reports help merchants identify repeat loss patterns by time period and available shipping dimensions.
 - The plugin remains useful with manual entry and CSV import, without requiring a third-party courier account.
+- Supported carrier APIs automate data sync where they expose shipment or billed-cost evidence; estimates remain visibly distinct from final charges.
 
 ## Feature ID policy
 
@@ -24,7 +25,7 @@ Every distinct user-facing capability receives one stable ID. Related options ar
 | ID | Capability | Free / Pro | Priority | Acceptance direction |
 |---|---|---|---|---|
 | SCM-ORD-01 | Order-level actual shipping cost field | Free | MVP | Save/read via WooCommerce order CRUD; display customer-paid shipping, actual cost, variance and source separately. |
-| SCM-ORD-02 | Cost source and audit history | Free | MVP | Record manual/import/rule source, timestamp, actor where available, and changes; never silently erase prior values. |
+| SCM-ORD-02 | Cost source and audit history | Free | MVP | Record manual/import/rule/API source, timestamp, actor where available, and changes; never silently erase prior values. |
 | SCM-ORD-03 | Parcel-level cost components | Pro | Later | Support multiple parcels and component labels such as base, fuel, COD, insurance, return; totals reconcile to order. |
 | SCM-IMP-01 | CSV upload with column mapping | Pro | MVP | Preview file, map columns, validate rows, show errors before import; no silent partial success. |
 | SCM-IMP-02 | Match invoice rows to orders | Pro | MVP | Match using user-selected identifiers (order/AWB/tracking) and fallback fields only when configured; show match basis. |
@@ -40,8 +41,41 @@ Every distinct user-facing capability receives one stable ID. Related options ar
 | SCM-INT-01 | WooCommerce Shipping cost import | Free | MVP if API/data path verified | Import supported label cost evidence idempotently; show source and import result. |
 | SCM-INT-02 | ShipStation or other provider adapters | Pro | Later | Add only after supported API, permissions, data handling and demand are documented. |
 | SCM-INT-03 | WPML / Polylang compatibility | Free | MVP | Translate plugin-owned strings; preserve order values; verify admin screen and notices in multilingual sites. |
+| SCM-INT-04 | Carrier and shipping-platform API adapter framework | Pro | MVP foundation | Common adapter contract for connection, capability discovery, sync, normalization, errors and disconnect; provider modules remain independently enabled. |
+| SCM-INT-05 | Automatic API sync controls | Pro | MVP foundation | Per-connection manual sync, scheduled sync and provider webhooks when available; configure cadence, date window and eligible statuses; show last sync/result and allow safe retry. |
+| SCM-INT-06 | Carrier API connection/security management | Pro | MVP foundation | Least-privilege credentials, secure storage, masked secrets, disconnect/revoke path, redacted logs and explicit provider data disclosure. |
+| SCM-INT-07 | API evidence classification | Pro | MVP | Tag each value as quote/estimate, label-purchased/manifest, invoice-final, refund/adjustment or unknown; never promote a quote to actual cost silently. |
 | SCM-SET-01 | Data retention and uninstall controls | Free | MVP | Explain retained order metadata; offer explicit opt-in purge setting; default uninstall must not unexpectedly delete merchant records. |
 | SCM-SET-02 | Permissions, privacy and diagnostics | Free | MVP | Least privilege, privacy notice for external integrations, opt-in diagnostics only, actionable status/errors. |
+
+### Provider integration priority
+
+Initial discovery shortlist: **UPS, FedEx, DHL Express**, plus shipping platforms/aggregators merchants already use, such as **ShipStation**. This is a research shortlist, not a release promise. Add regional carriers after target-market evidence identifies the most common providers. Each provider is a separate adapter and must pass the same capability and security review.
+
+Prioritize integrations in this order:
+
+1. Shipment identifiers, label purchase/manifest and account shipment records.
+2. Final billed-cost, invoice, adjustment/refund data where the provider exposes it.
+3. Rate quotes only as clearly labelled comparison estimates, never as actual spend.
+4. Tracking and fulfilment features only if directly needed for reliable cost matching; they are not a goal by themselves.
+
+### API integration behavior
+
+- Connection is optional; manual entry and CSV reconciliation continue to work if disconnected or an API is unavailable.
+- Provide a test-connection step and explain required account/API permissions before saving credentials.
+- Sync controls include manual sync, a merchant-configurable schedule, provider webhook ingestion only when officially supported, date range/status filters where available, and a visible last-sync/error state.
+- Use stable provider shipment/charge identifiers for idempotency. Handle rate limits, token expiry, retries and partial failures without duplicate costs.
+- Keep estimates, label/manifest amounts, invoice-final charges and credits in separate evidence states. Merchant reconciliation rules choose which state can update an order's current actual-cost figure.
+- Do not store raw secrets in logs or show them after entry. Document data transmitted to each provider and support disconnect/revocation.
+- Confirm API permissions, account availability, regional coverage, terms and developer approval before committing a connector to a release.
+
+### Explicitly out of scope for first release
+
+- Checkout rate calculation or modifying customer shipping prices.
+- Label purchase, shipment tracking portal, fulfilment dispatch, or courier account replacement.
+- Full business profit-and-loss, product COGS, gateway fee, tax, inventory or ad-spend suite.
+- Automatic recommendations that change shipping settings.
+- Runtime AI analysis or sending order/invoice data to an LLM.
 
 ## Platform and compatibility baseline
 
@@ -68,14 +102,6 @@ Official references:
 - [WPML minimum requirements](https://wpml.org/home/minimum-requirements)
 - [Polylang for WooCommerce changelog and compatibility requirements](https://polylang.pro/polylang-for-woocommerce-changelog/)
 - [WooCommerce React-powered admin pages](https://developer.woocommerce.com/docs/extensions/settings-and-config/working-with-woocommerce-admin-pages/)
-
-## Explicitly out of scope for first release
-
-- Checkout rate calculation or modifying customer shipping prices.
-- Label purchase, shipment tracking portal, fulfilment dispatch, or courier account replacement.
-- Full business profit-and-loss, product COGS, gateway fee, tax, inventory or ad-spend suite.
-- Automatic recommendations that change shipping settings.
-- Runtime AI analysis or sending order/invoice data to an LLM.
 
 ## Status vocabulary
 
