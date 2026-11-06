@@ -107,6 +107,9 @@
 		const [ parsed, setParsed ] = useState( null );
 		const [ mapping, setMapping ] = useState( { reference: '', amount: '', currency: '' } );
 		const [ error, setError ] = useState( '' );
+		const [ matchResults, setMatchResults ] = useState( {} );
+		const [ matching, setMatching ] = useState( false );
+		const [ matchError, setMatchError ] = useState( '' );
 
 		useEffect( function () {
 			if ( ! rawCsv ) {
@@ -140,6 +143,7 @@
 				};
 
 				setParsed( { headers: headers, rows: rows } );
+				setMatchResults( {} );
 				setMapping( {
 					reference: findHeader( [ 'order', 'ordernumber', 'orderid', 'tracking', 'trackingnumber', 'awb', 'shipmentid', 'referencenumber' ] ),
 					amount: findHeader( [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total' ] ),
@@ -199,6 +203,47 @@
 			} )
 			: [];
 
+
+		function matchReferences() {
+			if ( ! report.ajax_url || ! report.match_nonce || ! parsed ) {
+				setMatchError( __( 'Matching is unavailable. Reload the dashboard and try again.', 'wpessential-shipping-cost-monitor' ) );
+				return;
+			}
+
+			const rowsToMatch = validRows.slice( 0, 50 );
+			const body = new FormData();
+			body.append( 'action', 'wpe_scm_match_preview' );
+			body.append( 'nonce', report.match_nonce );
+			rowsToMatch.forEach( function ( item, index ) {
+				body.append( 'references[' + index + '][row]', String( item.number ) );
+				body.append( 'references[' + index + '][reference]', String( item.values[ Number( mapping.reference ) ] || '' ) );
+			} );
+
+			setMatching( true );
+			setMatchError( '' );
+			fetch( report.ajax_url, { method: 'POST', credentials: 'same-origin', body: body } )
+				.then( function ( response ) {
+					return response.json();
+				} )
+				.then( function ( payload ) {
+					if ( ! payload || ! payload.success || ! payload.data || ! Array.isArray( payload.data.results ) ) {
+						throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The matching request failed.', 'wpessential-shipping-cost-monitor' ) );
+					}
+
+					const resultMap = {};
+					payload.data.results.forEach( function ( result ) {
+						resultMap[ result.row ] = result;
+					} );
+					setMatchResults( resultMap );
+				} )
+				.catch( function ( requestError ) {
+					setMatchError( requestError.message || __( 'The matching request failed.', 'wpessential-shipping-cost-monitor' ) );
+				} )
+				.finally( function () {
+					setMatching( false );
+				} );
+		}
+
 		const fieldSelect = function ( label, field ) {
 			return h(
 				'label',
@@ -210,6 +255,7 @@
 						value: mapping[ field ],
 						onChange: function ( event ) {
 							setMapping( Object.assign( {}, mapping, { [ field ]: event.target.value } ) );
+							setMatchResults( {} );
 						},
 					},
 					h( 'option', { value: '' }, __( 'Choose a column', 'wpessential-shipping-cost-monitor' ) ),
@@ -225,7 +271,7 @@
 			{ className: 'wpe-scm-card wpe-scm-import-card' },
 			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'PRO IMPORT PREVIEW', 'wpessential-shipping-cost-monitor' ) ),
 			h( 'h2', null, __( 'Preview a courier invoice CSV', 'wpessential-shipping-cost-monitor' ) ),
-			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Preview-only: the file is read in this browser and is not uploaded or saved. No order costs are changed.', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Preview-only: the file stays in this browser. If you request exact matching, only mapped references are sent to WordPress; no file or cost rows are saved and no order costs change.', 'wpessential-shipping-cost-monitor' ) ),
 			h(
 				'div',
 				{ className: 'wpe-scm-import-toolbar' },
@@ -260,7 +306,8 @@
 					fieldSelect( __( 'Charge amount', 'wpessential-shipping-cost-monitor' ), 'amount' ),
 					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
 				),
-				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows pass basic field checks; matching and committing are not available in this preview.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows pass basic field checks. Exact order-number/ID matching is available for the first 50 valid rows; committing remains disabled.', 'wpessential-shipping-cost-monitor' ) ),
+				matchError ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, matchError ) : null,
 				h(
 					'div',
 					{ className: 'wpe-scm-import-table-wrap' },
@@ -277,17 +324,22 @@
 							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 							const currency = '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '';
 							const valid = '' !== reference.trim() && null !== parseInvoiceAmount( amountRaw, decimalMark ) && /^[A-Za-z]{3}$/.test( currency );
+							const match = matchResults[ item.number ];
+							const rowStatus = match ? match.status + ( match.order_number ? ': #' + match.order_number + ' (' + match.order_status + ')' : '' ) : valid ? __( 'Ready to match', 'wpessential-shipping-cost-monitor' ) : __( 'Missing or invalid required value', 'wpessential-shipping-cost-monitor' );
 							return h( 'tr', { key: item.number },
 								h( 'td', null, item.number ),
 								h( 'td', null, reference ),
 								h( 'td', null, amountRaw ),
 								h( 'td', null, currency ),
-								h( 'td', null, valid ? __( 'Ready for matching', 'wpessential-shipping-cost-monitor' ) : __( 'Missing or invalid required value', 'wpessential-shipping-cost-monitor' ) )
+								h( 'td', null, rowStatus )
 							);
 						} ) )
 					)
 				),
-				h( 'button', { type: 'button', className: 'button', onClick: clearPreview }, __( 'Clear preview', 'wpessential-shipping-cost-monitor' ) )
+				h( 'div', { className: 'wpe-scm-import-actions' },
+					h( 'button', { type: 'button', className: 'button button-primary', onClick: matchReferences, disabled: matching || validRows.length < 1 }, matching ? __( 'Matching…', 'wpessential-shipping-cost-monitor' ) : __( 'Match first 50 valid rows', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'button', { type: 'button', className: 'button', onClick: clearPreview }, __( 'Clear preview', 'wpessential-shipping-cost-monitor' ) )
+				)
 			) : null
 		);
 	}
