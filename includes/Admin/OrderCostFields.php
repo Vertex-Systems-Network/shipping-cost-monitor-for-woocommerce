@@ -196,11 +196,12 @@ final class OrderCostFields {
 			$order->save();
 			$order->add_order_note(
 				sprintf(
-					/* translators: 1: currency code, 2: amount, 3: evidence label. */
-					__( 'Shipping cost record removed: %1$s %2$s (%3$s).', 'wpessential-shipping-cost-monitor' ),
+					/* translators: 1: currency code, 2: amount, 3: evidence label, 4: tax treatment. */
+					__( 'Shipping cost record removed: %1$s %2$s (%3$s; tax %4$s).', 'wpessential-shipping-cost-monitor' ),
 					$previous_currency,
 					$previous_amount,
-					$this->evidence_label( $previous_evidence )
+					$this->evidence_label( $previous_evidence ),
+				'' !== $previous_tax_basis ? $previous_tax_basis : 'unknown'
 				),
 				0,
 				true
@@ -240,6 +241,7 @@ final class OrderCostFields {
 		$previous_currency = (string) $order->get_meta( '_wpe_scm_cost_currency', true );
 		$previous_evidence = (string) $order->get_meta( '_wpe_scm_cost_evidence', true );
 		$previous_tax_basis = (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true );
+		$previous_note = (string) $order->get_meta( '_wpe_scm_cost_note', true );
 
 		$order->update_meta_data( '_wpe_scm_cost_amount', $amount );
 		$order->update_meta_data( '_wpe_scm_cost_currency', $currency );
@@ -270,6 +272,12 @@ final class OrderCostFields {
 					$this->evidence_label( $evidence ),
 					$tax_basis
 				),
+				0,
+				true
+			);
+		} elseif ( $previous_note !== $note ) {
+			$order->add_order_note(
+				__( 'Shipping cost source note updated.', 'wpessential-shipping-cost-monitor' ),
 				0,
 				true
 			);
