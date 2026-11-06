@@ -1,6 +1,6 @@
 # Product requirements and options bank
 
-**Status:** Decision-ready draft; product-owner approval pending  
+**Status:** Initial MVP boundary accepted; pricing, merchant validation and distribution mechanics pending  
 **Product:** WPEssential Shipping Cost Monitor  
 **Parent suite:** WPEssential  
 **Audience:** WooCommerce merchants comparing customer-paid shipping with fulfilment spend.
@@ -47,6 +47,17 @@ WooCommerce records what the customer paid for shipping, but merchants may pay a
 - Runtime AI analysis or sending customer/order data to LLMs.
 
 Pricing and final Free/Pro entitlement await merchant validation and Marketplace review.
+
+## Distribution and submission plan
+
+**Target:** submit the Free edition to the WordPress.org Plugin Directory and the Paid/Pro edition to the WooCommerce.com Marketplace. See [SUBMISSION-STRATEGY.md](SUBMISSION-STRATEGY.md) for the full release tracks and current public requirements.
+
+- Free must be a stable, useful standalone plugin; do not make it a trial or disable existing Free functionality behind payment.
+- Pro is a separate paid release/package through WooCommerce.com. Final decision on standalone vs add-on packaging depends on Marketplace guidance and a safe upgrade/migration design.
+- WordPress.org Free must not download/install executable Pro code from an external server; distribution and updates follow each destination's approved flow.
+- Keep shared product IDs, names, versioning, license compatibility and migration behavior aligned. Do not claim either directory/Marketplace approval until received.
+- Woo Marketplace's current freemium submission flow may require separate Free and Paid submissions that are later merged. Confirm whether the WordPress.org Free package can satisfy its Free submission requirement, or whether Woo.com needs a separate Free submission too.
+- The submission tracks must meet their different readme, licensing, compatibility, security, UI, QIT, vendor-account and support requirements. Recheck exact rules at release.
 
 ## Metric definitions
 
@@ -166,9 +177,9 @@ Initial policy based on official recommendations checked 2026-11-06. Recheck at 
 
 | Platform | Initial baseline | Compatibility policy |
 |---|---|---|
-| PHP | 8.3+ | Verify on PHP 8.3 and 8.4; do not claim newer versions until supported WooCommerce release is tested there. |
+| PHP | 8.1 minimum; 8.3+ recommended | Test supported versions at release; Marketplace requires current published PHP minimum and strongly recommends 8.3+. |
 | WordPress | 6.9+ | Follow WooCommerce baseline; test current stable and an earlier supported version at release where viable. |
-| WooCommerce | 10.8+ | Follow current server recommendations; verify current and previous supported release at release. |
+| WooCommerce | 11.2+ development baseline | Recheck release-time latest two major WooCommerce releases for Marketplace support; this baseline is not a compatibility claim. |
 | Database | MySQL 8.0+ or MariaDB 10.6+ | Avoid version-specific SQL assumptions. |
 | HPOS | Supported | Use WooCommerce CRUD APIs; declare only after HPOS and legacy storage tests pass. |
 | React admin | WordPress/WooCommerce-supported React extension APIs | React for presentation; PHP/domain services authoritative. Toolchain choice waits for Gate D. |
