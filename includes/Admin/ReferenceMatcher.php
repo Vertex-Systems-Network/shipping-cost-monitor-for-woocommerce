@@ -122,8 +122,9 @@ final class ReferenceMatcher {
 
 			if ( 1 === count( $matches ) ) {
 				$order = reset( $matches );
-				$has_existing_cost = '' !== (string) $order->get_meta( '_wpe_scm_cost_amount', true );
-				$results[] = array(
+				$existing_amount = (string) $order->get_meta( '_wpe_scm_cost_amount', true );
+				$has_existing_cost = '' !== $existing_amount;
+				$result = array(
 					'row'               => $entry['row'],
 					'status'            => $has_existing_cost ? 'existing_cost' : 'matched',
 					'order_id'          => $order->get_id(),
@@ -132,6 +133,15 @@ final class ReferenceMatcher {
 					'currency'          => $order->get_currency(),
 					'has_existing_cost' => $has_existing_cost,
 				);
+				if ( $has_existing_cost ) {
+					$result['existing_cost'] = array(
+						'amount'    => wc_format_decimal( $existing_amount, wc_get_price_decimals() ),
+						'currency'  => strtoupper( sanitize_text_field( (string) $order->get_meta( '_wpe_scm_cost_currency', true ) ) ),
+						'evidence'  => sanitize_key( (string) $order->get_meta( '_wpe_scm_cost_evidence', true ) ),
+						'tax_basis' => sanitize_key( (string) $order->get_meta( '_wpe_scm_cost_tax_basis', true ) ),
+					);
+				}
+				$results[] = $result;
 			} elseif ( count( $matches ) > 1 ) {
 				$results[] = array(
 					'row'    => $entry['row'],
