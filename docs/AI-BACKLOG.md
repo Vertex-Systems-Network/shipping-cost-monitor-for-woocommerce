@@ -31,7 +31,8 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-13 | Carrier/platform public API capability matrix | Complete (public-doc desk review) | Region-aware evidence matrix in INTEGRATION-MATRIX.md; actual invoice endpoints/account permissions remain unverified |
 | AI-14 | Verify candidate APIs with merchant accounts and account-specific docs | Deferred; outside initial build | Reopen only after merchant usage, account scopes, invoice-final fields, regional terms and security review are available |
 | AI-15 | Bootstrap plugin and React admin shell without CLI/build tooling | Complete (implementation slice) | Plugin entry point, coordinator, WooCommerce submenu, truthful empty-state dashboard and scoped styles added; runtime verification not performed |
-| AI-16 | Implement manual per-order cost ledger via WooCommerce CRUD | Next implementation slice | Authorized order-level save/read flow with provenance and evidence type; add no custom order SQL; report changed files and defer testing until requested |\n| AI-17 | Plan WordPress.org Free and WooCommerce.com Paid submissions | Strategy drafted; submission mechanics need confirmation | SUBMISSION-STRATEGY.md has both tracks; confirm whether Woo Marketplace requires a separate Free submission for merged freemium listing |
+| AI-16 | Implement manual per-order cost ledger via WooCommerce CRUD | Next implementation slice | Authorized order-level save/read flow with provenance and evidence type; add no custom order SQL; report changed files and defer testing until requested |
+| AI-17 | Plan WordPress.org Free and WooCommerce.com Paid submissions | Strategy drafted; submission mechanics need confirmation | SUBMISSION-STRATEGY.md has both tracks; confirm whether Woo Marketplace requires a separate Free submission for merged freemium listing |
 
 ## Agent task template
 
