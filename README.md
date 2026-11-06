@@ -37,6 +37,7 @@ Dates below are **proposed planning targets** and will be re-baselined after eac
 - [Product requirements and deduplicated options bank](docs/PRODUCT-SPEC.md)
 - [Systems architecture, adapters and data flow](docs/ARCHITECTURE.md)
 - [AI-assisted development backlog and working rules](docs/AI-BACKLOG.md)
+- [AI start-here instructions and prompt](docs/AI-START-HERE.md)
 
 ## Product principles
 
@@ -63,3 +64,7 @@ Provider coverage and packaging will follow API validation, merchant demand, reg
 - API integrations will be phased. A provider is added only after its API, account requirements, supported data, security model, regional relevance and maintenance cost are reviewed.
 - “AI” means AI-assisted product development and engineering discipline at this stage. No AI service, customer data transmission, or runtime AI feature is assumed.
 - No CLI, build pipeline, or plugin code is part of this pre-development work. Any future toolchain decision is deferred until the product and UI architecture are approved.
+
+## For AI coding tools
+
+Repository-aware coding tools should load [AGENTS.md](AGENTS.md) before acting. Tool-specific entry points are included for Codex/ChatGPT Codex, Cursor, Claude Code, Gemini CLI and GitHub Copilot. A general ChatGPT conversation does **not** automatically receive repository files just because the GitHub URL is mentioned; use the prompt in [AI-START-HERE](docs/AI-START-HERE.md) and provide connected repository access.
