@@ -10,6 +10,7 @@ namespace WPEssential\ShippingCostMonitor;
 defined( 'ABSPATH' ) || exit;
 
 require_once WPE_SCM_DIR . 'includes/Admin/Page.php';
+require_once WPE_SCM_DIR . 'includes/Admin/Summary.php';
 require_once WPE_SCM_DIR . 'includes/Admin/OrderCostFields.php';
 
 /**
