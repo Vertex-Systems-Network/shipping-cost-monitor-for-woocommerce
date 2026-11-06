@@ -69,7 +69,18 @@ final class Page {
 			true
 		);
 
-		wp_localize_script( 'wpe-scm-admin', 'wpeScmDashboard', Summary::build() );
+		$requested_start = isset( $_GET['wpe_scm_start'] ) && is_string( $_GET['wpe_scm_start'] )
+			? sanitize_text_field( wp_unslash( $_GET['wpe_scm_start'] ) )
+			: null;
+		$requested_end = isset( $_GET['wpe_scm_end'] ) && is_string( $_GET['wpe_scm_end'] )
+			? sanitize_text_field( wp_unslash( $_GET['wpe_scm_end'] ) )
+			: null;
+
+		wp_localize_script(
+			'wpe-scm-admin',
+			'wpeScmDashboard',
+			Summary::build( $requested_start, $requested_end )
+		);
 
 		wp_set_script_translations(
 			'wpe-scm-admin',
