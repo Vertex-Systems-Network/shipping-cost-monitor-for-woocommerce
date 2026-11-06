@@ -26,12 +26,12 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 | AI-08 | Security/privacy and import/API threat model | Complete (proposed controls; review pending) | Credential, endpoint, CSV, webhook, logging and data-minimization controls plus open security decisions in ARCHITECTURE-DECISIONS.md |
 | AI-09 | Define reconciliation matching and review controls | Complete (proposed MVP rules) | Exact-ID precedence, exception states, ambiguity/manual review and audit behavior in PRODUCT-SPEC.md |
 | AI-10 | Define reporting/performance/background jobs | Complete (architecture proposal; benchmark pending) | Bounded pagination, server aggregates, indexed query direction and Action Scheduler proposal in ARCHITECTURE-DECISIONS.md |
-| AI-11 | Marketplace readiness checklist | Planned | Metadata, license, docs, support and compatibility evidence |
+| AI-11 | Marketplace readiness checklist | Submission strategy drafted; release evidence pending | SUBMISSION-STRATEGY.md defines WordPress.org Free and WooCommerce.com Pro tracks, open freemium pairing question, licensing, QIT and vendor requirements |
 | AI-12 | Pre-development exit review | Initial gates accepted with constraints | OWNER-DECISION-REGISTER.md records manual/no-API scope and no-build/no-CLI toolchain; credential, sample-data and retention items remain deferred |
 | AI-13 | Carrier/platform public API capability matrix | Complete (public-doc desk review) | Region-aware evidence matrix in INTEGRATION-MATRIX.md; actual invoice endpoints/account permissions remain unverified |
 | AI-14 | Verify candidate APIs with merchant accounts and account-specific docs | Deferred; outside initial build | Reopen only after merchant usage, account scopes, invoice-final fields, regional terms and security review are available |
 | AI-15 | Bootstrap plugin and React admin shell without CLI/build tooling | Complete (implementation slice) | Plugin entry point, coordinator, WooCommerce submenu, truthful empty-state dashboard and scoped styles added; runtime verification not performed |
-| AI-16 | Implement manual per-order cost ledger via WooCommerce CRUD | Next implementation slice | Authorized order-level save/read flow with provenance and evidence type; add no custom order SQL; report changed files and defer testing until requested |
+| AI-16 | Implement manual per-order cost ledger via WooCommerce CRUD | Next implementation slice | Authorized order-level save/read flow with provenance and evidence type; add no custom order SQL; report changed files and defer testing until requested |\n| AI-17 | Plan WordPress.org Free and WooCommerce.com Paid submissions | Strategy drafted; submission mechanics need confirmation | SUBMISSION-STRATEGY.md has both tracks; confirm whether Woo Marketplace requires a separate Free submission for merged freemium listing |
 
 ## Agent task template
 
@@ -52,4 +52,4 @@ This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It 
 
 ## Current handoff
 
-The owner authorized the initial manual/no-API implementation and approved the documented UX baseline on 2026-11-06. The implementation is constrained to WordPress-bundled React with no CLI, package manager, bundler or build pipeline. API credentials, CSV persistence, compatibility claims and tests remain out of scope until their evidence/review gates are met.
+The owner authorized the initial manual/no-API implementation and approved the documented UX baseline on 2026-11-06. The implementation is constrained to WordPress-bundled React with no CLI, package manager, bundler or build pipeline. The planned release channels are WordPress.org Free and WooCommerce.com Paid; the dual-submission mechanics need vendor confirmation. API credentials, CSV persistence, compatibility claims and tests remain out of scope until their evidence/review gates are met.
