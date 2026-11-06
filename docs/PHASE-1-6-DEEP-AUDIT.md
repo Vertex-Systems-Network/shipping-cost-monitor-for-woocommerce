@@ -1,6 +1,6 @@
 # Phase 1–6 deep audit
 
-**Audit date:** 2026-11-07  
+**Audit date:** 2026-11-06  
 **Scope:** Documentation, canonical feature bank, source-level workflow review, previously recorded Playground/staging evidence, and one new staging report-export check.  
 **Result:** Phases 1–5 satisfy only their explicitly documented desk/spec/code-delivery exit scopes. Phase 6 is not complete (83% implementation coverage). Phase 7/8 gates remain open.
 
@@ -12,7 +12,7 @@
 | 2. Requirements and options bank | Proposal baseline complete; owner/customer validation open | PRODUCT-SPEC.md maintains feature IDs, metrics, settings ownership and Free/Pro proposal. | Pricing, merchant validation, anonymized invoice formats, and Marketplace packaging mechanics are undecided. Current matching is exact WooCommerce order ID/order number; tracking/AWB/provider shipment ID are not implemented. |
 | 3. UX / React specification | Written UX baseline complete; implementation/visual QA partial | UX-FLOWS.md defines admin screens and states; current admin UI uses WordPress-bundled React via wp.element and rendered on staging. | No separate polished visual prototype/review evidence. Persistent exception resolution, server-synced profiles, zone/category loss reports, alerts, and rate simulation are not implemented. |
 | 4. Architecture / readiness | Initial manual/no-API boundary accepted; security and retention gates open | WooCommerce CRUD/order metadata, money/evidence distinction, bounded browser CSV flow, adapter interface and threat-control proposals are documented. | Credential storage/API calls remain gated by C-3. CSV rows are browser-local and not durably retained; merchant samples/retention policy are missing. This is not a completed security review. |
-| 5. Core implementation | Code delivery complete; staging core paths verified selectively | Manual order values and reports use WooCommerce CRUD; Playground/staging report numbers were observed. On 2026-11-07, staging report CSV export produced a download. | PHP lint and compatibility matrix not run. Export contents were not independently checked. Refund allocation, currency edge cases, HPOS, multilingual and performance remain unverified. |
+| 5. Core implementation | Code delivery complete; staging core paths verified selectively | Manual order values and reports use WooCommerce CRUD; Playground/staging report numbers were observed. On 2026-11-06, staging report CSV export produced a download. | PHP lint and compatibility matrix not run. Export contents were not independently checked. Refund allocation, currency edge cases, HPOS, multilingual and performance remain unverified. |
 | 6. Reconciliation / integrations | 83% implementation coverage; not phase-complete | Staging synthetic CSV preview/commit path; duplicate-in-file, non-numeric invalid, negative review, unmatched reference, refund review, existing-cost non-overwrite and report CSV download evidenced. Source audit confirms permission/nonce gates, server-side order/shipping/currency revalidation, fingerprint check and WooCommerce CRUD persistence. | Exact same AJAX replay response not exercised. Runtime ambiguous collision unavailable because staging has no duplicate order-number fixture. Currency mismatch, mapping-profile reuse, provider runtime behavior, merchant invoice formats and broad QA need evidence. Live provider package blocked on verified merchant account/schema/security gate. |
 | 7. Compatibility, quality and beta | Not started | None claimed by this audit. | HPOS/legacy, WPML, Polylang, supported PHP/WP/WC/database lanes, lower-bound period, regression/security/performance and beta feedback. |
 | 8. Marketplace readiness | Not started | Strategy targets WordPress.org Free and WooCommerce.com Paid; mechanics/requirements are documented. | Packaging, vendor/account prerequisites, QIT, listing assets, policy review, support, and approvals are outstanding. |
@@ -29,7 +29,7 @@
 | Existing-cost re-import protection | Pass | Existing value displayed; overwrite not offered; no edge CSV rows committed. |
 | Same exact AJAX commit replay | Pending | Fingerprint/idempotency branch reviewed in source; exact response not invoked at runtime. UI disables recommit after save. |
 | Ambiguous exact order reference | Pending | Branch reviewed; staging has no duplicate order-number fixture. No runtime pass claimed. |
-| Report CSV download | Pass | Staging Export CSV control delivered a download on 2026-11-07. File contents/edge values were not independently audited. |
+| Report CSV download | Pass | Staging Export CSV control delivered a download on 2026-11-06. File contents/edge values were not independently audited. |
 | Live carrier final-cost sync | Blocked | No approved provider/account, account-level final-cost schema or C-3 credential-security approval. |
 | HPOS, WPML/Polylang, currency mismatch and performance | Pending | No matrix/test evidence. |
 
