@@ -13,6 +13,7 @@ require_once WPE_SCM_DIR . 'includes/Admin/Page.php';
 require_once WPE_SCM_DIR . 'includes/Admin/Summary.php';
 require_once WPE_SCM_DIR . 'includes/Admin/CsvExport.php';
 require_once WPE_SCM_DIR . 'includes/Admin/ReferenceMatcher.php';
+require_once WPE_SCM_DIR . 'includes/Admin/InvoiceImporter.php';
 require_once WPE_SCM_DIR . 'includes/Admin/OrderCostFields.php';
 
 /**
@@ -52,5 +53,8 @@ final class Plugin {
 
 		$reference_matcher = new Admin\ReferenceMatcher();
 		$reference_matcher->register();
+
+		$invoice_importer = new Admin\InvoiceImporter();
+		$invoice_importer->register();
 	}
 }
