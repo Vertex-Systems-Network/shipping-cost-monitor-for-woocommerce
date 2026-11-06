@@ -261,8 +261,8 @@ final class OrderCostFields {
 			$action = '' === $previous_amount ? 'added' : 'updated';
 			$order->add_order_note(
 				sprintf(
-					/* translators: 1: action, 2: old currency, 3: old amount, 4: old evidence, 5: new currency, 6: new amount, 7: new evidence, 8: new tax basis. */
-					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s; tax %8$s).', 'wpessential-shipping-cost-monitor' ),
+					/* translators: 1: action, 2: old currency, 3: old amount, 4: old evidence, 5: new currency, 6: new amount, 7: new evidence, 8: new tax basis, 9: optional source note change. */
+					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s; tax %8$s)%9$s.', 'wpessential-shipping-cost-monitor' ),
 					$action,
 					$previous_currency,
 					$previous_amount,
@@ -270,7 +270,8 @@ final class OrderCostFields {
 					$currency,
 					$amount,
 					$this->evidence_label( $evidence ),
-					$tax_basis
+					$tax_basis,
+					$previous_note !== $note ? __( '; source note updated', 'wpessential-shipping-cost-monitor' ) : ''
 				),
 				0,
 				true
