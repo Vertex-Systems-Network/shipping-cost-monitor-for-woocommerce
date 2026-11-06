@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || exit;
 require_once WPE_SCM_DIR . 'includes/Admin/Page.php';
 require_once WPE_SCM_DIR . 'includes/Admin/Summary.php';
 require_once WPE_SCM_DIR . 'includes/Admin/CsvExport.php';
+require_once WPE_SCM_DIR . 'includes/Admin/ReferenceMatcher.php';
 require_once WPE_SCM_DIR . 'includes/Admin/OrderCostFields.php';
 
 /**
@@ -48,5 +49,8 @@ final class Plugin {
 
 		$csv_export = new Admin\CsvExport();
 		$csv_export->register();
+
+		$reference_matcher = new Admin\ReferenceMatcher();
+		$reference_matcher->register();
 	}
 }
