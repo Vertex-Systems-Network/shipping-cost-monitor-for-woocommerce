@@ -21,6 +21,277 @@
 			.join( ' · ' ) || '—';
 	}
 
+
+	function parseCsvRecords( text, delimiter ) {
+		const rows = [];
+		let row = [];
+		let field = '';
+		let inQuotes = false;
+
+		for ( let index = 0; index < text.length; index++ ) {
+			const character = text[ index ];
+
+			if ( '"' === character ) {
+				if ( inQuotes && '"' === text[ index + 1 ] ) {
+					field += '"';
+					index++;
+				} else if ( inQuotes || '' === field ) {
+					inQuotes = ! inQuotes;
+				} else {
+					throw new Error( __( 'A quote appears in an invalid position.', 'wpessential-shipping-cost-monitor' ) );
+				}
+				continue;
+			}
+
+			if ( ! inQuotes && character === delimiter ) {
+				row.push( field );
+				field = '';
+				continue;
+			}
+
+			if ( ! inQuotes && ( '\n' === character || '\r' === character ) ) {
+				if ( '\r' === character && '\n' === text[ index + 1 ] ) {
+					index++;
+				}
+				row.push( field );
+				rows.push( row );
+				row = [];
+				field = '';
+				if ( rows.length > 5001 ) {
+					throw new Error( __( 'This preview is limited to 5,000 data rows.', 'wpessential-shipping-cost-monitor' ) );
+				}
+				continue;
+			}
+
+			field += character;
+		}
+
+		if ( inQuotes ) {
+			throw new Error( __( 'The CSV has an unclosed quoted field.', 'wpessential-shipping-cost-monitor' ) );
+		}
+
+		if ( '' !== field || row.length > 0 ) {
+			row.push( field );
+			rows.push( row );
+		}
+
+		if ( rows.length > 5001 ) {
+			throw new Error( __( 'This preview is limited to 5,000 data rows.', 'wpessential-shipping-cost-monitor' ) );
+		}
+
+		return rows.filter( function ( values ) {
+			return values.some( function ( value ) {
+				return '' !== value.trim();
+			} );
+		} );
+	}
+
+	function parseInvoiceAmount( rawValue, decimalMark ) {
+		let value = String( rawValue || '' ).trim().replace( /[\s\u00a0]/g, '' );
+		if ( ',' === decimalMark ) {
+			value = value.replace( /\./g, '' ).replace( ',', '.' );
+		} else {
+			value = value.replace( /,/g, '' );
+		}
+
+		return /^-?\d+(?:\.\d+)?$/.test( value ) ? Number( value ) : null;
+	}
+
+	function CsvInvoicePreview() {
+		const useState = wp.element.useState;
+		const useEffect = wp.element.useEffect;
+		const [ rawCsv, setRawCsv ] = useState( '' );
+		const [ fileName, setFileName ] = useState( '' );
+		const [ delimiter, setDelimiter ] = useState( ',' );
+		const [ decimalMark, setDecimalMark ] = useState( '.' );
+		const [ parsed, setParsed ] = useState( null );
+		const [ mapping, setMapping ] = useState( { reference: '', amount: '', currency: '' } );
+		const [ error, setError ] = useState( '' );
+
+		useEffect( function () {
+			if ( ! rawCsv ) {
+				setParsed( null );
+				return;
+			}
+
+			try {
+				const text = rawCsv.replace( /^\uFEFF/, '' );
+				const records = parseCsvRecords( text, delimiter );
+				if ( records.length < 2 ) {
+					throw new Error( __( 'Select a CSV with a header row and at least one data row.', 'wpessential-shipping-cost-monitor' ) );
+				}
+
+				const headers = records[ 0 ].map( function ( value ) {
+					return value.trim();
+				} );
+				if ( headers.some( function ( value ) { return '' === value; } ) ) {
+					throw new Error( __( 'Every CSV column needs a non-empty header.', 'wpessential-shipping-cost-monitor' ) );
+				}
+
+				const rows = records.slice( 1 ).map( function ( values, index ) {
+					return { number: index + 2, values: values };
+				} );
+				const findHeader = function ( aliases ) {
+					const index = headers.findIndex( function ( header ) {
+						const normalized = header.toLowerCase().replace( /[^a-z0-9]/g, '' );
+						return aliases.indexOf( normalized ) !== -1;
+					} );
+					return index >= 0 ? String( index ) : '';
+				};
+
+				setParsed( { headers: headers, rows: rows } );
+				setMapping( {
+					reference: findHeader( [ 'order', 'ordernumber', 'orderid', 'tracking', 'trackingnumber', 'awb', 'shipmentid', 'referencenumber' ] ),
+					amount: findHeader( [ 'amount', 'charge', 'shippingcost', 'shippingcharge', 'cost', 'total' ] ),
+					currency: findHeader( [ 'currency', 'currencycode', 'iso' ] ),
+				} );
+				setError( '' );
+			} catch ( parseError ) {
+				setParsed( null );
+				setError( parseError.message || __( 'Could not read this CSV.', 'wpessential-shipping-cost-monitor' ) );
+			}
+		}, [ rawCsv, delimiter ] );
+
+		function chooseFile( event ) {
+			const file = event.target.files && event.target.files[ 0 ];
+			if ( ! file ) {
+				return;
+			}
+			if ( file.size > 5242880 ) {
+				setRawCsv( '' );
+				setFileName( '' );
+				setError( __( 'Files must be 5 MB or smaller.', 'wpessential-shipping-cost-monitor' ) );
+				return;
+			}
+			if ( ! /\.csv$/i.test( file.name ) ) {
+				setRawCsv( '' );
+				setFileName( '' );
+				setError( __( 'Choose a .csv file.', 'wpessential-shipping-cost-monitor' ) );
+				return;
+			}
+
+			setFileName( file.name );
+			setError( '' );
+			const reader = new FileReader();
+			reader.onload = function () {
+				setRawCsv( String( reader.result || '' ) );
+			};
+			reader.onerror = function () {
+				setError( __( 'The selected file could not be read.', 'wpessential-shipping-cost-monitor' ) );
+			};
+			reader.readAsText( file );
+		}
+
+		function clearPreview() {
+			setRawCsv( '' );
+			setFileName( '' );
+			setParsed( null );
+			setMapping( { reference: '', amount: '', currency: '' } );
+			setError( '' );
+		}
+
+		const validRows = parsed && mapping.reference !== '' && mapping.amount !== '' && mapping.currency !== ''
+			? parsed.rows.filter( function ( item ) {
+				const reference = item.values[ Number( mapping.reference ) ] || '';
+				const amount = parseInvoiceAmount( item.values[ Number( mapping.amount ) ], decimalMark );
+				const currency = String( item.values[ Number( mapping.currency ) ] || '' ).trim();
+				return '' !== reference.trim() && null !== amount && /^[A-Za-z]{3}$/.test( currency );
+			} )
+			: [];
+
+		const fieldSelect = function ( label, field ) {
+			return h(
+				'label',
+				{ className: 'wpe-scm-import-field' },
+				label,
+				h(
+					'select',
+					{
+						value: mapping[ field ],
+						onChange: function ( event ) {
+							setMapping( Object.assign( {}, mapping, { [ field ]: event.target.value } ) );
+						},
+					},
+					h( 'option', { value: '' }, __( 'Choose a column', 'wpessential-shipping-cost-monitor' ) ),
+					parsed ? parsed.headers.map( function ( header, index ) {
+						return h( 'option', { key: index, value: String( index ) }, header );
+					} ) : null
+				)
+			);
+		};
+
+		return h(
+			'section',
+			{ className: 'wpe-scm-card wpe-scm-import-card' },
+			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'PRO IMPORT PREVIEW', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'h2', null, __( 'Preview a courier invoice CSV', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Preview-only: the file is read in this browser and is not uploaded or saved. No order costs are changed.', 'wpessential-shipping-cost-monitor' ) ),
+			h(
+				'div',
+				{ className: 'wpe-scm-import-toolbar' },
+				h( 'label', { className: 'wpe-scm-file-field' }, __( 'Choose CSV file (5 MB max)', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'file', accept: '.csv,text/csv', onChange: chooseFile } ) ),
+				h(
+					'label',
+					{ className: 'wpe-scm-import-field' },
+					__( 'Column separator', 'wpessential-shipping-cost-monitor' ),
+					h( 'select', { value: delimiter, onChange: function ( event ) { setDelimiter( event.target.value ); } },
+						h( 'option', { value: ',' }, __( 'Comma', 'wpessential-shipping-cost-monitor' ) ),
+						h( 'option', { value: ';' }, __( 'Semicolon', 'wpessential-shipping-cost-monitor' ) ),
+						h( 'option', { value: '\t' }, __( 'Tab', 'wpessential-shipping-cost-monitor' ) )
+					)
+				),
+				h(
+					'label',
+					{ className: 'wpe-scm-import-field' },
+					__( 'Decimal mark', 'wpessential-shipping-cost-monitor' ),
+					h( 'select', { value: decimalMark, onChange: function ( event ) { setDecimalMark( event.target.value ); } },
+						h( 'option', { value: '.' }, __( 'Period (1,234.56)', 'wpessential-shipping-cost-monitor' ) ),
+						h( 'option', { value: ',' }, __( 'Comma (1.234,56)', 'wpessential-shipping-cost-monitor' ) )
+					)
+				)
+			),
+			fileName ? h( 'p', { className: 'wpe-scm-import-file' }, __( 'Selected:', 'wpessential-shipping-cost-monitor' ) + ' ' + fileName ) : null,
+			error ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, error ) : null,
+			parsed ? h(
+				'div',
+				{ className: 'wpe-scm-import-preview' },
+				h( 'div', { className: 'wpe-scm-import-mapping' },
+					fieldSelect( __( 'Order / shipment reference', 'wpessential-shipping-cost-monitor' ), 'reference' ),
+					fieldSelect( __( 'Charge amount', 'wpessential-shipping-cost-monitor' ), 'amount' ),
+					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
+				),
+				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows pass basic field checks; matching and committing are not available in this preview.', 'wpessential-shipping-cost-monitor' ) ),
+				h(
+					'div',
+					{ className: 'wpe-scm-import-table-wrap' },
+					h( 'table', { className: 'widefat striped wpe-scm-import-table' },
+						h( 'thead', null, h( 'tr', null,
+							h( 'th', null, __( 'Source row', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Reference', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Amount', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Currency', 'wpessential-shipping-cost-monitor' ) ),
+							h( 'th', null, __( 'Validation', 'wpessential-shipping-cost-monitor' ) )
+						) ),
+						h( 'tbody', null, parsed.rows.slice( 0, 10 ).map( function ( item ) {
+							const reference = item.values[ Number( mapping.reference ) ] || '';
+							const amountRaw = item.values[ Number( mapping.amount ) ] || '';
+							const currency = String( item.values[ Number( mapping.currency ) ] || '' ).trim();
+							const valid = '' !== reference.trim() && null !== parseInvoiceAmount( amountRaw, decimalMark ) && /^[A-Za-z]{3}$/.test( currency );
+							return h( 'tr', { key: item.number },
+								h( 'td', null, item.number ),
+								h( 'td', null, reference ),
+								h( 'td', null, amountRaw ),
+								h( 'td', null, currency ),
+								h( 'td', null, valid ? __( 'Ready for matching', 'wpessential-shipping-cost-monitor' ) : __( 'Missing or invalid required value', 'wpessential-shipping-cost-monitor' ) )
+							);
+						} ) )
+					)
+				),
+				h( 'button', { type: 'button', className: 'button', onClick: clearPreview }, __( 'Clear preview', 'wpessential-shipping-cost-monitor' ) )
+			) : null
+		);
+	}
+
 	function MetricCard( props ) {
 		return h(
 			'section',
@@ -79,6 +350,7 @@
 				report.export_url ? h( 'a', { className: 'button wpe-scm-export-action', href: report.export_url }, __( 'Export CSV', 'wpessential-shipping-cost-monitor' ) ) : null
 			),
 			report.period_reset ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'The selected dates were invalid or exceeded 366 days. Showing the default 30-day period.', 'wpessential-shipping-cost-monitor' ) ) : null,
+			h( CsvInvoicePreview ),
 			h(
 				'section',
 				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
