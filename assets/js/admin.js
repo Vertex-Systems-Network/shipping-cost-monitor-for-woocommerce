@@ -40,7 +40,7 @@
 		const confirmedValue = moneyByCurrency( 'confirmed_cost', 'confirmed_orders' );
 		const varianceValue = report.variance_available ? moneyByCurrency( 'variance', 'comparable_orders' ) : __( 'Not available', 'wpessential-shipping-cost-monitor' );
 		const hasOrders = eligible > 0;
-		const periodLabel = period.start && period.end ? period.start + ' — ' + period.end : __( 'Last 30 days', 'wpessential-shipping-cost-monitor' );
+		const periodLabel = period.start && period.end ? period.start + ' — ' + period.end + ' (' + ( period.timezone || 'UTC' ) + ')' : __( 'Last 30 days', 'wpessential-shipping-cost-monitor' );
 
 		return h(
 			'main',
