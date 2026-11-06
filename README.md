@@ -6,7 +6,7 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 > **Project status:** Phase 5 code complete; Phase 6 invoice workflow in progress  
 > **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 5 code scope is complete; Phase 6 has five of six implementation packages delivered; dashboard smoke render is verified; full compatibility/workflow verification remains pending; no CLI or build toolchain.  
-> **Last status update:** 2026-11-06  
+> **Last status update:** 2026-11-06 — staging evidence and AI backlog wording reconciled; progress unchanged.  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -153,3 +153,8 @@ Pricing and final packaging await owner and merchant validation and Marketplace 
 ## For AI coding tools
 
 Repository-aware agents should load [AGENTS.md](AGENTS.md) before acting. Tool entry points are included for Codex, Cursor, Claude Code, Gemini CLI and GitHub Copilot. General ChatGPT requires repository/file access and the prompt in [AI-START-HERE](docs/AI-START-HERE.md).
+
+
+### Update log
+
+- **2026-11-06:** Cleaned a duplicated sentence in AI-34 and reconciled the README with the verified state: WordPress staging has official WooCommerce 11.2.2 active, but the project ZIP could not be loaded. Phase 6 stays at 83% and overall progress stays at 73%; CSV import runtime QA and provider verification remain open.
