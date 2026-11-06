@@ -8,6 +8,7 @@
 	const h = wp.element.createElement;
 	const __ = wp.i18n.__;
 	const report = window.wpeScmDashboard || {};
+	const carrierAdapters = Array.isArray( report.carrier_adapters ) ? report.carrier_adapters : [];
 	const groups = Array.isArray( report.groups ) ? report.groups : [];
 
 	function moneyByCurrency( amountKey, countKey ) {
@@ -498,6 +499,33 @@
 		);
 	}
 
+	function CarrierConnections() {
+		const stateLabels = {
+			connected: __( 'Connected', 'wpessential-shipping-cost-monitor' ),
+			disconnected: __( 'Not connected', 'wpessential-shipping-cost-monitor' ),
+			reauth_required: __( 'Reconnect required', 'wpessential-shipping-cost-monitor' ),
+			unavailable: __( 'Unavailable', 'wpessential-shipping-cost-monitor' ),
+		};
+
+		return h(
+			'section',
+			{ className: 'wpe-scm-card wpe-scm-carrier-connections' },
+			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'OPTIONAL CARRIER DATA', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'h2', null, __( 'Carrier connections', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', null, __( 'Carrier adapters can add shipment IDs, tracking references or booked-cost evidence. They do not change checkout rates or order totals.', 'wpessential-shipping-cost-monitor' ) ),
+			carrierAdapters.length > 0
+				? h( 'ul', { className: 'wpe-scm-carrier-list' }, carrierAdapters.map( function ( adapter ) {
+					return h( 'li', { key: adapter.id, className: 'wpe-scm-carrier-item' },
+						h( 'strong', null, adapter.label ),
+						h( 'span', { className: 'wpe-scm-status-pill' }, stateLabels[ adapter.state ] || stateLabels.unavailable ),
+						adapter.regions && adapter.regions.length ? h( 'p', null, __( 'Regions:', 'wpessential-shipping-cost-monitor' ) + ' ' + adapter.regions.join( ', ' ) ) : null,
+						adapter.capabilities && adapter.capabilities.length ? h( 'p', null, __( 'Evidence:', 'wpessential-shipping-cost-monitor' ) + ' ' + adapter.capabilities.join( ', ' ) ) : null
+					);
+				} ) )
+				: h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'No carrier API adapter is enabled. Manual cost entry and invoice CSV reconciliation remain available; no provider credentials are configured or stored by this build.', 'wpessential-shipping-cost-monitor' ) )
+		);
+	}
+
 	function MetricCard( props ) {
 		return h(
 			'section',
@@ -560,6 +588,7 @@
 			),
 			report.period_reset ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'The selected dates were invalid or exceeded 366 days. Showing the default 30-day period.', 'wpessential-shipping-cost-monitor' ) ) : null,
 			h( CsvInvoicePreview ),
+			 h( CarrierConnections ),
 			h(
 				'section',
 				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
