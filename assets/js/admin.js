@@ -87,6 +87,10 @@
 		} );
 	}
 
+	function normalizeOrderReference( value ) {
+		return String( value || '' ).trim().replace( /^#\\s*/, '' );
+	}
+
 	function parseInvoiceAmount( rawValue, decimalMark ) {
 		let value = String( rawValue || '' ).trim().replace( /[\s\u00a0]/g, '' );
 		if ( ',' === decimalMark ) {
@@ -321,7 +325,7 @@
 			body.append( 'nonce', report.match_nonce );
 			rowsToMatch.forEach( function ( item, index ) {
 				body.append( 'references[' + index + '][row]', String( item.number ) );
-				body.append( 'references[' + index + '][reference]', String( item.values[ Number( mapping.reference ) ] || '' ) );
+				body.append( 'references[' + index + '][reference]', normalizeOrderReference( item.values[ Number( mapping.reference ) ] || '' ) );
 			} );
 
 			setMatching( true );
@@ -391,7 +395,7 @@
 					const currency = '__order_currency__' === mapping.currency ? String( match.currency || '' ).toUpperCase() : String( item.values[ Number( mapping.currency ) ] || '' ).trim().toUpperCase();
 					body.append( 'rows[' + index + '][row]', String( item.number ) );
 					body.append( 'rows[' + index + '][order_id]', String( match.order_id ) );
-					body.append( 'rows[' + index + '][reference]', String( item.values[ Number( mapping.reference ) ] || '' ) );
+					body.append( 'rows[' + index + '][reference]', normalizeOrderReference( item.values[ Number( mapping.reference ) ] || '' ) );
 					body.append( 'rows[' + index + '][amount]', amount );
 					body.append( 'rows[' + index + '][currency]', currency );
 					body.append( 'rows[' + index + '][batch]', batchHash );
