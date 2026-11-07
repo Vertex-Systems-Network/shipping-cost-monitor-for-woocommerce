@@ -85,3 +85,8 @@ The GitHub Actions PHP matrix initially failed in run #42374376598 due to incorr
 ## 2026-11-07 Phase 7 source dry-run follow-up
 
 Three source-level dry runs now complement the three existing execution checks: (1) WPML/WooCommerce Multilingual, (2) Polylang/Polylang for WooCommerce, and (3) legacy order-storage API usage. The first two found no direct integration API calls or hard dependencies and confirmed translation-aware PHP/React entry points; no language catalog files were present and neither add-on was installed. The legacy review found reporting/export via wc_get_orders() and WooCommerce CRUD order access, without direct $wpdb/wp_posts/update_post_meta order writes. No live runtime behavior was exercised. Phase 7 is 6/9 planned items complete (67%), not runtime-certified or release-ready. Overall project progress is 81%; see README.md and COMPATIBILITY-BASELINE.md.
+
+
+## 2026-11-07 repeat staging report smoke check
+
+On the owner-designated staging site (WordPress 7.1.4, WooCommerce 11.2.2; PHP 8.3.36 per System Status), the date-filtered report was refreshed for 2026-10-09 through 2026-11-07. The dashboard continued to show PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2). The Export CSV action completed and the browser returned a download. No order or site settings were changed. The zlib ob_end_flush notice remained visible; no fatal error was observed. This is a repeat functional smoke check inside the existing staging lane, not a new compatibility gate; Phase 7 remains 6/9 (67%), overall project 81%.
