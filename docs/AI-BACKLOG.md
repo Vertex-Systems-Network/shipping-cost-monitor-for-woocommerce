@@ -140,3 +140,8 @@ Staging recheck on 2026-11-07: Installed Plugins displayed five plugins/four act
 ## 2026-11-07 repeat staging report smoke check
 
 On the owner-designated staging site (WordPress 7.1.4, WooCommerce 11.2.2; PHP 8.3.36 per System Status), the date-filtered report was refreshed for 2026-10-09 through 2026-11-07. The dashboard continued to show PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2). The Export CSV action completed and the browser returned a download. No order or site settings were changed. The zlib ob_end_flush notice remained visible; no fatal error was observed. This is a repeat functional smoke check inside the existing staging lane, not a new compatibility gate; Phase 7 remains 6/9 (67%), overall project 81%.
+
+
+## 2026-11-07 staging report range boundary check
+
+On the owner-designated staging site, the report accepted the maximum supported inclusive range of 366 days (2025-11-07 through 2026-11-07). A 367-day inclusive range (2025-11-06 through 2026-11-07) was rejected and the dashboard fell back to its default 30-day range. The report was then restored to 2026-10-09 through 2026-11-07; the existing synthetic totals remained unchanged. CSV export also completed in the same session. No orders or site settings were modified. This is a targeted report-filter smoke check within the existing staging lane, not an additional Phase 7 gate. Phase 7 remains 6/9 (67%); overall project progress remains 81%. The zlib ob_end_flush notice was still visible and remains untriaged.
