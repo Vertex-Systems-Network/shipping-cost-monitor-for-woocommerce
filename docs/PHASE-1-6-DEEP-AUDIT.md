@@ -41,13 +41,13 @@
 - **Reference limitation:** exact order ID/order number matching is supported; tracking/AWB/provider shipment-ID match is not. Product-spec language must not imply those identifiers are currently supported.
 - **Reporting limitation:** shipping-method breakdown exists, but zone/category loss, threshold alerts, period comparison, PDF output and rate simulation are deferred features, not defects against the accepted initial boundary.
 - **Input hardening:** updated manual and invoice commit paths to accept canonical non-negative decimal strings only (no scientific notation) and reject non-string manual amount/nonce input. Invoice row and order IDs must be positive digit strings before conversion. This is a source change only; staging deployment/runtime checks and PHP lint remain pending.
-- **Composer/artifact packaging:** composer.json maps the product namespace to includes/. The bootstrap now requires vendor/autoload.php directly and the SPL fallback was removed. A CI-only GitHub Actions packaging workflow is authorized to generate vendor/, lint PHP, smoke-check PSR-4 and upload the installable ZIP; first workflow run/artifact verification is pending.
+- **Composer/artifact packaging:** composer.json maps the product namespace to includes/. The bootstrap now requires vendor/autoload.php directly and the SPL fallback was removed. A CI-only GitHub Actions packaging workflow generated vendor/, linted PHP, smoke-checked PSR-4 and uploaded the installable ZIP successfully on 2026-11-07 (run #42373229279). The artifact is available until 2026-11-21; staging installation and runtime verification of the latest source-hardening edits remain pending.
 
 ## Validation limits
 
 - Staging is WordPress 7.1.4 + WooCommerce 11.2.2. This proves only the observed flows on that site/configuration.
 - Existing test data is synthetic. No merchant invoice has been validated.
-- PHP/Composer were unavailable in the earlier runtime environment. PHP lint and Composer/autoloader verification are now delegated to the newly authorized GitHub Actions workflow; its first run is pending. The latest source-hardening edits are not yet staging-verified. No local CLI was invoked.
+- PHP/Composer were unavailable in the earlier runtime environment. GitHub Actions run #42373229279 successfully ran Composer autoload generation, PHP lint, PSR-4 class-loading smoke and ZIP integrity checks. The generated artifact still needs owner-side staging installation; no runtime claim is made for the latest source-hardening edits. The latest source-hardening edits are not yet staging-verified. No local CLI was invoked.
 - No automated test suite, full security review, full compatibility matrix, provider account verification or Marketplace submission was performed.
 
 ## Next gated work
@@ -57,3 +57,7 @@
 3. Exercise exact AJAX replay and ambiguous matching in a controlled staging fixture; record exact response/evidence.
 4. Run PHP lint and supported-platform checks only when the approved final toolchain/environment is available; do not state those as passed before execution.
 5. Start Phase 7 quality lanes, then Phase 8 submission preparation; neither is complete.
+
+## 2026-11-07 artifact build evidence
+
+GitHub Actions run [#42373229279](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42373229279) completed successfully. PHP lint, Composer PSR-4 autoload generation, class-loading smoke check, ZIP integrity and artifact upload passed. Artifact ID `13573878695`; SHA-256 `1ce2781cb3fed3e187a9e0fe559546004ab8c9a4454ad3d8e9fa3dda0c7d2707`; expires 2026-11-21. This closes build-system verification only. It does not close Phase 6, establish runtime installation, or verify the source-hardening changes on staging.
