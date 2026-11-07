@@ -5,8 +5,8 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Phases 1–5 documented/code-delivered for their defined scope; Phase 6 remains in progress  
-> **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 6 has five of six implementation packages delivered. Staging verifies synthetic reconciliation edge cases and report CSV download; provider, compatibility and broader QA remain open. No CLI or build toolchain.  
-> **Last status update:** 2026-11-06 — deep audit of Phases 1–6 recorded; staging report CSV download verified.  
+> **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 6 has five of six implementation packages delivered. Staging verifies synthetic reconciliation edge cases and report CSV download; provider, compatibility, post-hardening staging validation and broader QA remain open. No CLI or build toolchain.  
+> **Last status update:** 2026-11-07 — deep audit of Phases 1–6 recorded; staging report CSV download verified; source input hardening added, staging check pending.  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
