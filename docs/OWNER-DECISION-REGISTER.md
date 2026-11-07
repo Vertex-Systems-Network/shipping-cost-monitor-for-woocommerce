@@ -1,7 +1,7 @@
 # Owner decision register
 
-**Status:** Gates A and B approved; Gate C approved for the initial no-API foundation with credential handling deferred; Gate D approved for a no-CLI/no-build React path. This status records the owner's instruction to start on 2026-11-06.  
-**Updated:** 2026-11-06  
+**Status:** Gates A and B approved; Gate C approved for the initial no-API foundation with credential handling deferred; Gate D approves no-build React plus the owner-authorized CI-only artifact workflow.  
+**Updated:** 2026-11-07  
 **Purpose:** Resolve the gates that block implementation without treating draft documents as approval.
 
 The owner said “start” after reviewing the gate register. For the initial scope, the proposed defaults below are accepted where they directly match prior instructions; unresolved or evidence-dependent items stay deferred.
@@ -35,12 +35,13 @@ The owner said “start” after reviewing the gate register. For the initial sc
 
 | ID | Decision needed | Recommended default | Evidence / impact | State |
 |---|---|---|---|---|
-| D-1 | Development tooling authorization | Start a no-build implementation using WordPress-bundled React (`wp.element`) and plain JavaScript; PHP owns server behavior. No npm, package manager, bundler or build pipeline. | Accepted under the explicit start instruction; stop for a new approval if compilation/tooling becomes necessary. | Accepted; constrained path |
-| D-2 | CLI policy | CLI remains absent until the plugin is final and the owner explicitly changes this instruction. | Preserves the standing no-CLI requirement. | Accepted; prohibited for now |
+| D-1 | React development path | Use WordPress-bundled React (`wp.element`) and plain JavaScript; PHP owns server behavior. No npm or JS bundler. | Preserves the approved no-build UI path. | Accepted |
+| D-2 | Local/in-plugin CLI | Do not add a local CLI prerequisite, CLI distributed inside the plugin, npm or JS build chain. | Product development should remain usable from the repository source; package compilation is isolated to GitHub Actions. | Accepted; remains prohibited |
+| D-3 | Installable ZIP artifact workflow | Add a manually downloadable GitHub Actions workflow that runs Composer PSR-4 generation, PHP lint, autoloader smoke and ZIP packaging. | Explicit owner request on 2026-11-07: “artifact build system add krro take build kr k me download krron phir testing pr upload kr don”. CI-generated artifacts support staging installs; they do not constitute a Marketplace release. | Authorized; first workflow run pending |
 
 ## Remaining decisions
 
 - Provide anonymized merchant invoice samples before CSV parsing/matching is finalized (A-3).
 - Complete credential-security and retention reviews before adding API credentials or CSV upload persistence (C-3/C-4).
 - Recheck compatibility versions and run the matrix before making support claims (C-5).
-- Keep CLI, package managers, bundlers and build pipelines out until the plugin is final (D-2).
+- Keep local/in-plugin CLI, npm and JS bundlers out of scope. Use only the explicitly authorized GitHub Actions artifact workflow (D-2/D-3).
