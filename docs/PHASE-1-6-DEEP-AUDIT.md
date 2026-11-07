@@ -41,13 +41,13 @@
 - **Reference limitation:** exact order ID/order number matching is supported; tracking/AWB/provider shipment-ID match is not. Product-spec language must not imply those identifiers are currently supported.
 - **Reporting limitation:** shipping-method breakdown exists, but zone/category loss, threshold alerts, period comparison, PDF output and rate simulation are deferred features, not defects against the accepted initial boundary.
 - **Input hardening:** updated manual and invoice commit paths to accept canonical non-negative decimal strings only (no scientific notation) and reject non-string manual amount/nonce input. Invoice row and order IDs must be positive digit strings before conversion. This is a source change only; staging deployment/runtime checks and PHP lint remain pending.
-- **Composer:** composer.json has PSR-4 mapping; staging ZIP used the source fallback and omitted generated vendor files. Composer-generated autoload packaging remains pending under the no-CLI-until-final rule.
+- **Composer/artifact packaging:** composer.json maps the product namespace to includes/. The bootstrap now requires vendor/autoload.php directly and the SPL fallback was removed. A CI-only GitHub Actions packaging workflow is authorized to generate vendor/, lint PHP, smoke-check PSR-4 and upload the installable ZIP; first workflow run/artifact verification is pending.
 
 ## Validation limits
 
 - Staging is WordPress 7.1.4 + WooCommerce 11.2.2. This proves only the observed flows on that site/configuration.
 - Existing test data is synthetic. No merchant invoice has been validated.
-- PHP and Composer executables were unavailable in this environment; PHP lint was not run. The latest source-hardening edits were not uploaded to staging or runtime-verified. No CLI/build toolchain was invoked.
+- PHP/Composer were unavailable in the earlier runtime environment. PHP lint and Composer/autoloader verification are now delegated to the newly authorized GitHub Actions workflow; its first run is pending. The latest source-hardening edits are not yet staging-verified. No local CLI was invoked.
 - No automated test suite, full security review, full compatibility matrix, provider account verification or Marketplace submission was performed.
 
 ## Next gated work
