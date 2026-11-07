@@ -145,3 +145,8 @@ On the owner-designated staging site (WordPress 7.1.4, WooCommerce 11.2.2; PHP 8
 ## 2026-11-07 staging report range boundary check
 
 On the owner-designated staging site, the report accepted the maximum supported inclusive range of 366 days (2025-11-07 through 2026-11-07). A 367-day inclusive range (2025-11-06 through 2026-11-07) was rejected and the dashboard fell back to its default 30-day range. The report was then restored to 2026-10-09 through 2026-11-07; the existing synthetic totals remained unchanged. CSV export also completed in the same session. No orders or site settings were modified. This is a targeted report-filter smoke check within the existing staging lane, not an additional Phase 7 gate. Phase 7 remains 6/9 (67%); overall project progress remains 81%. The zlib ob_end_flush notice was still visible and remains untriaged.
+
+
+## 2026-11-07 staging dashboard console smoke check
+
+The existing Shipping Cost Monitor dashboard rendered its restored 2026-10-09–2026-11-07 report and the same synthetic totals (PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance, 2/2 coverage). A browser-console query filtered to the plugin admin script name `admin.js` returned no warning/error entries. The captured console did contain browser-extension errors; these are not attributed to the plugin. This is a narrow browser-session observation, not a full console, JavaScript, browser, or runtime regression test. No order or site setting was changed. No new Phase 7 gate is counted: Phase 7 remains 6/9 (67%), overall progress 81%. The unrelated zlib output-compression notice remains visible in WordPress admin.
