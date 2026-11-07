@@ -1,0 +1,75 @@
+name: Build installable plugin ZIP
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-installable-zip.yml'
+      - 'assets/**'
+      - 'includes/**'
+      - 'composer.json'
+      - 'wpessential-shipping-cost-monitor.php'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint, build and upload ZIP
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Composer autoloader
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
+
+      - name: Lint plugin and generated PHP
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -l wpessential-shipping-cost-monitor.php
+          find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
+
+      - name: Verify Composer PSR-4 autoload
+        run: |
+          php -r 'require "vendor/autoload.php"; if (!class_exists("WPEssential\\ShippingCostMonitor\\Plugin")) { fwrite(STDERR, "PSR-4 autoload smoke failed\n"); exit(1); } echo "PSR-4 autoload smoke passed\n";'
+
+      - name: Package installable plugin ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          slug='wpessential-shipping-cost-monitor'
+          archive="${slug}.zip"
+          rm -rf build "$archive" "$archive.sha256"
+          package_dir="build/${slug}"
+          mkdir -p "$package_dir"
+          cp -R assets includes vendor "$package_dir/"
+          cp wpessential-shipping-cost-monitor.php "$package_dir/"
+          if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
+          (cd build && zip -qr "../${archive}" "$slug")
+          unzip -t "$archive"
+          sha256sum "$archive" > "${archive}.sha256"
+
+      - name: Upload downloadable build artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: wpessential-shipping-cost-monitor-${{ github.sha }}
+          path: |
+            wpessential-shipping-cost-monitor.zip
+            wpessential-shipping-cost-monitor.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
