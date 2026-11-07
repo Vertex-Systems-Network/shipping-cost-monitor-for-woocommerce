@@ -49,7 +49,7 @@ jobs:
 
       - name: Verify Composer PSR-4 autoload
         run: |
-          php -r 'require "vendor/autoload.php"; if (!class_exists("WPEssential\\\\ShippingCostMonitor\\\\Plugin")) { fwrite(STDERR, "PSR-4 autoload smoke failed\\n"); exit(1); } echo "PSR-4 autoload smoke passed\\n";'
+          php -r 'require "vendor/autoload.php"; if (!class_exists("WPEssential\\ShippingCostMonitor\\Plugin")) { fwrite(STDERR, "PSR-4 autoload smoke failed\\n"); exit(1); } echo "PSR-4 autoload smoke passed\\n";'
 
   build:
     name: Lint, build and upload ZIP
