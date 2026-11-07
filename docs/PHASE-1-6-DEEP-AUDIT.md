@@ -41,13 +41,13 @@
 - **Reference limitation:** exact order ID/order number matching is supported; tracking/AWB/provider shipment-ID match is not. Product-spec language must not imply those identifiers are currently supported.
 - **Reporting limitation:** shipping-method breakdown exists, but zone/category loss, threshold alerts, period comparison, PDF output and rate simulation are deferred features, not defects against the accepted initial boundary.
 - **Input hardening:** updated manual and invoice commit paths to accept canonical non-negative decimal strings only (no scientific notation) and reject non-string manual amount/nonce input. Invoice row and order IDs must be positive digit strings before conversion. This is a source change only; staging deployment/runtime checks and PHP lint remain pending.
-- **Composer/artifact packaging:** composer.json maps the product namespace to includes/. The bootstrap now requires vendor/autoload.php directly and the SPL fallback was removed. A CI-only GitHub Actions packaging workflow generated vendor/, linted PHP, smoke-checked PSR-4 and uploaded the installable ZIP successfully on 2026-11-07 (run #42373229279). The artifact is available until 2026-11-21; staging installation and runtime verification of the latest source-hardening edits remain pending.
+- **Composer/artifact packaging:** composer.json maps the product namespace to includes/. The bootstrap now requires vendor/autoload.php directly and the SPL fallback was removed. A CI-only GitHub Actions packaging workflow generated vendor/, linted PHP, smoke-checked PSR-4 and uploaded the installable ZIP successfully on 2026-11-07 (run #42373229279). The artifact is available until 2026-11-21. The owner reported uploading it; staging later showed the plugin active at v0.1.0 and the dashboard rendered. No build SHA is visible in the admin UI, so exact artifact identity and source-hardening runtime verification remain unconfirmed.
 
 ## Validation limits
 
 - Staging is WordPress 7.1.4 + WooCommerce 11.2.2. This proves only the observed flows on that site/configuration.
 - Existing test data is synthetic. No merchant invoice has been validated.
-- PHP/Composer were unavailable in the earlier runtime environment. GitHub Actions run #42373229279 successfully ran Composer autoload generation, PHP lint, PSR-4 class-loading smoke and ZIP integrity checks. The generated artifact still needs owner-side staging installation; no runtime claim is made for the latest source-hardening edits. The latest source-hardening edits are not yet staging-verified. No local CLI was invoked.
+- PHP/Composer were unavailable in the earlier runtime environment. GitHub Actions run #42373229279 successfully ran Composer autoload generation, PHP lint, PSR-4 class-loading smoke and ZIP integrity checks. The owner reported uploading the generated artifact. Staging showed the plugin active and dashboard rendered, but no build SHA is exposed; therefore the exact artifact identity and runtime behavior of source-hardening edits are unconfirmed. The latest source-hardening edits are not yet staging-verified. No local CLI was invoked.
 - No automated test suite, full security review, full compatibility matrix, provider account verification or Marketplace submission was performed.
 
 ## Next gated work
@@ -55,9 +55,16 @@
 1. Keep Phase 6 at 83%; complete provider package only after merchant/provider identity, account-specific final billed-cost evidence, terms and C-3 credential review.
 2. Request anonymized representative invoices before defining aggregation, tracking-reference matching or durable exception resolution.
 3. Exercise exact AJAX replay and ambiguous matching in a controlled staging fixture; record exact response/evidence.
-4. Run PHP lint and supported-platform checks only when the approved final toolchain/environment is available; do not state those as passed before execution.
+4. PHP lint and PSR-4 autoload checks passed in CI. Run remaining supported-platform compatibility checks; do not infer them from the successful build.
 5. Start Phase 7 quality lanes, then Phase 8 submission preparation; neither is complete.
 
 ## 2026-11-07 artifact build evidence
 
 GitHub Actions run [#42373229279](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42373229279) completed successfully. PHP lint, Composer PSR-4 autoload generation, class-loading smoke check, ZIP integrity and artifact upload passed. Artifact ID `13573878695`; SHA-256 `1ce2781cb3fed3e187a9e0fe559546004ab8c9a4454ad3d8e9fa3dda0c7d2707`; expires 2026-11-21. This closes build-system verification only. It does not close Phase 6, establish runtime installation, or verify the source-hardening changes on staging.
+
+
+## 2026-11-07 staging recheck after owner upload
+
+The staging admin showed WPEssential Shipping Cost Monitor v0.1.0 active on WordPress 7.1.4 + WooCommerce 11.2.2. The dashboard rendered existing synthetic report data: PKR 750 shipping charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2). This confirms the plugin is active and its dashboard renders, but no displayed commit/build SHA proves the exact Actions artifact is installed. Carrier panel stated no API adapter is enabled and no credentials are configured. A new synthetic CSV fixture selection failed in the browser with “The selected file could not be read”; no rows were imported or committed. Therefore exact AJAX replay, runtime ambiguity fixture and new hardening-path verification remain pending.
+
+**Phase 6 disposition:** remains 83% and is not complete. The remaining implementation package is live provider API synchronization with account-level final billed-cost verification. Staging has no provider adapter/credentials, and no account-specific final-cost schema or credential-security approval is evidenced; this cannot be truthfully marked passed. This is a documented external gate, not a completed runtime test. Overall progress remains 73%.
