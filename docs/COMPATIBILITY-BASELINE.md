@@ -56,7 +56,7 @@ Every lane must cover install/upgrade/deactivation, manual cost record, CSV impo
 | Current-platform staging lane | Pass (single environment) | WooCommerce System Status showed WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36, MySQL 8.0.46 and HTTPS. Plugin v0.1.0 was active; dashboard rendered the synthetic 2-order report. No other version lane is implied. |
 | HPOS order read + stored cost display | Pass (selected flow) | HPOS was enabled and OrdersTableDataStore was active. Order #52 showed its imported PKR 850 invoice-final, tax-exclusive cost and private import note. Dashboard report read the same synthetic order set. This does not cover manual save, refunds, or all HPOS order states. |
 | Minimum PHP 8.1 / WordPress 7.0 lane | Pending | Staging runs PHP 8.3.36 and WordPress 7.1.4; minimum lane not available. |
-| PHP 8.1–8.4 runtime matrix | Pending | CI build/lint was run on PHP 8.3 only; no matrix claim. |
+| PHP 8.1–8.4 runtime matrix | Pending (CI matrix workflow added; first run not yet verified) | PHP parser, Composer autoload and class smoke are configured for 8.1–8.4; even if green, this is not a WordPress/WooCommerce runtime matrix. |
 | Legacy order storage | Pending | Staging uses HPOS; no legacy-store run was performed. |
 | WPML + WooCommerce Multilingual | Pending | Not installed/active on staging; no interaction claim. |
 | Polylang + Polylang for WooCommerce | Pending | Not installed/active on staging; no interaction claim. |
