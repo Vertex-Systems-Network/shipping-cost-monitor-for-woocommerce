@@ -6,7 +6,7 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 > **Project status:** Phases 1–5 documented/code-delivered for their defined scope; Phase 6 remains in progress and Phase 7 is active  
 > **Current overall progress:** `■■■■■■■■░░ 81%` — Phase 6 remains 83%; Phase 7 has 6/9 planned verification items complete (67%): three staging/HPOS/CI execution checks and three source dry runs covering WPML/WCML, Polylang, and legacy-storage API usage. Actual runtime combinations, live integrations, translation catalogs, legacy-store execution, regression/security/performance and beta checks remain open. A CI-only artifact build workflow is authorized; no local CLI or JavaScript bundler.  
-> **Last status update:** 2026-11-07 — WPML/WCML, Polylang and legacy-storage source dry runs completed; no hard dependencies or direct legacy order-table writes were found. Phase 7 is 67% (6/9 planned items: 3 execution checks + 3 dry runs), overall progress 81%; runtime checks remain open.  
+> **Last status update:** 2026-11-07 — Staging report range boundary check passed (366-day maximum accepted; 367-day request rejected and default period restored); WPML/WCML, Polylang and legacy-storage source dry runs completed; no hard dependencies or direct legacy order-table writes were found. Phase 7 is 67% (6/9 planned items: 3 execution checks + 3 dry runs), overall progress 81%; runtime checks remain open.  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -233,3 +233,8 @@ Staging recheck on 2026-11-07: Installed Plugins displayed five plugins/four act
 ## 2026-11-07 repeat staging report smoke check
 
 On the owner-designated staging site (WordPress 7.1.4, WooCommerce 11.2.2; PHP 8.3.36 per System Status), the date-filtered report was refreshed for 2026-10-09 through 2026-11-07. The dashboard continued to show PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2). The Export CSV action completed and the browser returned a download. No order or site settings were changed. The zlib ob_end_flush notice remained visible; no fatal error was observed. This is a repeat functional smoke check inside the existing staging lane, not a new compatibility gate; Phase 7 remains 6/9 (67%), overall project 81%.
+
+
+## 2026-11-07 staging report range boundary check
+
+On the owner-designated staging site, the report accepted the maximum supported inclusive range of 366 days (2025-11-07 through 2026-11-07). A 367-day inclusive range (2025-11-06 through 2026-11-07) was rejected and the dashboard fell back to its default 30-day range. The report was then restored to 2026-10-09 through 2026-11-07; the existing synthetic totals remained unchanged. CSV export also completed in the same session. No orders or site settings were modified. This is a targeted report-filter smoke check within the existing staging lane, not an additional Phase 7 gate. Phase 7 remains 6/9 (67%); overall project progress remains 81%. The zlib ob_end_flush notice was still visible and remains untriaged.
