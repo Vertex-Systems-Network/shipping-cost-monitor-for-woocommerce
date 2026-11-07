@@ -81,8 +81,14 @@ final class InvoiceImporter {
 			return array( 'status' => 'invalid' );
 		}
 
-		$row_number = absint( $row['row'] );
-		$order_id   = absint( $row['order_id'] );
+		$row_value     = is_scalar( $row['row'] ) ? (string) $row['row'] : '';
+		$order_id_value = is_scalar( $row['order_id'] ) ? (string) $row['order_id'] : '';
+		if ( ! preg_match( '/^[1-9][0-9]*$/D', $row_value ) || ! preg_match( '/^[1-9][0-9]*$/D', $order_id_value ) ) {
+			return array( 'status' => 'invalid' );
+		}
+
+		$row_number = absint( $row_value );
+		$order_id   = absint( $order_id_value );
 		$reference  = is_scalar( $row['reference'] ) ? preg_replace( '/^#\s*/', '', trim( sanitize_text_field( (string) $row['reference'] ) ) ) : '';
 		$raw_amount = is_scalar( $row['amount'] ) ? trim( (string) $row['amount'] ) : '';
 		$currency   = is_scalar( $row['currency'] ) ? strtoupper( sanitize_text_field( (string) $row['currency'] ) ) : '';
@@ -96,8 +102,7 @@ final class InvoiceImporter {
 			|| '' === $reference
 			|| strlen( $reference ) > 100
 			|| ! preg_match( '/^[a-f0-9]{64}$/', $batch_hash )
-			|| ! is_numeric( $raw_amount )
-			|| (float) $raw_amount < 0
+			|| ! preg_match( '/^[0-9]+(?:\.[0-9]+)?$/D', $raw_amount )
 			|| ! preg_match( '/^[A-Z]{3}$/', $currency )
 			|| ! array_key_exists( $currency, get_woocommerce_currencies() )
 			|| ! in_array( $evidence, array( 'invoice_final', 'merchant_confirmed', 'booked_label' ), true )
