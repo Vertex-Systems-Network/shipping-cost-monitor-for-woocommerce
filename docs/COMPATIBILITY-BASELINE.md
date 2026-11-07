@@ -84,3 +84,12 @@ Research is a dated public-doc review. It does not establish account-specific in
 
 
 CI follow-up: an initial matrix run failed because the PSR-4 smoke command escaped the class name incorrectly. The workflow was corrected; run [#42374396949](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42374396949) then passed all four PHP matrix jobs and the ZIP build. Artifact digest: `sha256:1a0abd3c406aaa9c7debb68d85a1961ae666d7d416883b63601aa46adb16edd6`. The passed matrix checks dependency install, syntax and autoload only.
+
+
+## Phase 7 staging artifact replacement — 2026-11-07
+
+The checksum-verified ZIP from Actions run [#42374396949](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42374396949), digest `sha256:1a0abd3c406aaa9c7debb68d85a1961ae666d7d416883b63601aa46adb16edd6`, was selected in the owner-designated WordPress installer. The installer showed current and uploaded version 0.1.0; **Replace current with uploaded** completed with “Plugin updated successfully.” Installed Plugins still showed Shipping Cost Monitor active at 0.1.0. The dashboard rendered its report (PKR 750 charged, PKR 1,950 confirmed, PKR -1,200 variance, coverage 2/2), and order #52 showed PKR 850 invoice-final/tax-exclusive with its private import note. The storefront loaded after update. These observations add exact upload/replacement evidence to the existing current-platform lane; they do not add a separate compatibility gate, so Phase 7 remains 3/9 (33%). No fatal error or recovery-mode screen was observed.
+
+**Observed staging notice:** admin installer, dashboard, order page and storefront showed `ob_end_flush(): Failed to send buffer of zlib output compression (1)` at `wp-includes/functions.php:5581`. Cause is undetermined; do not attribute it to the plugin without diagnosis. Track it as an environment notice to investigate before release-quality claims.
+
+The WordPress admin does not display the installed plugin file digest. The selected CI artifact, its checksum, and successful overwrite are known from the upload flow, but a post-install filesystem hash was not obtained. Runtime observations remain limited to WP 7.1.4 + WC 11.2.2 + PHP 8.3.36 + MySQL 8.0.46 with HPOS enabled. Minimum versions, PHP runtime matrix, legacy datastore, WPML/WCML, Polylang for WooCommerce, and regression/security/performance/beta lanes remain pending.
