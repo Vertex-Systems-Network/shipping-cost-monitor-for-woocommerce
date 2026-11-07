@@ -1,7 +1,7 @@
 # Compatibility baseline — proposal
 
-**Research snapshot:** 2026-11-06  
-**Status:** Proposed implementation baseline; Phase 7 execution started 2026-11-07. Staging verified one current-platform + HPOS lane on WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36 and MySQL 8.0.46. This is one tested environment, not a compatibility matrix or broad support claim.  
+**Research snapshot:** 2026-11-07  
+**Status:** Proposed implementation baseline; Phase 7 execution started 2026-11-07. Staging verified one current-platform + HPOS lane on WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36 and MySQL 8.0.46. Official release listings checked 2026-11-07 show WordPress 7.1.4 and WooCommerce 11.2.2 as current stable; the staging pair matches that observed current lane. This is one tested environment, not a compatibility matrix or broad support claim.  
 **Scope:** WPEssential Shipping Cost Monitor core plus optional WPML and Polylang multilingual-store coexistence.
 
 ## Recommended baseline for the first release
