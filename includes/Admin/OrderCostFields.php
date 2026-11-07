@@ -170,6 +170,20 @@ final class OrderCostFields {
 			return;
 		}
 
+		// Reject malformed optional fields before WordPress sanitizers receive arrays/objects.
+		foreach (
+			array(
+				'wpe_scm_cost_currency',
+				'wpe_scm_cost_evidence',
+				'wpe_scm_cost_tax_basis',
+				'wpe_scm_cost_note',
+			) as $field
+		) {
+			if ( isset( $_POST[ $field ] ) && ! is_string( $_POST[ $field ] ) ) {
+				return;
+			}
+		}
+
 		$nonce = sanitize_text_field( wp_unslash( $_POST[ $nonce_key ] ) );
 
 		if (
