@@ -1,8 +1,8 @@
 # Pre-development readiness — Phase 4
 
 **Status:** Phase 4 decisions accepted for the initial manual/no-API build; evidence-dependent items remain deferred.  
-**Updated:** 2026-11-06  
-**Implementation:** Initial plugin/admin shell started under the constrained authorization in OWNER-DECISION-REGISTER.md. **CLI/package/build tools:** prohibited until plugin final.
+**Updated:** 2026-11-07  
+**Implementation:** Initial plugin/admin shell started under OWNER-DECISION-REGISTER.md. A narrow GitHub Actions artifact workflow is authorized for Composer autoload generation, PHP lint, PSR-4 smoke verification and installable ZIP packaging; local/in-plugin CLI, npm and JS bundling remain prohibited.
 
 ## Phase 4 exit checklist
 
@@ -25,7 +25,7 @@
 - CSV import/upload persistence waits for anonymized merchant invoices and a defined retention policy.
 - Carrier credentials and sync wait for credential encryption/key-management review and account-specific API evidence.
 - Compatibility statements wait for the documented matrix to pass, including HPOS and both supported order-storage modes.
-- CLI, package manager, bundler and build pipeline remain prohibited until the plugin is final.
+- The approved CI-only artifact workflow is the sole build exception. Do not introduce local CLI setup, in-plugin CLI, npm or JS bundlers.
 - Before release, **Gate E — Release** must cover compatibility, API account evidence, privacy, support/docs and Marketplace requirements.
 
 ## Current truthful status
