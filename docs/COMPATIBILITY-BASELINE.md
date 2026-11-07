@@ -1,7 +1,7 @@
 # Compatibility baseline — proposal
 
 **Research snapshot:** 2026-11-06  
-**Status:** Proposed implementation baseline. One temporary Playground smoke run installed WordPress 7.1.4, WooCommerce 11.2.2 and PHP 8.3; this is not a compatibility matrix or support claim.  
+**Status:** Proposed implementation baseline; Phase 7 execution started 2026-11-07. Staging verified one current-platform + HPOS lane on WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36 and MySQL 8.0.46. This is one tested environment, not a compatibility matrix or broad support claim.  
 **Scope:** WPEssential Shipping Cost Monitor core plus optional WPML and Polylang multilingual-store coexistence.
 
 ## Recommended baseline for the first release
@@ -48,6 +48,21 @@ Every lane must cover install/upgrade/deactivation, manual cost record, CSV impo
 3. Confirm support for both MySQL and MariaDB in the project test environment.
 4. Decide whether WPML and Polylang are formal release support targets or best-effort compatibility targets, and test the WooCommerce-specific add-ons.
 5. Set an explicit policy for the latest beta lane; beta testing never equals a stable compatibility claim.
+
+## Phase 7 execution log — 2026-11-07
+
+| Gate | Result | Evidence / boundary |
+|---|---|---|
+| Current-platform staging lane | Pass (single environment) | WooCommerce System Status showed WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36, MySQL 8.0.46 and HTTPS. Plugin v0.1.0 was active; dashboard rendered the synthetic 2-order report. No other version lane is implied. |
+| HPOS order read + stored cost display | Pass (selected flow) | HPOS was enabled and OrdersTableDataStore was active. Order #52 showed its imported PKR 850 invoice-final, tax-exclusive cost and private import note. Dashboard report read the same synthetic order set. This does not cover manual save, refunds, or all HPOS order states. |
+| Minimum PHP 8.1 / WordPress 7.0 lane | Pending | Staging runs PHP 8.3.36 and WordPress 7.1.4; minimum lane not available. |
+| PHP 8.1–8.4 runtime matrix | Pending | CI build/lint was run on PHP 8.3 only; no matrix claim. |
+| Legacy order storage | Pending | Staging uses HPOS; no legacy-store run was performed. |
+| WPML + WooCommerce Multilingual | Pending | Not installed/active on staging; no interaction claim. |
+| Polylang + Polylang for WooCommerce | Pending | Not installed/active on staging; no interaction claim. |
+| Regression, security, performance and beta review | Pending | No automated suite, benchmark, full security review, or beta feedback was run in this round. |
+
+**Phase 7 progress:** 2 of 8 gates passed (25%). These gates cover the current staging environment and selected HPOS path only; all remaining gates stay open. No broad compatibility or release-readiness claim is made.
 
 ## Research sources
 
