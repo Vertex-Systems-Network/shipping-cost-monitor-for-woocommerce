@@ -123,3 +123,8 @@ On the owner-designated staging site, the report accepted the maximum supported 
 ## 2026-11-07 staging dashboard console smoke check
 
 The existing Shipping Cost Monitor dashboard rendered its restored 2026-10-09–2026-11-07 report and the same synthetic totals (PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance, 2/2 coverage). A browser-console query filtered to the plugin admin script name `admin.js` returned no warning/error entries. The captured console did contain browser-extension errors; these are not attributed to the plugin. This is a narrow browser-session observation, not a full console, JavaScript, browser, or runtime regression test. No order or site setting was changed. No new Phase 7 gate is counted: Phase 7 remains 6/9 (67%), overall progress 81%. The unrelated zlib output-compression notice remains visible in WordPress admin.
+
+
+## 2026-11-07 staging empty-report state check
+
+On staging, the report was filtered to 2020-01-01 through 2020-01-30. The dashboard displayed “No eligible shipping orders found,” blank summary values and “No eligible orders in this period”; it did not show stale figures from the prior date range. The filter was restored to 2026-10-09 through 2026-11-07 and the original synthetic values returned (PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance, 2/2 coverage). No order or site setting was changed. This is a targeted empty-state smoke check, not a new Phase 7 gate or full QA result. Phase 7 remains 6/9 (67%); overall progress remains 81%. The WordPress zlib output-compression notice remains visible.
