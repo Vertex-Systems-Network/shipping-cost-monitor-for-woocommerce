@@ -18,7 +18,7 @@ If a task is ambiguous, report the conflict or assumption. Do not invent product
 - Product: **WPEssential Shipping Cost Monitor**, a future WPEssential WooCommerce add-on.
 - Use the feature IDs in `docs/PRODUCT-SPEC.md`; check them before adding options, settings or workflows. Avoid duplicate capabilities under different names/screens.
 - The owner authorized the initial implementation on 2026-11-06; see `docs/OWNER-DECISION-REGISTER.md` for the accepted scope and limits. Phase 5 may proceed within that scope.
-- The owner prohibits CLI until the plugin is final. Do not add CLI commands, package managers, bundlers or build systems. The approved initial React path is plain JavaScript using WordPress-bundled `wp.element`; stop and request a new decision if compilation/tooling becomes necessary.
+- On 2026-11-07, the owner explicitly authorized a CI-only GitHub Actions workflow that builds a downloadable installable ZIP, generates the Composer PSR-4 vendor autoloader, runs PHP lint and checks PSR-4 loading. This is a narrow exception to the earlier no-build boundary. Do not add local CLI setup, an in-plugin CLI, npm, a JS bundler or unrelated build tooling. The approved React path remains plain JavaScript using WordPress-bundled `wp.element`.
 - API credentials and carrier connections are out of initial scope until credential-security review. CSV import persistence waits for anonymized merchant invoice samples and the retention decision.
 - Do not claim compatibility, tests, security review or Marketplace acceptance without evidence.
 - Use WooCommerce CRUD APIs; HPOS compatibility must be proven before it is declared.
