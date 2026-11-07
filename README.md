@@ -5,8 +5,8 @@
 Find orders and delivery patterns where actual fulfilment spend is eroding margin. The proposed product combines a per-order cost ledger, courier invoice reconciliation and optional carrier API sync where reliable data exists.
 
 > **Project status:** Phases 1–5 documented/code-delivered for their defined scope; Phase 6 remains in progress  
-> **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 6 has five of six implementation packages delivered. Staging verifies synthetic reconciliation edge cases and report CSV download; provider, compatibility, post-hardening staging validation and broader QA remain open. No CLI or build toolchain.  
-> **Last status update:** 2026-11-07 — deep audit of Phases 1–6 recorded; staging report CSV download verified; source input hardening added, staging check pending.  
+> **Current overall progress:** `■■■■■■█░░░ 73%` — Phase 6 has five of six implementation packages delivered. Staging verifies synthetic reconciliation edge cases and report CSV download; provider, compatibility, post-hardening staging validation and broader QA remain open. A CI-only artifact build workflow is authorized; no local CLI or JavaScript bundler.  
+> **Last status update:** 2026-11-07 — GitHub Actions installable ZIP workflow added; first run/artifact verification pending. The Phase 1–6 audit and staging evidence remain recorded.  
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -17,7 +17,7 @@ Record what customers paid for shipping and what merchants paid to fulfil shipme
 
 ## Roadmap
 
-The progress bars measure documented or implemented deliverables only; they do not certify runtime QA, merchant validation, compatibility, or release readiness. Overall progress is the equally weighted mean of the eight phase percentages, rounded to a whole percent: (5 × 100% + 83% + 0% + 0%) ÷ 8 = 73%. Completed dates are actual; future start/end dates are schedule targets. Phase 3 is a written UX specification, not an interactive React prototype. Phase 4 authorizes only the initial manual/no-API foundation; credential security and CSV retention remain open. A temporary Playground smoke setup uses WordPress 7.1.4, WooCommerce 11.2.2 and PHP 8.3. The owner-designated staging site runs WordPress 7.1.4 and WooCommerce 11.2.2. The current plugin source was uploaded and activated there from a 14-file test ZIP containing the PSR-4 source fallback but no generated Composer vendor files. Synthetic orders #51 and #52 verified manual cost entry and the CSV preview → exact match → reviewed commit path. The staging report showed PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2); re-importing order #52 surfaced the stored cost without offering overwrite. This verifies synthetic happy-path and selected edge-case flows, plus report CSV download; it is not a compatibility or release-readiness claim. Woo telemetry opt-in was disabled and no store address was entered. No CLI, package manager or build system has been added.
+The progress bars measure documented or implemented deliverables only; they do not certify runtime QA, merchant validation, compatibility, or release readiness. Overall progress is the equally weighted mean of the eight phase percentages, rounded to a whole percent: (5 × 100% + 83% + 0% + 0%) ÷ 8 = 73%. Completed dates are actual; future start/end dates are schedule targets. Phase 3 is a written UX specification, not an interactive React prototype. Phase 4 authorizes only the initial manual/no-API foundation; credential security and CSV retention remain open. A temporary Playground smoke setup uses WordPress 7.1.4, WooCommerce 11.2.2 and PHP 8.3. The owner-designated staging site runs WordPress 7.1.4 and WooCommerce 11.2.2. The current plugin source was uploaded and activated there from a 14-file test ZIP containing the PSR-4 source fallback but no generated Composer vendor files. Synthetic orders #51 and #52 verified manual cost entry and the CSV preview → exact match → reviewed commit path. The staging report showed PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2); re-importing order #52 surfaced the stored cost without offering overwrite. This verifies synthetic happy-path and selected edge-case flows, plus report CSV download; it is not a compatibility or release-readiness claim. Woo telemetry opt-in was disabled and no store address was entered. As of 2026-11-07, the owner has authorized a CI-only GitHub Actions ZIP build workflow; no local CLI, npm package or JavaScript bundler is added.
 
 | Phase | Status | Progress | Start (actual/planned) | Target end | Completed | Exit outcome |
 |---|---|---:|---|---|---|---|
@@ -60,6 +60,17 @@ All rows below were synthetic, previewed in the browser and matched only where e
 
 **Remaining verification:** runtime-test an ambiguous match using a controlled duplicate order-number provider/fixture, and directly replay an identical commit request to observe the server’s already-imported response. The current UI prevents a second commit once a row is saved, so it cannot exercise that lower-level retry branch. Report CSV download was verified on staging on 2026-11-06. Currency-mismatch, HPOS/legacy, multilingual, lower-bound and performance checks also remain. See [Phase 1–6 deep audit](docs/PHASE-1-6-DEEP-AUDIT.md). Keep implementation progress at 83% until the blocked sixth package or a formally revised phase scope is resolved.
 
+## Build and download a staging ZIP
+
+An installable ZIP is generated by the GitHub Actions workflow; the source tree itself does not contain generated vendor files.
+
+1. Open the repository's **Actions** tab.
+2. Choose **Build installable plugin ZIP** and select **Run workflow** on the branch you want to test. Plugin-source pushes to `main` also start a build.
+3. Wait for the run to finish successfully, then download the `wpessential-shipping-cost-monitor-<commit>` artifact from that run.
+4. Extract the downloaded Actions artifact bundle. It contains `wpessential-shipping-cost-monitor.zip` and its SHA-256 checksum.
+5. Upload the inner plugin ZIP in WordPress admin under **Plugins → Add Plugin → Upload Plugin**.
+
+The workflow generates Composer's PSR-4 `vendor/autoload.php`, runs PHP lint and an autoloader smoke check, then packages the plugin under the correct `wpessential-shipping-cost-monitor/` directory. Artifacts are retained for 14 days. This is a staging/test build, not a marketplace release. The first workflow run is still pending.
 ## Phase 2 decision pack
 
 Recommended first release: Free manual order-cost ledger, provenance, basic summary and CSV export; Pro universal invoice CSV mapping/matching, exception review and shipping loss reports. One or two API adapters may be selected only after account-level evidence. Read the exact metric contract, acceptance criteria and single-home settings map in [Product requirements](docs/PRODUCT-SPEC.md).
