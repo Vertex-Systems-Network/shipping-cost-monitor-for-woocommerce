@@ -228,3 +228,8 @@ Source search found no direct $wpdb, wp_posts, or update_post_meta order-storage
 
 
 Staging recheck on 2026-11-07: Installed Plugins displayed five plugins/four active; Shipping Cost Monitor v0.1.0 remained active, while WPML/WCML and Polylang were absent. The familiar ob_end_flush zlib compression notice remained visible. This confirms the dry-run environment and current active state only; no multilingual runtime interaction was possible.
+
+
+## 2026-11-07 repeat staging report smoke check
+
+On the owner-designated staging site (WordPress 7.1.4, WooCommerce 11.2.2; PHP 8.3.36 per System Status), the date-filtered report was refreshed for 2026-10-09 through 2026-11-07. The dashboard continued to show PKR 750 charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2). The Export CSV action completed and the browser returned a download. No order or site settings were changed. The zlib ob_end_flush notice remained visible; no fatal error was observed. This is a repeat functional smoke check inside the existing staging lane, not a new compatibility gate; Phase 7 remains 6/9 (67%), overall project 81%.
