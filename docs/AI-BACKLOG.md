@@ -110,3 +110,13 @@ The staging environment baseline and one HPOS order-read/display path passed. Wo
 
 
 The first matrix attempt (run #42374376598) failed because of an escaped PSR-4 class-name error in the smoke command. The workflow was corrected and run #42374396949 passed all four PHP-version jobs plus the artifact build. Artifact digest: `sha256:1a0abd3c406aaa9c7debb68d85a1961ae666d7d416883b63601aa46adb16edd6`. PHP lint/autoload does not verify WordPress/WooCommerce runtime compatibility.
+
+
+## 2026-11-07 — Phase 7 staging artifact upload round
+
+- **Verified:** uploaded the checksum-verified artifact from Actions run #42374396949 via WordPress Plugins → Add Plugin; current and uploaded versions were both 0.1.0; Replace completed successfully.
+- **Verified:** plugin remained active, dashboard rendered (PKR 750 charged, PKR 1,950 confirmed, PKR -1,200 variance, 2/2 coverage), order #52 retained PKR 850 invoice-final/tax-exclusive with private import note, and storefront loaded after replacement.
+- **Observed issue:** WordPress admin and storefront surfaces emitted `ob_end_flush(): Failed to send buffer of zlib output compression (1)` from `wp-includes/functions.php:5581`. Root cause not established; investigate staging output compression separately and do not claim plugin causality.
+- **Evidence limit:** no fatal/recovery mode observed. Admin does not expose an installed-file hash, so successful upload/replacement is established but the on-host plugin SHA was not independently read.
+- **Progress decision:** this expands evidence for existing staging/current-platform and HPOS gates rather than creating a new distinct gate. Phase 7 stays 3/9 (33%); overall 77%; Phase 6 remains 83%. Remaining PHP/WP/WC runtime matrix, minimum versions, legacy storage, multilingual combinations, regression/security/performance and beta lanes stay open.
+- **Execution boundary:** no CLI or source edits this round. Continue using the named staging site for safe read-only verification; do not modify unrelated plugins or site-wide compression settings as part of the plugin check.
