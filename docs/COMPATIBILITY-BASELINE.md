@@ -56,13 +56,14 @@ Every lane must cover install/upgrade/deactivation, manual cost record, CSV impo
 | Current-platform staging lane | Pass (single environment) | WooCommerce System Status showed WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36, MySQL 8.0.46 and HTTPS. Plugin v0.1.0 was active; dashboard rendered the synthetic 2-order report. No other version lane is implied. |
 | HPOS order read + stored cost display | Pass (selected flow) | HPOS was enabled and OrdersTableDataStore was active. Order #52 showed its imported PKR 850 invoice-final, tax-exclusive cost and private import note. Dashboard report read the same synthetic order set. This does not cover manual save, refunds, or all HPOS order states. |
 | Minimum PHP 8.1 / WordPress 7.0 lane | Pending | Staging runs PHP 8.3.36 and WordPress 7.1.4; minimum lane not available. |
-| PHP 8.1–8.4 runtime matrix | Pending (CI matrix workflow added; first run not yet verified) | PHP parser, Composer autoload and class smoke are configured for 8.1–8.4; even if green, this is not a WordPress/WooCommerce runtime matrix. |
+| PHP 8.1–8.4 lint/autoload matrix | Pass (CI run #42374396949) | Composer install, PHP lint and PSR-4 class smoke passed on PHP 8.1, 8.2, 8.3 and 8.4. This is static/autoload verification, not full WordPress/WooCommerce runtime coverage. |
+| PHP runtime under WordPress/WooCommerce | Pending | The plugin was runtime-observed only on PHP 8.3.36 + WP 7.1.4 + WC 11.2.2. PHP 8.1/8.2/8.4 runtime combinations remain untested. |
 | Legacy order storage | Pending | Staging uses HPOS; no legacy-store run was performed. |
 | WPML + WooCommerce Multilingual | Pending | Not installed/active on staging; no interaction claim. |
 | Polylang + Polylang for WooCommerce | Pending | Not installed/active on staging; no interaction claim. |
 | Regression, security, performance and beta review | Pending | No automated suite, benchmark, full security review, or beta feedback was run in this round. |
 
-**Phase 7 progress:** 2 of 8 gates passed (25%). These gates cover the current staging environment and selected HPOS path only; all remaining gates stay open. No broad compatibility or release-readiness claim is made.
+**Phase 7 progress:** 3 of 9 gates passed (33%). Passing gates are the staging environment lane, selected HPOS order-read/display and PHP 8.1–8.4 lint/autoload matrix. Full WP/WC runtime lanes, minimum versions, legacy storage, multilingual integrations and QA/beta remain open. No broad compatibility or release-readiness claim is made.
 
 ## Research sources
 
@@ -80,3 +81,6 @@ Every lane must cover install/upgrade/deactivation, manual cost record, CSV impo
 - [WooCommerce Settings UI stability note](https://developer.woocommerce.com/docs/extensions/settings-and-config/settings-ui/)
 
 Research is a dated public-doc review. It does not establish account-specific integrations, plugin interoperability, PHP runtime behavior or release compatibility.
+
+
+CI follow-up: an initial matrix run failed because the PSR-4 smoke command escaped the class name incorrectly. The workflow was corrected; run [#42374396949](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42374396949) then passed all four PHP matrix jobs and the ZIP build. Artifact digest: `sha256:1a0abd3c406aaa9c7debb68d85a1961ae666d7d416883b63601aa46adb16edd6`. The passed matrix checks dependency install, syntax and autoload only.
