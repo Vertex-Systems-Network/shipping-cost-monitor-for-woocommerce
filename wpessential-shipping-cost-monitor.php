@@ -23,15 +23,7 @@ define( 'WPE_SCM_FILE', __FILE__ );
 define( 'WPE_SCM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPE_SCM_URL', plugin_dir_url( __FILE__ ) );
 
-$composer_autoloader = WPE_SCM_DIR . 'vendor/autoload.php';
-
-if ( is_readable( $composer_autoloader ) ) {
-	require_once $composer_autoloader;
-} else {
-	require_once WPE_SCM_DIR . 'includes/Autoloader.php';
-}
-
-require_once WPE_SCM_DIR . 'includes/Plugin.php';
+require_once WPE_SCM_DIR . 'vendor/autoload.php';
 
 /**
  * Start the plugin after WooCommerce has loaded.
