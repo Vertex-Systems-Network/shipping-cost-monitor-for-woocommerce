@@ -14,7 +14,7 @@
 | 4. Architecture / readiness | Initial manual/no-API boundary accepted; security and retention gates open | WooCommerce CRUD/order metadata, money/evidence distinction, bounded browser CSV flow, adapter interface and threat-control proposals are documented. | Credential storage/API calls remain gated by C-3. CSV rows are browser-local and not durably retained; merchant samples/retention policy are missing. This is not a completed security review. |
 | 5. Core implementation | Code delivery complete; staging core paths verified selectively | Manual order values and reports use WooCommerce CRUD; Playground/staging report numbers were observed. On 2026-11-06, staging report CSV export produced a download. | PHP lint and compatibility matrix not run. Export contents were not independently checked. Refund allocation, currency edge cases, HPOS, multilingual and performance remain unverified. |
 | 6. Reconciliation / integrations | 83% implementation coverage; not phase-complete | Staging synthetic CSV preview/commit path; duplicate-in-file, non-numeric invalid, negative review, unmatched reference, refund review, existing-cost non-overwrite and report CSV download evidenced. Source audit confirms permission/nonce gates, server-side order/shipping/currency revalidation, fingerprint check and WooCommerce CRUD persistence. | Exact same AJAX replay response not exercised. Runtime ambiguous collision unavailable because staging has no duplicate order-number fixture. Currency mismatch, mapping-profile reuse, provider runtime behavior, merchant invoice formats and broad QA need evidence. Live provider package blocked on verified merchant account/schema/security gate. |
-| 7. Compatibility, quality and beta | Not started | None claimed by this audit. | HPOS/legacy, WPML, Polylang, supported PHP/WP/WC/database lanes, lower-bound period, regression/security/performance and beta feedback. |
+| 7. Compatibility, quality and beta | In progress (25%; 2/8 gates passed) | Staging current-platform environment and selected HPOS order read/display verified 2026-11-07. | Minimum PHP/WP lane, PHP matrix, legacy storage, WPML, Polylang, lower-bound, regression/security/performance and beta feedback. See COMPATIBILITY-BASELINE.md. |
 | 8. Marketplace readiness | Not started | Strategy targets WordPress.org Free and WooCommerce.com Paid; mechanics/requirements are documented. | Packaging, vendor/account prerequisites, QIT, listing assets, policy review, support, and approvals are outstanding. |
 
 ## Phase 6 audit checklist
@@ -56,7 +56,7 @@
 2. Request anonymized representative invoices before defining aggregation, tracking-reference matching or durable exception resolution.
 3. Exercise exact AJAX replay and ambiguous matching in a controlled staging fixture; record exact response/evidence.
 4. PHP lint and PSR-4 autoload checks passed in CI. Run remaining supported-platform compatibility checks; do not infer them from the successful build.
-5. Start Phase 7 quality lanes, then Phase 8 submission preparation; neither is complete.
+5. Continue Phase 7 lanes; Phase 8 submission preparation remains not started.
 
 ## 2026-11-07 artifact build evidence
 
@@ -67,4 +67,11 @@ GitHub Actions run [#42373229279](https://github.com/Vertex-Systems-Network/wpes
 
 The staging admin showed WPEssential Shipping Cost Monitor v0.1.0 active on WordPress 7.1.4 + WooCommerce 11.2.2. The dashboard rendered existing synthetic report data: PKR 750 shipping charged, PKR 1,950 confirmed cost, PKR -1,200 variance and 100% coverage (2/2). This confirms the plugin is active and its dashboard renders, but no displayed commit/build SHA proves the exact Actions artifact is installed. Carrier panel stated no API adapter is enabled and no credentials are configured. A new synthetic CSV fixture selection failed in the browser with “The selected file could not be read”; no rows were imported or committed. Therefore exact AJAX replay, runtime ambiguity fixture and new hardening-path verification remain pending.
 
-**Phase 6 disposition:** remains 83% and is not complete. The remaining implementation package is live provider API synchronization with account-level final billed-cost verification. Staging has no provider adapter/credentials, and no account-specific final-cost schema or credential-security approval is evidenced; this cannot be truthfully marked passed. This is a documented external gate, not a completed runtime test. Overall progress remains 73%.
+**Phase 6 disposition:** remains 83% and is not complete. The remaining implementation package is live provider API synchronization with account-level final billed-cost verification. Staging has no provider adapter/credentials, and no account-specific final-cost schema or credential-security approval is evidenced; this cannot be truthfully marked passed. This is a documented external gate, not a completed runtime test. Phase 7 now has 2/8 gates (25%); overall progress is 76%.
+
+
+## Phase 7 initial verification round — 2026-11-07
+
+Staging System Status showed WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36 and MySQL 8.0.46. HTTPS was active. HPOS was enabled and OrdersTableDataStore was the active order datastore. WPEssential Shipping Cost Monitor v0.1.0 was active. Its dashboard rendered existing synthetic summary figures; HPOS order #52 displayed the stored PKR 850 invoice-final, tax-exclusive cost and private import note. This passes only (1) the current staging environment lane and (2) selected HPOS order read/display. No manual save, refund-specific HPOS, legacy datastore, WPML, Polylang, minimum-version, cross-version PHP, performance or beta checks were performed. WPML and Polylang were not present in the active plugin set.
+
+Phase 7 is tracked as 2/8 gates passed (25%). No test matrix or broader compatibility claim is implied. Next: obtain a PHP 8.1/WP 7.0 compatible test lane; exercise legacy storage; test WPML and Polylang with their WooCommerce add-ons; run regression/performance/security review; collect beta feedback. Keep Phase 8 not started until these quality exit criteria are satisfied.
