@@ -159,17 +159,22 @@ final class OrderCostFields {
 	public function save_fields( $order_id ): void {
 		$order_id = absint( $order_id );
 
-		if ( ! $order_id || ! isset( $_POST['wpe_scm_order_cost_nonce_' . $order_id] ) ) {
+		$nonce_key = 'wpe_scm_order_cost_nonce_' . $order_id;
+		if (
+			! $order_id
+			|| ! isset( $_POST[ $nonce_key ] )
+			|| ! is_string( $_POST[ $nonce_key ] )
+			|| ! isset( $_POST['wpe_scm_cost_amount'] )
+			|| ! is_string( $_POST['wpe_scm_cost_amount'] )
+		) {
 			return;
 		}
 
-		$nonce_key = 'wpe_scm_order_cost_nonce_' . $order_id;
-		$nonce     = sanitize_text_field( wp_unslash( $_POST[ $nonce_key ] ) );
+		$nonce = sanitize_text_field( wp_unslash( $_POST[ $nonce_key ] ) );
 
 		if (
 			! wp_verify_nonce( $nonce, 'wpe_scm_save_order_cost_' . $order_id )
 			|| ! current_user_can( 'edit_shop_order', $order_id )
-			|| ! isset( $_POST['wpe_scm_cost_amount'] )
 		) {
 			return;
 		}
@@ -209,7 +214,7 @@ final class OrderCostFields {
 			return;
 		}
 
-		if ( ! is_numeric( $raw_amount ) || (float) $raw_amount < 0 ) {
+		if ( ! preg_match( '/^[0-9]+(?:\.[0-9]+)?$/D', $raw_amount ) ) {
 			return;
 		}
 
