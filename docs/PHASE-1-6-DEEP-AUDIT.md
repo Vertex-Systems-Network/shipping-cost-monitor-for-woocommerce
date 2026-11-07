@@ -1,8 +1,8 @@
 # Phase 1–6 deep audit
 
-**Audit date:** 2026-11-06  
+**Audit date:** 2026-11-07  
 **Scope:** Documentation, canonical feature bank, source-level workflow review, previously recorded Playground/staging evidence, and one new staging report-export check.  
-**Result:** Phases 1–5 satisfy only their explicitly documented desk/spec/code-delivery exit scopes. Phase 6 is not complete (83% implementation coverage). Phase 7/8 gates remain open.
+**Result:** Phases 1–5 satisfy only their explicitly documented desk/spec/code-delivery exit scopes. Phase 6 is not complete (83% implementation coverage). Source-level amount/identifier hardening was added after the staging observations; that change is not yet deployed or runtime-verified. Phase 7/8 gates remain open.
 
 ## Phase status
 
@@ -40,14 +40,14 @@
 - **Idempotency limitation:** a batch/row fingerprint is stored against the order; re-import UI proves existing-cost non-overwrite but not the exact already_imported response for a replayed AJAX request. Track separately.
 - **Reference limitation:** exact order ID/order number matching is supported; tracking/AWB/provider shipment-ID match is not. Product-spec language must not imply those identifiers are currently supported.
 - **Reporting limitation:** shipping-method breakdown exists, but zone/category loss, threshold alerts, period comparison, PDF output and rate simulation are deferred features, not defects against the accepted initial boundary.
-- **Input hardening follow-up:** source accepts is_numeric() amounts, which admits scientific notation. Consider tightening to a documented decimal grammar and strict positive row/order ID validation before wider merchant release. This audit did not change behavior because runtime verification and PHP lint tools are unavailable here.
+- **Input hardening:** updated manual and invoice commit paths to accept canonical non-negative decimal strings only (no scientific notation) and reject non-string manual amount/nonce input. Invoice row and order IDs must be positive digit strings before conversion. This is a source change only; staging deployment/runtime checks and PHP lint remain pending.
 - **Composer:** composer.json has PSR-4 mapping; staging ZIP used the source fallback and omitted generated vendor files. Composer-generated autoload packaging remains pending under the no-CLI-until-final rule.
 
 ## Validation limits
 
 - Staging is WordPress 7.1.4 + WooCommerce 11.2.2. This proves only the observed flows on that site/configuration.
 - Existing test data is synthetic. No merchant invoice has been validated.
-- PHP and Composer executables were unavailable in this environment; PHP lint was not run. No CLI/build toolchain was invoked.
+- PHP and Composer executables were unavailable in this environment; PHP lint was not run. The latest source-hardening edits were not uploaded to staging or runtime-verified. No CLI/build toolchain was invoked.
 - No automated test suite, full security review, full compatibility matrix, provider account verification or Marketplace submission was performed.
 
 ## Next gated work
