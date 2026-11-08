@@ -169,3 +169,8 @@ The new source has not been installed on staging, and no malformed order-save re
 ## 2026-11-07 staging artifact handoff status
 
 The hardened commit's GitHub Actions run [#42384461173](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42384461173) succeeded and produced artifact `wpessential-shipping-cost-monitor-31fa4961e8343268516be67b2c49f39d88dddc41` (artifact ID `13578379599`; SHA-256 `f61b9abdf801188996dc377422ff63a9d444bc0dd0fa7169f06ad3f5ec969e64`). The downloaded Actions artifact is an outer ZIP containing the installable plugin ZIP. The current browser security policy rejected a local `data:` URL used to extract the inner package, so no alternate browser route was attempted and no upload/install was made on staging. Runtime proof for the new input guard remains pending until the inner plugin ZIP is uploaded to staging. This environment restriction is not a staging-site failure. Phase 7 remains 6/9 (67%); overall progress 81%. To resume: download the artifact from the linked Actions run, extract the outer archive, upload its inner `wpessential-shipping-cost-monitor.zip` via WordPress Plugins → Add Plugin → Upload Plugin, and tell me when done.
+
+
+## 2026-11-08 performance review note
+
+For AI and human contributors: the source review found 100-order paginated `wc_get_orders()` loops in dashboard summary and CSV export, with status/date filters, and admin assets limited to the plugin page. Treat this as code inspection only. Do not mark performance complete without reproducible benchmarks or large-volume staging evidence. Current staging remains v0.1.0; Phase 7 remains 6/9 (67%) and overall progress 81%.
