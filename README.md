@@ -6,7 +6,7 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 > **Project status:** Phases 1–5 documented/code-delivered for their defined scope; Phase 6 remains in progress and Phase 7 is active  
 > **Current overall progress:** `■■■■■■■■░░ 81%` — Phase 6 remains 83%; Phase 7 has 6/9 planned verification items complete (67%): three staging/HPOS/CI execution checks and three source dry runs covering WPML/WCML, Polylang, and legacy-storage API usage. Actual runtime combinations, live integrations, translation catalogs, legacy-store execution, regression/security/performance and beta checks remain open. A CI-only artifact build workflow is authorized; no local CLI or JavaScript bundler.  
-> **Last status update:** 2026-11-08 — Staging plugin list rechecked: Shipping Cost Monitor v0.1.0 is still active; hardened Actions artifact remains uninstalled. Read-only source review confirmed date/status-filtered 100-order pagination for summary and CSV, with admin assets limited to this plugin screen; no benchmark or large-volume runtime measurement was performed. Existing staging report/version observations remain unchanged. Phase 7 remains 6/9 (67%) and overall progress 81%; performance, runtime compatibility and regression gates remain open.
+> **Last status update:** 2026-11-08 — Staging plugin list rechecked: Shipping Cost Monitor v0.1.0 is still active; hardened Actions artifact remains uninstalled. Read-only source review confirmed date/status-filtered 100-order pagination for summary and CSV, with admin assets limited to this plugin screen. A reproducible 100/1,000/10,000-order performance measurement protocol is now documented; no benchmark was run. Phase 7 remains 6/9 (67%), overall progress 81%; runtime compatibility, performance measurement and regression gates remain open.
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -267,3 +267,15 @@ The hardened commit's GitHub Actions run [#42384461173](https://github.com/Verte
 ## 2026-11-08 bounded performance source review
 
 Reviewed `includes/Admin/Summary.php`, `includes/Admin/CsvExport.php`, and `includes/Admin/Page.php` at the current repository revision. Both report paths use WooCommerce `wc_get_orders()` with 100-order pages, date/status bounds, and `paginate`; dashboard assets are enqueued only on the plugin screen. The report loops through order objects and shipping items and keeps aggregated totals in memory. This is a bounded source review only: no benchmark, high-volume staging test, query-count trace, or runtime comparison was run. Potential follow-up is to measure representative large date ranges and assess object-query cost before changing pagination or aggregation. Staging recheck on 2026-11-08 still shows v0.1.0 active, so the hardened Actions artifact remains uninstalled. Phase 7 remains 6/9 (67%), overall progress 81%; performance validation is still open.
+
+
+## 2026-11-08 performance gate measurement plan
+
+The pending performance check now has a reproducible evidence outline; this plan is not a benchmark result and does not close a gate. Run only on a staging copy with disposable fixtures and record exact plugin commit, WP/WooCommerce/PHP/database versions, HPOS state, order count, date range, and whether the request is cold or repeat.
+
+| Workflow | Fixture sizes | Capture for each of 5 runs | Correctness check | Status |
+|---|---:|---|---|---|
+| Dashboard summary load | 100, 1,000, 10,000 eligible shipping orders | Server request duration, peak PHP memory, database query count, and slow queries | Totals and coverage match an independent fixture aggregate | Pending staging benchmark |
+| CSV export | 100, 1,000, 10,000 eligible shipping orders | Export duration, peak PHP memory, query count, response completion, and output row count | Export row count and representative values match fixture data | Pending staging benchmark |
+
+Keep report date windows explicit and wide enough to include exactly the fixtures. Capture cold and repeat requests separately. Retain sanitized timing/query evidence and CSV row-count evidence; do not include customer personal data. Establish pass/fail latency and memory budgets only after capturing the current staging baseline and reviewing it, rather than treating an unmeasured target as a pass. No benchmark was run in this update; Phase 7 remains 6/9 (67%) and overall progress 81%.
