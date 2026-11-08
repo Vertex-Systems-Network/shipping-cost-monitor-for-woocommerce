@@ -147,3 +147,8 @@ The hardened commit's GitHub Actions run [#42384461173](https://github.com/Verte
 ## 2026-11-08 source-level performance review
 
 Reviewed Summary, CSV export, and admin asset loading. Dashboard summary and CSV use paginated WooCommerce order queries at 100 orders per page, filtered by status and date; frontend-facing admin assets are restricted to this plugin screen. This confirms bounded pagination in source, not performance at scale. No benchmark, SQL/query-count trace, or large-order staging run was performed, so the performance gate remains open. Staging still reports v0.1.0 active and does not contain the hardened artifact.
+
+
+## 2026-11-08 proposed performance measurement protocol
+
+Performance remains unverified. A staging-copy benchmark should compare dashboard summary and CSV export using 100, 1,000, and 10,000 eligible shipping orders. For each size, use a date filter covering only the fixtures, run five requests with cold and repeat runs noted separately, and record commit, WP/WooCommerce/PHP/database versions, HPOS state, elapsed server time, peak PHP memory, database query count, slow queries, and CSV row count. Validate summary aggregates and CSV rows against an independent fixture tally, retain evidence without customer personal data, and establish latency/memory budgets only after the staging baseline is measured and reviewed. Do not infer scale readiness from 100-order query pagination alone. This is a test plan, not execution evidence; no performance gate is closed.
