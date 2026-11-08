@@ -174,3 +174,16 @@ The hardened commit's GitHub Actions run [#42384461173](https://github.com/Verte
 ## 2026-11-08 performance review note
 
 For AI and human contributors: the source review found 100-order paginated `wc_get_orders()` loops in dashboard summary and CSV export, with status/date filters, and admin assets limited to the plugin page. Treat this as code inspection only. Do not mark performance complete without reproducible benchmarks or large-volume staging evidence. Current staging remains v0.1.0; Phase 7 remains 6/9 (67%) and overall progress 81%.
+
+
+## AI-37 — Reproducible report performance baseline (pending)
+
+**Goal:** measure, not assume, report scalability.
+
+1. Use a staging copy and disposable orders only; include exactly 100, 1,000, and 10,000 eligible shipping orders in an explicit report date range.
+2. Benchmark dashboard summary and CSV export separately; perform five requests per fixture size and label cold vs repeat runs.
+3. Record commit, WP/WooCommerce/PHP/database versions, HPOS state, elapsed server duration, peak PHP memory, query count, slow queries, and export row count.
+4. Compare dashboard aggregates and CSV rows with an independent fixture tally. Save sanitized evidence with no customer PII.
+5. Review the measured baseline before proposing numerical pass/fail budgets; do not mark this task complete from code inspection or pagination alone.
+
+**Current status:** Plan defined 2026-11-08; execution pending hardened artifact installation and safe disposable fixture availability. Phase 7 remains 6/9 (67%); overall progress 81%.
