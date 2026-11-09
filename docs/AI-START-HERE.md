@@ -6,7 +6,7 @@ AI tools only know the project files they can access and actually load. Reposito
 
 ## Copy/paste prompt
 
-> Work on the GitHub repository `Vertex-Systems-Network/wpessential-shipping-cost-monitor`. First read `AGENTS.md`, `README.md`, and the task-relevant files in `docs/`. Follow the feature IDs in `docs/PRODUCT-SPEC.md` and the task gates in `docs/AI-BACKLOG.md`. Initial implementation is authorized within `docs/OWNER-DECISION-REGISTER.md`. Use React through WordPress-bundled `wp.element` and plain JavaScript. Use the approved GitHub Actions workflow for installable ZIP artifacts; it runs Composer PSR-4 generation, PHP lint and an autoloader smoke check in CI. Do not add local CLI requirements, an in-plugin CLI, npm or JS bundlers. API credentials and CSV upload persistence remain deferred pending evidence/review. For this task: [describe one bounded task]. Before editing, summarize the applicable requirements and files you will change. Afterward, report changes, evidence, assumptions, unresolved issues, and proposed status updates.
+> Work on the GitHub repository `Vertex-Systems-Network/wpessential-shipping-cost-monitor`. First read `AGENTS.md`, `docs/AI-START-HERE.md`, the current README status, the active task row in `docs/AI-BACKLOG.md`, and all task-specific sources. Follow feature IDs in `docs/PRODUCT-SPEC.md`, architecture boundaries in `docs/ARCHITECTURE.md` and `docs/ARCHITECTURE-DECISIONS.md`, and the evidence gates in `docs/PHASE-7-GATES.md` when relevant. Initial implementation is authorized within `docs/OWNER-DECISION-REGISTER.md`. Use React through WordPress-bundled `wp.element` and plain JavaScript. The authorized GitHub Actions workflow handles CI-only Composer PSR-4 generation, PHP lint, autoload smoke and installable ZIP packaging. Do not add local/in-plugin CLI, npm or JS bundlers. API credentials and durable CSV retention remain deferred unless their recorded gates are satisfied. Choose the highest-priority unblocked task and do its implementation/verification now; do not stop at a plan, repeated staging check or status-only README edit while useful authorized work remains. If blocked, record the exact dependency, owner action and next independent task; do not retry the same blocked check without new evidence. Report only verified evidence and distinguish implemented, static-verified, runtime-verified, blocked and deferred. For this task: [one bounded task or continue highest-priority unblocked backlog item].
 
 ## Tool entry points
 
@@ -17,3 +17,8 @@ AI tools only know the project files they can access and actually load. Reposito
 - **GitHub Copilot:** `.github/copilot-instructions.md`
 
 These files route each supported agent to the same source of truth instead of keeping separate, drifting copies of the product plan.
+
+
+## Progress and blocker rules
+
+README updates are a record of meaningful completed work or changed evidence, not a substitute for it. Use fixed task/gate IDs and their exit evidence; source dry-runs are not runtime passes. Do not use the old Phase 7 6/9 score as a readiness percentage; see PHASE-7-GATES.md. Complete one whole unblocked backlog item per session where feasible. If a user action is the only blocker for one item, state the exact requested action once and continue independent tasks rather than repeating the same check.
