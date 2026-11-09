@@ -6,7 +6,7 @@ Find orders and delivery patterns where actual fulfilment spend is eroding margi
 
 > **Project status:** Phases 1–5 documented/code-delivered for their defined scope; Phase 6 remains in progress and Phase 7 is active  
 > **Current release/QA status:** Phase 6 remains 83% implementation coverage; Phase 7 has 7 narrow evidence gates passed, 2 partial and 5 pending in the new 14-gate register. This count is not a readiness percentage. Aggregate project percentage is retired because phase deliverables and QA evidence are not comparable. See [Phase 7 gate register](docs/PHASE-7-GATES.md). No local CLI or JavaScript bundler; CI-only Composer/PHP checks remain authorized.
-> **Last status update:** 2026-11-10 — Fixed planning/prompt structure: added explicit Phase 7 gate register; the old 6/9 score and overall 81% average are retired as readiness measures. Added evidence-first execution/blocker rules for ChatGPT/Codex, Claude, Gemini, Cursor and Copilot. Resolved duplicate AI task ID (artifact build remains AI-37; performance baseline is AI-39). QA states and limits remain unchanged; no code or runtime gate changed.
+> **Last status update:** 2026-11-10 — Phase 7 P7-12 source review found unbounded scalar field lengths in manual/import request paths (defensive resource-boundary gap; no exploit demonstrated). Added server-side byte caps and documented limits; CI PHP 8.1–8.4 verification is pending. Phase 7 gate counts remain 7 narrow passes, 2 partial, 5 pending; no gate is being counted as passed by this code change alone.
 > **Repository:** [wpessential-shipping-cost-monitor](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor)
 
 ## Product direction
@@ -291,3 +291,8 @@ Read-only browser verification on the owner-designated staging site found WPEsse
 ## 2026-11-10 plan and prompt structural repair
 
 Added a canonical evidence-first execution protocol to AGENTS.md and routed AI-START-HERE.md, Cursor and Copilot through it. It requires agents to finish an unblocked acceptance-sized task in-session, avoid repeating unchanged blocked checks, distinguish implementation/static/runtime evidence, and keep documentation updates from counting as QA progress. Added [docs/PHASE-7-GATES.md](docs/PHASE-7-GATES.md), replacing the misleading historical 6/9 readiness score with 14 explicit gates and narrow acceptance evidence. Fixed a duplicate backlog ID: AI-37 remains the artifact-build task and the performance-baseline task is AI-39; AI-40 tracks this prompt/rules repair. The former aggregate 81% was retired because it averaged unlike phase deliverables and QA checks. No code or runtime gate was changed by this documentation work.
+
+
+## 2026-11-10 P7-12 bounded-input hardening
+
+Source review found that manual cost save and invoice match/commit enforced field shapes and row-count caps but did not consistently cap scalar lengths before sanitization/conversion. Added server-side bounds for row numbers, order IDs, references, amount strings, currency/evidence/tax keys, batch hashes and manual notes. The limits are documented in PRODUCT-SPEC.md; the manual note field now displays its 2,000-byte maximum. This is defensive hardening, not a proven exploit or staging incident. CI verification is pending; runtime malformed/oversize request tests require the built artifact on staging. P7-12 remains partial and P7-11 remains partial until runtime cases pass.

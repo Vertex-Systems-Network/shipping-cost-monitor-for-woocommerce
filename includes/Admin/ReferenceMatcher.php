@@ -55,14 +55,27 @@ final class ReferenceMatcher {
 
 		$normalized = array();
 		foreach ( $references as $row ) {
-			if ( ! is_array( $row ) || ! isset( $row['row'] ) || ! isset( $row['reference'] ) || ! is_scalar( $row['reference'] ) ) {
+			if ( ! is_array( $row ) || ! isset( $row['row'] ) || ! isset( $row['reference'] ) || ! is_scalar( $row['row'] ) || ! is_scalar( $row['reference'] ) ) {
 				wp_send_json_error(
 					array( 'message' => __( 'The reference list has an invalid row.', 'wpessential-shipping-cost-monitor' ) ),
 					400
 				);
 			}
 
-			$reference = trim( sanitize_text_field( (string) $row['reference'] ) );
+			$row_value = (string) $row['row'];
+			$raw_reference = trim( (string) $row['reference'] );
+			if (
+				! preg_match( '/^[1-9][0-9]{0,3}$/D', $row_value )
+				|| (int) $row_value > 5000
+				|| strlen( $raw_reference ) > 100
+			) {
+				wp_send_json_error(
+					array( 'message' => __( 'The reference list has an invalid row.', 'wpessential-shipping-cost-monitor' ) ),
+					400
+				);
+			}
+
+			$reference = trim( sanitize_text_field( $raw_reference ) );
 			$reference = preg_replace( '/^#\s*/', '', $reference );
 			if ( '' === $reference || strlen( $reference ) > 100 ) {
 				wp_send_json_error(
@@ -72,7 +85,7 @@ final class ReferenceMatcher {
 			}
 
 			$normalized[] = array(
-				'row'       => absint( $row['row'] ),
+				'row'       => (int) $row_value,
 				'reference' => $reference,
 			);
 		}
@@ -99,7 +112,10 @@ final class ReferenceMatcher {
 			}
 
 			if ( ctype_digit( $reference ) ) {
-				$candidate_ids[] = absint( $reference );
+				$order_id = filter_var( $reference, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+				if ( false !== $order_id ) {
+					$candidate_ids[] = $order_id;
+				}
 			}
 
 			$candidate_ids = array_unique( array_filter( array_map( 'absint', $candidate_ids ) ) );

@@ -142,7 +142,7 @@ final class OrderCostFields {
 			esc_html__( 'Source or note', 'wpessential-shipping-cost-monitor' )
 		);
 		printf(
-			'<textarea class="short" id="wpe_scm_cost_note" name="wpe_scm_cost_note" rows="2">%s</textarea>',
+			'<textarea class="short" id="wpe_scm_cost_note" name="wpe_scm_cost_note" rows="2" maxlength="2000">%s</textarea>',
 			esc_textarea( $note )
 		);
 		echo '</p>';
@@ -166,20 +166,23 @@ final class OrderCostFields {
 			|| ! is_string( $_POST[ $nonce_key ] )
 			|| ! isset( $_POST['wpe_scm_cost_amount'] )
 			|| ! is_string( $_POST['wpe_scm_cost_amount'] )
+			|| strlen( $_POST['wpe_scm_cost_amount'] ) > 64
 		) {
 			return;
 		}
 
 		// Reject malformed optional fields before WordPress sanitizers receive arrays/objects.
-		foreach (
-			array(
-				'wpe_scm_cost_currency',
-				'wpe_scm_cost_evidence',
-				'wpe_scm_cost_tax_basis',
-				'wpe_scm_cost_note',
-			) as $field
-		) {
-			if ( isset( $_POST[ $field ] ) && ! is_string( $_POST[ $field ] ) ) {
+		$max_field_bytes = array(
+			'wpe_scm_cost_currency' => 3,
+			'wpe_scm_cost_evidence' => 32,
+			'wpe_scm_cost_tax_basis' => 16,
+			'wpe_scm_cost_note' => 2000,
+		);
+		foreach ( $max_field_bytes as $field => $max_bytes ) {
+			if (
+				isset( $_POST[ $field ] )
+				&& ( ! is_string( $_POST[ $field ] ) || strlen( $_POST[ $field ] ) > $max_bytes )
+			) {
 				return;
 			}
 		}

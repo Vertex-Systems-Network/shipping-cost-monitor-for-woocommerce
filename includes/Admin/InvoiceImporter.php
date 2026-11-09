@@ -81,20 +81,48 @@ final class InvoiceImporter {
 			return array( 'status' => 'invalid' );
 		}
 
-		$row_value     = is_scalar( $row['row'] ) ? (string) $row['row'] : '';
+		$row_value      = is_scalar( $row['row'] ) ? (string) $row['row'] : '';
 		$order_id_value = is_scalar( $row['order_id'] ) ? (string) $row['order_id'] : '';
-		if ( ! preg_match( '/^[1-9][0-9]*$/D', $row_value ) || ! preg_match( '/^[1-9][0-9]*$/D', $order_id_value ) ) {
+		if (
+			! preg_match( '/^[1-9][0-9]{0,3}$/D', $row_value )
+			|| (int) $row_value > 5000
+			|| strlen( $order_id_value ) > 20
+			|| ! preg_match( '/^[1-9][0-9]*$/D', $order_id_value )
+		) {
 			return array( 'status' => 'invalid' );
 		}
 
-		$row_number = absint( $row_value );
-		$order_id   = absint( $order_id_value );
-		$reference  = is_scalar( $row['reference'] ) ? preg_replace( '/^#\s*/', '', trim( sanitize_text_field( (string) $row['reference'] ) ) ) : '';
-		$raw_amount = is_scalar( $row['amount'] ) ? trim( (string) $row['amount'] ) : '';
-		$currency   = is_scalar( $row['currency'] ) ? strtoupper( sanitize_text_field( (string) $row['currency'] ) ) : '';
-		$batch_hash = is_scalar( $row['batch'] ) ? strtolower( sanitize_text_field( (string) $row['batch'] ) ) : '';
-		$evidence   = isset( $row['evidence'] ) && is_scalar( $row['evidence'] ) ? sanitize_key( (string) $row['evidence'] ) : '';
-		$tax_basis  = isset( $row['tax_basis'] ) && is_scalar( $row['tax_basis'] ) ? sanitize_key( (string) $row['tax_basis'] ) : '';
+		$row_number   = (int) $row_value;
+		$order_id     = filter_var( $order_id_value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+		if ( false === $order_id ) {
+			return array( 'status' => 'invalid' );
+		}
+		$raw_reference = is_scalar( $row['reference'] ) ? trim( (string) $row['reference'] ) : '';
+		$raw_amount   = is_scalar( $row['amount'] ) ? trim( (string) $row['amount'] ) : '';
+		$raw_currency = is_scalar( $row['currency'] ) ? trim( (string) $row['currency'] ) : '';
+		$raw_batch    = is_scalar( $row['batch'] ) ? trim( (string) $row['batch'] ) : '';
+		$raw_evidence = isset( $row['evidence'] ) && is_scalar( $row['evidence'] ) ? trim( (string) $row['evidence'] ) : '';
+		$raw_tax_basis = isset( $row['tax_basis'] ) && is_scalar( $row['tax_basis'] ) ? trim( (string) $row['tax_basis'] ) : '';
+
+		if (
+			strlen( $raw_reference ) > 100
+			|| strlen( $raw_amount ) > 64
+			|| strlen( $raw_currency ) > 3
+			|| strlen( $raw_batch ) > 64
+			|| strlen( $raw_evidence ) > 32
+			|| strlen( $raw_tax_basis ) > 16
+		) {
+			return array(
+				'row'    => $row_number,
+				'status' => 'invalid',
+			);
+		}
+
+		$reference = preg_replace( '/^#\s*/', '', trim( sanitize_text_field( $raw_reference ) ) );
+		$currency  = strtoupper( sanitize_text_field( $raw_currency ) );
+		$batch_hash = strtolower( $raw_batch );
+		$evidence  = sanitize_key( $raw_evidence );
+		$tax_basis = sanitize_key( $raw_tax_basis );
 
 		if (
 			! $row_number

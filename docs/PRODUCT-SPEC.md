@@ -97,6 +97,7 @@ These definitions are the single reporting contract; use them across dashboard, 
 - Exact configured order/tracking/AWB/provider shipment IDs are tried first. Fallback matching is off by default.
 - Every match exposes its identifier and source row. Ambiguous rows never auto-commit.
 - File size/row limits are shown before processing; long imports are bounded/background work.
+- Server handlers enforce field-size limits before sanitization/conversion: up to 50 match/commit rows per request, 5,000 source rows per file, 100-byte order reference, 64-byte non-negative decimal amount, 3-byte ISO currency, 64-byte SHA-256 batch key, and 32/16-byte evidence/tax keys. Manual cost entry applies the same amount/currency/evidence/tax limits and a 2,000-byte optional source note.
 
 ### SCM-IMP-03 — exception review
 
