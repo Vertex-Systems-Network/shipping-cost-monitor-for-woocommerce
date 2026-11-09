@@ -31,9 +31,10 @@ final class ReferenceMatcher {
 			);
 		}
 
-		$nonce = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] )
-			? sanitize_text_field( wp_unslash( $_POST['nonce'] ) )
+		$nonce_value = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] )
+			? wp_unslash( $_POST['nonce'] )
 			: '';
+		$nonce = strlen( $nonce_value ) <= 128 ? sanitize_text_field( $nonce_value ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'wpe_scm_match_preview' ) ) {
 			wp_send_json_error(
@@ -63,9 +64,10 @@ final class ReferenceMatcher {
 			}
 
 			$row_value = (string) $row['row'];
-			$raw_reference = trim( (string) $row['reference'] );
+			$raw_reference = (string) $row['reference'];
 			if (
-				! preg_match( '/^[1-9][0-9]{0,3}$/D', $row_value )
+				strlen( $row_value ) > 4
+				|| ! preg_match( '/^[1-9][0-9]{0,3}$/D', $row_value )
 				|| (int) $row_value > 5000
 				|| strlen( $raw_reference ) > 100
 			) {
@@ -75,6 +77,7 @@ final class ReferenceMatcher {
 				);
 			}
 
+			$raw_reference = trim( $raw_reference );
 			$reference = trim( sanitize_text_field( $raw_reference ) );
 			$reference = preg_replace( '/^#\s*/', '', $reference );
 			if ( '' === $reference || strlen( $reference ) > 100 ) {

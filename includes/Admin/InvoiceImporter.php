@@ -31,9 +31,10 @@ final class InvoiceImporter {
 			);
 		}
 
-		$nonce = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] )
-			? sanitize_text_field( wp_unslash( $_POST['nonce'] ) )
+		$nonce_value = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] )
+			? wp_unslash( $_POST['nonce'] )
 			: '';
+		$nonce = strlen( $nonce_value ) <= 128 ? sanitize_text_field( $nonce_value ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'wpe_scm_commit_invoice_rows' ) ) {
 			wp_send_json_error(
@@ -97,12 +98,12 @@ final class InvoiceImporter {
 		if ( false === $order_id ) {
 			return array( 'status' => 'invalid' );
 		}
-		$raw_reference = is_scalar( $row['reference'] ) ? trim( (string) $row['reference'] ) : '';
-		$raw_amount   = is_scalar( $row['amount'] ) ? trim( (string) $row['amount'] ) : '';
-		$raw_currency = is_scalar( $row['currency'] ) ? trim( (string) $row['currency'] ) : '';
-		$raw_batch    = is_scalar( $row['batch'] ) ? trim( (string) $row['batch'] ) : '';
-		$raw_evidence = isset( $row['evidence'] ) && is_scalar( $row['evidence'] ) ? trim( (string) $row['evidence'] ) : '';
-		$raw_tax_basis = isset( $row['tax_basis'] ) && is_scalar( $row['tax_basis'] ) ? trim( (string) $row['tax_basis'] ) : '';
+		$raw_reference = is_scalar( $row['reference'] ) ? (string) $row['reference'] : '';
+		$raw_amount    = is_scalar( $row['amount'] ) ? (string) $row['amount'] : '';
+		$raw_currency  = is_scalar( $row['currency'] ) ? (string) $row['currency'] : '';
+		$raw_batch     = is_scalar( $row['batch'] ) ? (string) $row['batch'] : '';
+		$raw_evidence  = isset( $row['evidence'] ) && is_scalar( $row['evidence'] ) ? (string) $row['evidence'] : '';
+		$raw_tax_basis = isset( $row['tax_basis'] ) && is_scalar( $row['tax_basis'] ) ? (string) $row['tax_basis'] : '';
 
 		if (
 			strlen( $raw_reference ) > 100
@@ -117,6 +118,13 @@ final class InvoiceImporter {
 				'status' => 'invalid',
 			);
 		}
+
+		$raw_reference = trim( $raw_reference );
+		$raw_amount    = trim( $raw_amount );
+		$raw_currency  = trim( $raw_currency );
+		$raw_batch     = trim( $raw_batch );
+		$raw_evidence  = trim( $raw_evidence );
+		$raw_tax_basis = trim( $raw_tax_basis );
 
 		$reference = preg_replace( '/^#\s*/', '', trim( sanitize_text_field( $raw_reference ) ) );
 		$currency  = strtoupper( sanitize_text_field( $raw_currency ) );
