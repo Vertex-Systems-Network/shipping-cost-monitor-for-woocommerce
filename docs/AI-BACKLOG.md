@@ -1,5 +1,7 @@
 # AI-assisted development backlog and working protocol
 
+> **Status authority:** The active backlog table and docs/PHASE-7-GATES.md define current state. Dated notes below preserve historical evidence and may contain superseded counts/statuses; never use them as current progress without checking the gate register.
+
 This backlog is for ChatGPT, Cursor, Claude, Gemini, and human contributors. It is a shared project plan, not authorization for an agent to invent scope or skip review.
 
 ## Rules for every contributor
@@ -178,7 +180,7 @@ The hardened commit's GitHub Actions run [#42384461173](https://github.com/Verte
 
 ## 2026-11-08 performance review note
 
-For AI and human contributors: the source review found 100-order paginated `wc_get_orders()` loops in dashboard summary and CSV export, with status/date filters, and admin assets limited to the plugin page. Treat this as code inspection only. Do not mark performance complete without reproducible benchmarks or large-volume staging evidence. Current staging remains v0.1.0; Phase 7 remains 6/9 (67%) and overall progress 81%.
+For AI and human contributors: the source review found 100-order paginated `wc_get_orders()` loops in dashboard summary and CSV export, with status/date filters, and admin assets limited to the plugin page. Treat this as code inspection only. Do not mark performance complete without reproducible benchmarks or large-volume staging evidence. At the time of this 2026-11-08 note, staging showed v0.1.0 and the then-used 6/9 count. That count is now retired; use docs/PHASE-7-GATES.md for current QA state.
 
 
 ## AI-39 — Reproducible report performance baseline (pending)
@@ -191,7 +193,7 @@ For AI and human contributors: the source review found 100-order paginated `wc_g
 4. Compare dashboard aggregates and CSV rows with an independent fixture tally. Save sanitized evidence with no customer PII.
 5. Review the measured baseline before proposing numerical pass/fail budgets; do not mark this task complete from code inspection or pagination alone.
 
-**Current status:** Plan defined 2026-11-08; execution pending hardened artifact installation and safe disposable fixture availability. Phase 7 remains 6/9 (67%); overall progress 81%.
+**Current status (2026-11-10):** Benchmark protocol is defined; execution remains pending hardened artifact installation and safe disposable fixtures. Current gate state is P7-13 in docs/PHASE-7-GATES.md; do not use the retired 6/9 score.
 
 
 ## AI-40 — Evidence-first task execution and prompt alignment
