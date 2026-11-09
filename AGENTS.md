@@ -32,3 +32,20 @@ If a task is ambiguous, report the conflict or assumption. Do not invent product
 ## Work handoff
 
 Report: task/feature IDs, changed files, decisions, assumptions, evidence, unverified items and proposed status updates. Do not mark a phase complete unless its exit outcome is met.
+
+
+## Execution and evidence discipline
+
+- Start each work session by reading `docs/AI-START-HERE.md`, the current README status, the task entry in `docs/AI-BACKLOG.md`, and its referenced source-of-truth document. Verify the repository's current state before relying on an older handoff.
+- Select the highest-priority unblocked task with a concrete acceptance check. Do the implementation or verification in the same session where possible; do not end after a plan, repeated read-only check, or status-only README edit when useful unblocked work remains.
+- Complete one whole backlog item per session when feasible. If an item is blocked, record the exact failed dependency, who/what can unblock it, and its smallest next action; do not repeat the same blocked check unless a new artifact, version, fixture, permission, or evidence has appeared. Move to the next independent P0/P1 task.
+- A documentation-only change is complete only when documentation/prompt repair is the assigned task. It does not count as implementation, runtime QA, or release progress.
+- Keep states separate: **implemented** (code exists), **static-verified**, **runtime-verified** (identify exact environment and flow), **blocked** (state external dependency), and **deferred** (owner-approved out of scope). Source dry-runs never count as runtime compatibility.
+- Progress bars may represent only a fixed, listed checklist. Never call an unweighted count a release-readiness percentage. Do not compute an overall project percentage by averaging unlike phases. Keep the gate register as the authority for QA closure; README is a concise view that links to it.
+- Update README after a meaningful completed task or state change, not after every repeated observation. Repeated smoke checks of the same flow add evidence but do not increment completion.
+- Respect approved tooling boundaries: no local or in-plugin CLI, npm or JS bundler. Use the authorized CI workflow, browser/Playground, or approved staging environment. A tooling restriction is not a reason to stop unrelated unblocked work.
+- Do not ask the owner to repeat authorization already recorded. Ask only for a specifically identified external dependency that cannot be supplied or created within existing authorization.
+
+## Completion report contract
+
+Every handoff must include: task ID and exact outcome; files/commit changed; verification performed with exact environment/result; what remains unverified; blocker owner/action if blocked; next highest-priority unblocked task. Never describe an attempted check as a pass. Close a phase only when every mandatory exit gate in its register passes or the owner explicitly narrows the supported scope.
