@@ -246,7 +246,7 @@ final class Summary {
 	 * @param string|null $value Date in YYYY-MM-DD form.
 	 */
 	private static function valid_date( ?string $value ): bool {
-		if ( null === $value || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ) {
+		if ( null === $value || 10 !== strlen( $value ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ) {
 			return false;
 		}
 

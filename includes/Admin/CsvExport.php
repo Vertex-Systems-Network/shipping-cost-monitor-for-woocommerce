@@ -34,11 +34,17 @@ final class CsvExport {
 
 		check_admin_referer( 'wpe_scm_export_report' );
 
-		$requested_start = isset( $_GET['wpe_scm_start'] ) && is_string( $_GET['wpe_scm_start'] )
-			? sanitize_text_field( wp_unslash( $_GET['wpe_scm_start'] ) )
+		$requested_start_raw = isset( $_GET['wpe_scm_start'] ) && is_string( $_GET['wpe_scm_start'] )
+			? wp_unslash( $_GET['wpe_scm_start'] )
 			: null;
-		$requested_end = isset( $_GET['wpe_scm_end'] ) && is_string( $_GET['wpe_scm_end'] )
-			? sanitize_text_field( wp_unslash( $_GET['wpe_scm_end'] ) )
+		$requested_end_raw = isset( $_GET['wpe_scm_end'] ) && is_string( $_GET['wpe_scm_end'] )
+			? wp_unslash( $_GET['wpe_scm_end'] )
+			: null;
+		$requested_start = is_string( $requested_start_raw ) && strlen( $requested_start_raw ) <= 10
+			? sanitize_text_field( $requested_start_raw )
+			: null;
+		$requested_end = is_string( $requested_end_raw ) && strlen( $requested_end_raw ) <= 10
+			? sanitize_text_field( $requested_end_raw )
 			: null;
 		$period = Summary::normalize_period( $requested_start, $requested_end );
 
