@@ -124,3 +124,8 @@ The hardened commit's GitHub Actions run [#42384461173](https://github.com/Verte
 ## 2026-11-08 Phase 7 performance source check
 
 Read-only source review covered `Summary.php`, `CsvExport.php`, and `Page.php`. Both report workflows page WooCommerce orders in batches of 100 with date and status filters; dashboard assets load only on the plugin screen. No runtime benchmark or large-volume test was available. Therefore this is evidence of bounded query structure, not proof of acceptable response time or database load. The staging site still runs v0.1.0 and the hardened artifact is pending upload. Phase 7 remains 6/9 (67%), overall 81%; performance is not marked complete.
+
+
+## Current Phase 7 authority note (2026-11-10)
+
+This audit contains historical Phase 7 counts and artifact handoff notes accurate to their dated observations; these are not the current completion score. The former 6/9 (67%) and 81% aggregate are retired. Current QA states, precise gate criteria and blockers are in [PHASE-7-GATES.md](PHASE-7-GATES.md). Use the active backlog rows for task state and do not count documentation repair or repeated staging checks as runtime progress.
