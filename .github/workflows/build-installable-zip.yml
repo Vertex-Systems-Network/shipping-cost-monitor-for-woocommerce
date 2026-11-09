@@ -94,6 +94,7 @@ jobs:
           mkdir -p "$package_dir"
           cp -R assets includes vendor "$package_dir/"
           cp wpessential-shipping-cost-monitor.php "$package_dir/"
+          printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
           (cd build && zip -qr "../${archive}" "$slug")
           unzip -t "$archive"

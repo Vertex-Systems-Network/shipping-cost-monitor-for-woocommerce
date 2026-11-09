@@ -218,6 +218,13 @@
 	font-weight: 600;
 }
 
+.wpe-scm-build-id {
+	margin: 3px 0 0;
+	color: var(--wpe-scm-muted);
+	font-family: monospace;
+	font-size: 11px;
+}
+
 .wpe-scm-report-notice {
 	margin: 0 0 14px;
 	padding: 11px 14px;

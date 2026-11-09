@@ -23,6 +23,16 @@ define( 'WPE_SCM_FILE', __FILE__ );
 define( 'WPE_SCM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPE_SCM_URL', plugin_dir_url( __FILE__ ) );
 
+$wpe_scm_build_id = 'source';
+$wpe_scm_build_file = WPE_SCM_DIR . 'BUILD-ID.txt';
+if ( is_readable( $wpe_scm_build_file ) ) {
+	$wpe_scm_build_candidate = trim( (string) file_get_contents( $wpe_scm_build_file, false, null, 0, 41 ) );
+	if ( preg_match( '/^[a-f0-9]{40}$/D', $wpe_scm_build_candidate ) ) {
+		$wpe_scm_build_id = substr( $wpe_scm_build_candidate, 0, 12 );
+	}
+}
+define( 'WPE_SCM_BUILD_ID', $wpe_scm_build_id );
+
 require_once WPE_SCM_DIR . 'vendor/autoload.php';
 
 /**

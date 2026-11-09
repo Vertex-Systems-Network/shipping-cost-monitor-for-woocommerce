@@ -752,7 +752,8 @@
 					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'SHIPPING INTELLIGENCE', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'h1', null, __( 'Shipping Cost Monitor', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'p', { className: 'wpe-scm-intro' }, __( 'Understand what customers paid for delivery and what your store paid to fulfil it.', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', { className: 'wpe-scm-period' }, __( 'Order period:', 'wpessential-shipping-cost-monitor' ) + ' ' + periodLabel )
+					h( 'p', { className: 'wpe-scm-period' }, __( 'Order period:', 'wpessential-shipping-cost-monitor' ) + ' ' + periodLabel ),
+					h( 'p', { className: 'wpe-scm-build-id' }, __( 'Build ID:', 'wpessential-shipping-cost-monitor' ) + ' ' + ( report.build_id || 'source' ) )
 				),
 				h(
 					'a',
