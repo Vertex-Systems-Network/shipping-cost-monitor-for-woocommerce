@@ -152,3 +152,8 @@ Reviewed Summary, CSV export, and admin asset loading. Dashboard summary and CSV
 ## 2026-11-08 proposed performance measurement protocol
 
 Performance remains unverified. A staging-copy benchmark should compare dashboard summary and CSV export using 100, 1,000, and 10,000 eligible shipping orders. For each size, use a date filter covering only the fixtures, run five requests with cold and repeat runs noted separately, and record commit, WP/WooCommerce/PHP/database versions, HPOS state, elapsed server time, peak PHP memory, database query count, slow queries, and CSV row count. Validate summary aggregates and CSV rows against an independent fixture tally, retain evidence without customer personal data, and establish latency/memory budgets only after the staging baseline is measured and reviewed. Do not infer scale readiness from 100-order query pagination alone. This is a test plan, not execution evidence; no performance gate is closed.
+
+
+## Current gate authority (2026-11-10)
+
+Older dated entries in this file accurately record what was reported at that time; their historical 6/9 counts are not current scores. Current Phase 7 state and closure criteria are maintained only in [PHASE-7-GATES.md](PHASE-7-GATES.md). Source dry-runs remain distinct from runtime verification. Do not infer compatibility support from CI lint/autoload or a single staging lane.
