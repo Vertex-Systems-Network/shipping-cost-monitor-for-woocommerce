@@ -1,0 +1,40 @@
+# Phase 7 quality and release gates
+
+**Authority:** This is the canonical Phase 7 gate register. README shows a summary only.  
+**Last reviewed:** 2026-11-10  
+**Scope:** Compatibility, security, regression, performance, beta evidence for WPEssential Shipping Cost Monitor.  
+**Interpretation:** Gate rows are not equal-sized. The prior “6/9 = 67%” mixed source dry-runs with runtime checks and is retired as a release-readiness percentage. Historical evidence is retained below, but Phase 7 closes only when every mandatory gate is passed or explicitly removed from supported scope by the owner.
+
+## Gate register
+
+| Gate | Requirement and exit evidence | State | Evidence / missing input |
+|---|---|---|---|
+| P7-01 Environment fingerprint | Record WP, WC, PHP, database, HTTPS and active order datastore on the target staging lane. | Pass — one lane | Staging System Status: WP 7.1.4, WC 11.2.2, PHP 8.3.36, MySQL 8.0.46, HTTPS; HPOS selected. Not a support matrix. |
+| P7-02 Core dashboard and CSV smoke | Install/activate; report and export render; compare known synthetic data and confirm no fatal/admin JS failure. | Pass — selected flows | Staging synthetic orders #51/#52: PKR 750 shipping charged, PKR 1,950 confirmed cost, PKR -1,200 variance, 2/2 coverage; CSV download observed. Exact hardened build identity is not exposed in WP Admin. |
+| P7-03 CI static/package lane | CI Composer PSR-4 install, PHP lint, autoload smoke, package ZIP creation and artifact upload pass. | Pass — CI only | Actions run #42384461173 passed PHP 8.1–8.4 jobs and ZIP packaging. This is not WordPress runtime coverage. |
+| P7-04 HPOS read/display | Read an HPOS order and display its stored shipping-cost evidence correctly. | Pass — selected flow | HPOS OrdersTableDataStore was active; order #52 cost/evidence appeared in report. Manual-save/import/refund writes are not covered. |
+| P7-05 WPML/WCML source boundary | Source dry-run: no hard dependency/direct unsupported API; core degrades safely when absent. | Pass — source only | No WPML/WCML runtime add-on present. This does not establish interoperability. |
+| P7-06 Polylang source boundary | Source dry-run: no hard dependency/direct unsupported API; core degrades safely when absent. | Pass — source only | No Polylang for WooCommerce runtime add-on present. This does not establish interoperability. |
+| P7-07 Legacy storage source boundary | Source review confirms order reads/writes use WooCommerce CRUD/query abstractions. | Pass — source only | No direct order-table access found. Legacy datastore runtime remains untested. |
+| P7-08 Supported-version runtime matrix | Install/upgrade and core report/order workflows pass on declared minimum WP/WC/PHP and latest stable release matrix; publish exact tested versions. | Pending | Only WP 7.1.4 + WC 11.2.2 + PHP 8.3.36 staging runtime observed. CI PHP lint/autoload does not close runtime lanes. |
+| P7-09 HPOS and legacy write-path matrix | Verify manual cost save, invoice commit, refund-adjusted report and export against HPOS and legacy storage; compare records/totals. | Pending | HPOS read/display only. Legacy datastore was not activated. Hardened artifact is not confirmed installed. |
+| P7-10 Multilingual runtime and catalogs | Run WPML + WCML and Polylang + its WooCommerce add-on independently; verify UI translations, locale-specific CSV/date/decimal behavior, order metadata visibility and no cross-language/currency leakage. | Pending | Source dry-runs only; plugins/add-ons and translation catalogs absent. |
+| P7-11 Reconciliation edge/retry regression | Runtime tests for ambiguous order numbers, exact same-request replay response, safe re-import, malformed values, mismatch currency, refunds/credits and no-overwrite behavior. Save sanitized request/result evidence. | Partial | Several staging CSV preview cases and existing-cost protection passed. Ambiguous collision, exact AJAX replay, and new input guards remain unverified. |
+| P7-12 Security and privacy review | Independent review of capability/nonce boundaries, import size/row bounds, validation, formula injection, personal-data minimization, retention, failure/retry behavior; fix findings and attach evidence. | Partial | Focused source review and CI hardening exist; no full independent security/privacy review or malformed order-save runtime probe. |
+| P7-13 Performance baseline | Execute `docs/AI-BACKLOG.md` item AI-39 on a staging copy at 100/1,000/10,000 eligible orders; five runs per size/workflow; capture elapsed time, peak PHP memory, DB query count/slow queries, CSV row count and correctness. Agree budgets after measuring baseline. | Pending | Measurement protocol documented; no benchmark run. Needs hardened/current artifact and safe disposable fixtures. |
+| P7-14 Beta feedback | Run the approved beta workflow with real merchants; record consented, sanitized feedback, reproducible issues, resolutions and owner acceptance. | Pending | No beta feedback evidence. Merchant invoice samples and retention decision remain needed for some workflows. |
+
+## Historical count reconciliation
+
+The old 9-item denominator counted three staging/CI execution observations and three source dry-runs together, while leaving other work bundled under vague “matrix / QA / performance / beta” language. That made the percentage look like release readiness and failed to tell the next contributor exactly what to do. The prior count is superseded. The seven passes above are explicitly narrow evidence packages; two are source-only dry-runs and none closes the corresponding runtime gate.
+
+## Current blocking handoff
+
+- **Owner/staging action:** install the hardened installable ZIP from the latest successful Actions artifact, then share the exact installed version/build visible in WP Admin. Do not claim that v0.1.0 is the hardened build without artifact identity.
+- **Contributor action while waiting:** complete P7-11 and P7-12 source-side review/fixtures that do not mutate staging; prepare a disposable benchmark dataset or test plan under existing authorization; keep P7-13 explicitly pending until measured.
+- **Stop repeating:** do not re-open the same staging version/dashboard smoke as a new gate unless the installed build, dataset, environment, or test path changes.
+- **No CLI rule:** no local/plugin CLI, npm or JS bundler. CI-only Composer/PHP checks are authorized; browser/Playground/staging checks remain valid. Do not let the no-local-CLI boundary block work that can be completed through these routes.
+
+## Phase 7 close rule
+
+Close Phase 7 only after P7-08 through P7-14 are either passed with evidence or the owner records a narrower supported/release scope for the explicitly deferred lane. Any unresolved blocker must identify the responsible party and exact requested input. A percentage or completed source dry-run is not a substitute for a passed release gate.
