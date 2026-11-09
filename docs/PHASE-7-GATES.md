@@ -10,7 +10,7 @@
 | Gate | Requirement and exit evidence | State | Evidence / missing input |
 |---|---|---|---|
 | P7-01 Environment fingerprint | Record WP, WC, PHP, database, HTTPS and active order datastore on the target staging lane. | Pass — one lane | Staging System Status: WP 7.1.4, WC 11.2.2, PHP 8.3.36, MySQL 8.0.46, HTTPS; HPOS selected. Not a support matrix. |
-| P7-02 Core dashboard and CSV smoke | Install/activate; report and export render; compare known synthetic data and confirm no fatal/admin JS failure. | Pass — selected flows | Staging synthetic orders #51/#52: PKR 750 shipping charged, PKR 1,950 confirmed cost, PKR -1,200 variance, 2/2 coverage; CSV download observed. Exact hardened build identity is not exposed in WP Admin. |
+| P7-02 Core dashboard and CSV smoke | Install/activate; report and export render; compare known synthetic data and confirm no fatal/admin JS failure. | Pass — selected flows | Staging synthetic orders #51/#52: PKR 750 shipping charged, PKR 1,950 confirmed cost, PKR -1,200 variance, 2/2 coverage; CSV download observed. Commit 9a7ae7e adds a commit-based build ID to CI ZIPs and the dashboard; staging has not yet displayed/read back that ID. |
 | P7-03 CI static/package lane | CI Composer PSR-4 install, PHP lint, autoload smoke, package ZIP creation and artifact upload pass. | Pass — CI only | Actions run #42384461173 passed PHP 8.1–8.4 jobs and ZIP packaging. This is not WordPress runtime coverage. |
 | P7-04 HPOS read/display | Read an HPOS order and display its stored shipping-cost evidence correctly. | Pass — selected flow | HPOS OrdersTableDataStore was active; order #52 cost/evidence appeared in report. Manual-save/import/refund writes are not covered. |
 | P7-05 WPML/WCML source boundary | Source dry-run: no hard dependency/direct unsupported API; core degrades safely when absent. | Pass — source only | No WPML/WCML runtime add-on present. This does not establish interoperability. |
@@ -30,7 +30,7 @@ The old 9-item denominator counted three staging/CI execution observations and t
 
 ## Current blocking handoff
 
-- **Owner/staging action:** install the hardened installable ZIP from the latest successful Actions artifact, then share the exact installed version/build visible in WP Admin. Do not claim that v0.1.0 is the hardened build without artifact identity.
+- **Owner/staging action:** install the latest successful Actions artifact and verify the admin Build ID equals the 12-character prefix of the artifact source commit. Do not treat version 0.1.0 alone as build identity.
 - **Contributor action while waiting:** complete P7-11 and P7-12 source-side review/fixtures that do not mutate staging; prepare a disposable benchmark dataset or test plan under existing authorization; keep P7-13 explicitly pending until measured.
 - **Stop repeating:** do not re-open the same staging version/dashboard smoke as a new gate unless the installed build, dataset, environment, or test path changes.
 - **No CLI rule:** no local/plugin CLI, npm or JS bundler. CI-only Composer/PHP checks are authorized; browser/Playground/staging checks remain valid. Do not let the no-local-CLI boundary block work that can be completed through these routes.
