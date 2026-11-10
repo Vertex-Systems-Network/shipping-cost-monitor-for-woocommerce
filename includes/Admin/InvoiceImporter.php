@@ -54,8 +54,35 @@ final class InvoiceImporter {
 			);
 		}
 
+		$duplicate_order_ids = array();
+		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) || ! isset( $row['order_id'] ) || ! is_scalar( $row['order_id'] ) ) {
+				continue;
+			}
+
+			$candidate_id = (string) $row['order_id'];
+			if ( strlen( $candidate_id ) <= 20 && preg_match( '/^[1-9][0-9]*$/D', $candidate_id ) ) {
+				$duplicate_order_ids[ $candidate_id ] = ( $duplicate_order_ids[ $candidate_id ] ?? 0 ) + 1;
+			}
+		}
+
 		$results = array();
 		foreach ( $rows as $row ) {
+			$candidate_id = is_array( $row ) && isset( $row['order_id'] ) && is_scalar( $row['order_id'] )
+				? (string) $row['order_id']
+				: '';
+
+			if ( isset( $duplicate_order_ids[ $candidate_id ] ) && $duplicate_order_ids[ $candidate_id ] > 1 ) {
+				$row_number = is_array( $row ) && isset( $row['row'] ) && is_scalar( $row['row'] )
+					? (int) $row['row']
+					: 0;
+				$results[] = array(
+					'row'    => $row_number,
+					'status' => 'duplicate_order_in_batch',
+				);
+				continue;
+			}
+
 			$results[] = $this->commit_row( $row );
 		}
 

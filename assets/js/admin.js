@@ -427,7 +427,9 @@
 			const currencyValid = '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency );
 			const valid = '' !== reference && null !== amount && '-' !== amount.charAt( 0 ) && currencyValid && ! hasRefundStatus( item );
 			if ( hasRefundStatus( item ) ) { return 'refund_review'; }
-			if ( commitResults[ item.number ] ) { return 'saved'; }
+			if ( commitResults[ item.number ] ) {
+				return [ 'committed', 'already_imported' ].indexOf( commitResults[ item.number ].status ) !== -1 ? 'saved' : 'exception';
+			}
 			if ( matchResults[ item.number ] ) {
 				const match = matchResults[ item.number ];
 				if ( 'matched' !== match.status ) { return 'exception'; }
@@ -693,7 +695,9 @@
 							const status = hasRefundStatus( item )
 								? __( 'Refund status needs review', 'wpessential-shipping-cost-monitor' )
 								: commitResult
-									? commitResult.status
+									? ( 'duplicate_order_in_batch' === commitResult.status
+										? __( 'Duplicate order in this invoice batch; none of its rows were saved.', 'wpessential-shipping-cost-monitor' )
+										: commitResult.status )
 								: match && 'matched' === match.status && match.order_number && '__order_currency__' !== mapping.currency && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
 									? __( 'Currency differs from order', 'wpessential-shipping-cost-monitor' ) + ' (' + match.currency + ')'
 									: match && 'existing_cost' === match.status && match.order_number
