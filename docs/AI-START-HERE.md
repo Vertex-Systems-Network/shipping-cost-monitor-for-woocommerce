@@ -22,4 +22,8 @@ These files route each supported agent to the same source of truth instead of ke
 ## Progress and blocker rules
 
 README updates are a record of meaningful completed work or changed evidence, not a substitute for it. Use fixed task/gate IDs and their exit evidence; source dry-runs are not runtime passes. Do not use the old Phase 7 6/9 score as a readiness percentage; see PHASE-7-GATES.md. Complete one whole unblocked backlog item per session where feasible. If a user action is the only blocker for one item, state the exact requested action once and continue independent tasks rather than repeating the same check.
-\n\n## Current handoff\n\nUse [AI audit and execution plan](AI-AUDIT-AND-EXECUTION-PLAN.md) for source-of-truth order, the environment-specific evidence snapshot, and the ordered next actions. Use [PHASE-7-GATES.md](PHASE-7-GATES.md) for gate status. Do not treat the TasteWP build/dashboard smoke as report or order-flow evidence; those synthetic report observations belong to the separate wpessential.org staging site.\n
+
+
+## Current handoff
+
+Use [AI audit and execution plan](AI-AUDIT-AND-EXECUTION-PLAN.md) for source-of-truth order, the environment-specific evidence snapshot, and the ordered next actions. Use [PHASE-7-GATES.md](PHASE-7-GATES.md) for gate status. Do not treat the TasteWP build/dashboard smoke as report or order-flow evidence; those synthetic report observations belong to the separate wpessential.org staging site.
