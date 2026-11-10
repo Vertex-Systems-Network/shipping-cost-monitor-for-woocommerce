@@ -1,5 +1,7 @@
 # Pre-development readiness — Phase 4
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 **Status:** Phase 4 decisions accepted for the initial manual/no-API build; evidence-dependent items remain deferred.  
 **Updated:** 2026-11-10  
 **Implementation:** Initial plugin/admin shell started under OWNER-DECISION-REGISTER.md. A narrow GitHub Actions artifact workflow is authorized for Composer autoload generation, PHP lint, PSR-4 smoke verification and installable ZIP packaging; local/in-plugin CLI, npm and JS bundling remain prohibited.
@@ -15,7 +17,6 @@
 | Security/privacy | Endpoint, CSV, webhook, logging and data-minimization controls specified | Draft complete | Threat-model review, retention/export/delete/uninstall decisions |
 | PHP/WP/WC/database | Dated baseline proposal in [COMPATIBILITY-BASELINE.md](COMPATIBILITY-BASELINE.md) | Proposed; no plugin claim | Development baseline accepted as proposal; recheck release versions and pass the matrix |
 | HPOS | CRUD-first design; feature detection; compatibility declaration only after tests | Proposed | Verify HPOS + legacy order storage before declaring support |
-| WPML/Polylang | Optional integration targets; current add-on requirements and test lanes proposed in COMPATIBILITY-BASELINE.md | Proposed | Decide formal support target; verify combinations; no dependency claim |
 | Performance | Bounded server-side pagination, indexed queries, Action Scheduler proposal | Draft complete | Confirm compatibility range; benchmark representative volume |
 | React/admin UX | UX spec accepted; business rules remain server-side | Baseline approved | Visual/functional review; implementation uses no-build React |
 | Human gates | A/B accepted for MVP and UX; C/D accepted with no-API/no-build constraints; E release remains | In progress | Merchant examples, security/retention decisions, version verification and release evidence |
