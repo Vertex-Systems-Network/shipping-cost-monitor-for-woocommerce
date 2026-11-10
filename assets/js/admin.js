@@ -28,13 +28,30 @@
 		let row = [];
 		let field = '';
 		let inQuotes = false;
+		const maximumColumns = 100;
+		const maximumFieldLength = 65536;
+
+		function appendField() {
+			if ( row.length >= maximumColumns ) {
+				throw new Error( __( 'This preview supports up to 100 columns per row.', 'wpessential-shipping-cost-monitor' ) );
+			}
+			row.push( field );
+			field = '';
+		}
+
+		function appendCharacter( character ) {
+			field += character;
+			if ( field.length > maximumFieldLength ) {
+				throw new Error( __( 'A CSV field exceeds the 65,536-character preview limit.', 'wpessential-shipping-cost-monitor' ) );
+			}
+		}
 
 		for ( let index = 0; index < text.length; index++ ) {
 			const character = text[ index ];
 
 			if ( '"' === character ) {
 				if ( inQuotes && '"' === text[ index + 1 ] ) {
-					field += '"';
+					appendCharacter( '"' );
 					index++;
 				} else if ( inQuotes || '' === field ) {
 					inQuotes = ! inQuotes;
@@ -45,8 +62,7 @@
 			}
 
 			if ( ! inQuotes && character === delimiter ) {
-				row.push( field );
-				field = '';
+				appendField();
 				continue;
 			}
 
@@ -54,17 +70,16 @@
 				if ( '\r' === character && '\n' === text[ index + 1 ] ) {
 					index++;
 				}
-				row.push( field );
+				appendField();
 				rows.push( row );
 				row = [];
-				field = '';
 				if ( rows.length > 5001 ) {
 					throw new Error( __( 'This preview is limited to 5,000 data rows.', 'wpessential-shipping-cost-monitor' ) );
 				}
 				continue;
 			}
 
-			field += character;
+			appendCharacter( character );
 		}
 
 		if ( inQuotes ) {
@@ -72,7 +87,7 @@
 		}
 
 		if ( '' !== field || row.length > 0 ) {
-			row.push( field );
+			appendField();
 			rows.push( row );
 		}
 
