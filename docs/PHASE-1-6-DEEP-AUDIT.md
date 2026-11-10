@@ -1,5 +1,7 @@
 # Phase 1–6 deep audit
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 > **Current authority (2026-11-11):** Phase 6 implementation is complete (6/6 packages, 100% implementation coverage), including the read-only ShipStation V2 label adapter and review/match handoff. Live account API-key connection/sync and independent security review remain validation gates; Phase 6 does not claim final carrier invoice synchronization. Older artifact and gate statements below are dated history. Current cross-document status and contributor routing are in [AI audit and execution plan](AI-AUDIT-AND-EXECUTION-PLAN.md). The only current Phase 7 count is in [Phase 7 gate register](PHASE-7-GATES.md): 7 narrow passes, 2 partial, 5 pending. Commit `50f37db` passed PHP 8.1–8.4 Composer/autoload/lint and ZIP packaging in Actions run [#42891830660](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42891830660); this is source/package evidence, not JS or staging runtime evidence. TasteWP build/dashboard smoke and wpessential.org synthetic-order report evidence are separate environments.
 
 **Audit date:** 2026-11-11  
