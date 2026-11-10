@@ -1,6 +1,6 @@
 # WPEssential Shipping Cost Monitor — Copilot instructions
 
-Before acting, read `AGENTS.md`, `README.md`, and the task-relevant files under `docs/`. The canonical feature bank is `docs/PRODUCT-SPEC.md`; architecture is `docs/ARCHITECTURE.md`; AI task IDs/gates are `docs/AI-BACKLOG.md`.
+Before acting, read `AGENTS.md`, `docs/AI-AUDIT-AND-EXECUTION-PLAN.md`, `README.md`, and the task-relevant files under `docs/`. The canonical feature bank is `docs/PRODUCT-SPEC.md`; architecture is `docs/ARCHITECTURE.md`; AI task IDs/gates are `docs/AI-BACKLOG.md`.
 
 Initial implementation is authorized within `docs/OWNER-DECISION-REGISTER.md`. Use WordPress-bundled React (`wp.element`) with no JavaScript build step. The owner authorizes one CI-only GitHub Actions workflow to generate Composer PSR-4 autoload files, run PHP lint/smoke checks, and package an installable ZIP. Do not add local/in-plugin CLI requirements, npm or a JS bundler. API credentials and CSV upload persistence are deferred. Do not claim tests or compatibility unless actually verified. Keep options unique by feature ID. Carrier API estimates are not final billed costs. Report evidence and assumptions in every handoff.
 
