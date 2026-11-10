@@ -106,38 +106,7 @@ final class ReferenceMatcher {
 				continue;
 			}
 
-			$candidate_ids = array();
-			if ( function_exists( 'wc_order_search' ) ) {
-				$search_results = wc_order_search( $reference );
-				if ( is_array( $search_results ) ) {
-					$candidate_ids = array_merge( $candidate_ids, $search_results );
-				}
-			}
-
-			if ( ctype_digit( $reference ) ) {
-				$order_id = filter_var( $reference, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
-				if ( false !== $order_id ) {
-					$candidate_ids[] = $order_id;
-				}
-			}
-
-			$candidate_ids = array_unique( array_filter( array_map( 'absint', $candidate_ids ) ) );
-			$matches = array();
-
-			foreach ( $candidate_ids as $candidate_id ) {
-				$order = wc_get_order( $candidate_id );
-				if (
-					$order instanceof \WC_Order
-					&& 'shop_order' === $order->get_type()
-					&& ! empty( $order->get_items( 'shipping' ) )
-					&& (
-						(string) $order->get_order_number() === $reference
-						|| (string) $order->get_id() === $reference
-					)
-				) {
-					$matches[ $order->get_id() ] = $order;
-				}
-			}
+			$matches = self::find_exact_matches( $reference );
 
 			if ( 1 === count( $matches ) ) {
 				$order = reset( $matches );
@@ -181,5 +150,48 @@ final class ReferenceMatcher {
 				'committed'   => false,
 			)
 		);
+	}
+
+	/**
+	 * Resolve exact shipping-order matches for preview and commit validation.
+	 *
+	 * @param string $reference Normalized order reference.
+	 * @return array<int,\WC_Order> Orders keyed by ID.
+	 */
+	public static function find_exact_matches( string $reference ): array {
+		$candidate_ids = array();
+		if ( function_exists( 'wc_order_search' ) ) {
+			$search_results = wc_order_search( $reference );
+			if ( is_array( $search_results ) ) {
+				$candidate_ids = array_merge( $candidate_ids, $search_results );
+			}
+		}
+
+		if ( ctype_digit( $reference ) ) {
+			$order_id = filter_var( $reference, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+			if ( false !== $order_id ) {
+				$candidate_ids[] = $order_id;
+			}
+		}
+
+		$candidate_ids = array_unique( array_filter( array_map( 'absint', $candidate_ids ) ) );
+		$matches = array();
+
+		foreach ( $candidate_ids as $candidate_id ) {
+			$order = wc_get_order( $candidate_id );
+			if (
+				$order instanceof \WC_Order
+				&& 'shop_order' === $order->get_type()
+				&& ! empty( $order->get_items( 'shipping' ) )
+				&& (
+					(string) $order->get_order_number() === $reference
+					|| (string) $order->get_id() === $reference
+				)
+			) {
+				$matches[ $order->get_id() ] = $order;
+			}
+		}
+
+		return $matches;
 	}
 }
