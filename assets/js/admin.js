@@ -754,6 +754,7 @@
 	}
 
 	function CarrierConnections( props ) {
+		const useState = wp.element.useState;
 		const [ connectionState, setConnectionState ] = useState( function () {
 			const adapter = carrierAdapters.find( function ( item ) { return 'shipstation' === item.id; } );
 			return adapter ? adapter.state : 'disconnected';
