@@ -202,6 +202,20 @@ final class InvoiceImporter {
 			);
 		}
 
+		$exact_matches = ReferenceMatcher::find_exact_matches( $reference );
+		if ( count( $exact_matches ) > 1 ) {
+			return array(
+				'row'    => $row_number,
+				'status' => 'ambiguous',
+			);
+		}
+		if ( 1 !== count( $exact_matches ) || ! isset( $exact_matches[ $order_id ] ) ) {
+			return array(
+				'row'    => $row_number,
+				'status' => 'order_mismatch',
+			);
+		}
+
 		if ( strtoupper( $order->get_currency() ) !== $currency ) {
 			return array(
 				'row'    => $row_number,
