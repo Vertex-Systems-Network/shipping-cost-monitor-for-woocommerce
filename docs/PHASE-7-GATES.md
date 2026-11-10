@@ -52,7 +52,7 @@ The old 9-item denominator counted three staging/CI execution observations and t
 
 ## Current blocking handoff
 
-- **Staging state:** latest successful artifact commit `fd81d99` is installed on the owner-designated `el-test` site; its enqueued admin JavaScript URL carries `?ver=fd81d99cc8e4`. This is the asset build identity observed in the browser; plugin version 0.1.0 alone is not build identity.
+- **Staging state (2026-11-10):** corrected artifact commit `bbf95766b0848dd17c23b483f77f0771503017d8` is installed on the owner-designated `el-test` site; the dashboard displayed build ID `bbf95766b084`. The React carrier card and CSV controls rendered. See the corrected-build verification entry below.
 - **Contributor action:** continue P7-11 exact-request replay and ambiguous-reference evidence, then P7-12 capability/nonce and oversized raw-request probes. Keep P7-13 explicitly pending until its 100/1,000/10,000-order benchmark is measured.
 - **Stop repeating:** do not re-open the same staging version/dashboard smoke as a new gate unless the installed build, dataset, environment, or test path changes.
 - **No CLI rule:** no local/plugin CLI, npm or JS bundler. CI-only Composer/PHP checks are authorized; browser/Playground/staging checks remain valid. Do not let the no-local-CLI boundary block work that can be completed through these routes.
@@ -60,3 +60,10 @@ The old 9-item denominator counted three staging/CI execution observations and t
 ## Phase 7 close rule
 
 Close Phase 7 only after P7-08 through P7-14 are either passed with evidence or the owner records a narrower supported/release scope for the explicitly deferred lane. Any unresolved blocker must identify the responsible party and exact requested input. A percentage or completed source dry-run is not a substitute for a passed release gate.
+
+
+## 2026-11-10 corrected-build staging verification
+
+The prior React runtime failure in the ShipStation carrier card was fixed in commit `bbf95766b0848dd17c23b483f77f0771503017d8` by binding the WordPress-provided `wp.element.useState` hook in the component. GitHub Actions run [#42906678164](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/actions/runs/42906678164) passed PHP 8.1–8.4 Composer/autoload/lint jobs and installable ZIP packaging/upload (artifact ID `13804917827`; outer artifact SHA-256 `c32ff77f71d758d938ecbf6c9c7940fafe3cca75ec7d4bc3486c89d4ce09dd05`). The installable ZIP was uploaded and WordPress reported “Plugin updated successfully” on the owner-designated `wpessential.org/el-test` staging site. The dashboard displayed build ID `bbf95766b084`, the React carrier card rendered with ShipStation V2 “Not connected”, the invoice CSV controls rendered, and existing synthetic summary values remained PKR 750 charged / PKR 1,950 confirmed cost / PKR -1,200 variance / 2 of 2 eligible orders. No carrier credential or API request was used and no order data was changed. The site-wide zlib `ob_end_flush()` notices persisted. This resolves the observed React render failure and confirms selected dashboard/carrier-card runtime smoke only; it does not close a new gate or prove the full browser console is clean.
+
+**Current Phase 7 disposition:** P7-02 remains Pass — selected flows; P7-03 remains Pass — CI only. The evidence-gate count remains 7 narrow passes, 2 partial and 5 pending. P7-08 through P7-10 and P7-13 through P7-14 still require additional runtime matrices, add-on environments, measured workload fixtures or participating merchants. P7-11 and P7-12 remain partial until replay/ambiguous fixtures and runtime security probes/independent review are evidenced. These dependencies cannot be truthfully inferred from this staging smoke. The newest installed staging build is `bbf95766b084` (not the previously recorded `fd81d99`).
