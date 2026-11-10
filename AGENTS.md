@@ -1,6 +1,6 @@
 # Repository instructions for AI contributors
 
-This file is the canonical project brief for repository-aware coding agents. Read it before making changes.
+This file is the canonical project brief for repository-aware coding agents. Read it before making changes. The current cross-document audit and ordered handoff are in `docs/AI-AUDIT-AND-EXECUTION-PLAN.md`; use that alongside the canonical sources below.
 
 ## Required reading order
 
@@ -36,11 +36,11 @@ Report: task/feature IDs, changed files, decisions, assumptions, evidence, unver
 
 ## Execution and evidence discipline
 
-- Start each work session by reading `docs/AI-START-HERE.md`, the current README status, the task entry in `docs/AI-BACKLOG.md`, and its referenced source-of-truth document. Verify the repository's current state before relying on an older handoff.
+- Start each work session by confirming the exact repository and default branch, then reading `docs/AI-START-HERE.md`, `docs/AI-AUDIT-AND-EXECUTION-PLAN.md`, current README status, the task entry in `docs/AI-BACKLOG.md`, and its referenced source-of-truth document. Verify the repository's current state before relying on an older handoff.
 - Select the highest-priority unblocked task with a concrete acceptance check. Do the implementation or verification in the same session where possible; do not end after a plan, repeated read-only check, or status-only README edit when useful unblocked work remains.
 - Complete one whole backlog item per session when feasible. If an item is blocked, record the exact failed dependency, who/what can unblock it, and its smallest next action; do not repeat the same blocked check unless a new artifact, version, fixture, permission, or evidence has appeared. Move to the next independent P0/P1 task.
 - A documentation-only change is complete only when documentation/prompt repair is the assigned task. It does not count as implementation, runtime QA, or release progress.
-- Keep states separate: **implemented** (code exists), **static-verified**, **runtime-verified** (identify exact environment and flow), **blocked** (state external dependency), and **deferred** (owner-approved out of scope). Source dry-runs never count as runtime compatibility.
+- Keep environment evidence separate by site, build ID, fixture and flow; never transfer order/report evidence from wpessential.org staging to TasteWP. Never deliver project test ZIPs/files in chat or retain them in the Library; if artifact testing is authorized and possible, install privately and remove temporary copies.\n- Keep states separate: **implemented** (code exists), **static-verified**, **runtime-verified** (identify exact environment and flow), **blocked** (state external dependency), and **deferred** (owner-approved out of scope). Source dry-runs never count as runtime compatibility.
 - Progress bars may represent only a fixed, listed checklist. Never call an unweighted count a release-readiness percentage. Do not compute an overall project percentage by averaging unlike phases. Keep the gate register as the authority for QA closure; README is a concise view that links to it.
 - Update README after a meaningful completed task or state change, not after every repeated observation. Repeated smoke checks of the same flow add evidence but do not increment completion.
 - Respect approved tooling boundaries: no local or in-plugin CLI, npm or JS bundler. Use the authorized CI workflow, browser/Playground, or approved staging environment. A tooling restriction is not a reason to stop unrelated unblocked work.
