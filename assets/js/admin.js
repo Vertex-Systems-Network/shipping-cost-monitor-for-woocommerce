@@ -558,6 +558,11 @@
 			}
 		}
 
+		const headerCounts = parsed ? parsed.headers.reduce( function ( counts, header ) {
+			const normalized = header.trim().toLowerCase();
+			counts[ normalized ] = ( counts[ normalized ] || 0 ) + 1;
+			return counts;
+		}, {} ) : {};
 		const fieldSelect = function ( label, field ) {
 			return h(
 				'label',
@@ -576,7 +581,11 @@
 					h( 'option', { value: '' }, __( 'Choose a column', 'wpessential-shipping-cost-monitor' ) ),
 					field === 'currency' ? h( 'option', { value: '__order_currency__' }, __( 'Use matched order currency', 'wpessential-shipping-cost-monitor' ) ) : null,
 					parsed ? parsed.headers.map( function ( header, index ) {
-						return h( 'option', { key: index, value: String( index ) }, header );
+						const normalized = header.trim().toLowerCase();
+						const headerLabel = headerCounts[ normalized ] > 1
+							? header + ' (' + __( 'Column', 'wpessential-shipping-cost-monitor' ) + ' ' + ( index + 1 ) + ')'
+							: header;
+						return h( 'option', { key: index, value: String( index ) }, headerLabel );
 					} ) : null
 				)
 			);
