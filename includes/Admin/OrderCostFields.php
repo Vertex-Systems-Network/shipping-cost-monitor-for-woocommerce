@@ -164,6 +164,7 @@ final class OrderCostFields {
 			! $order_id
 			|| ! isset( $_POST[ $nonce_key ] )
 			|| ! is_string( $_POST[ $nonce_key ] )
+			|| strlen( $_POST[ $nonce_key ] ) > 128
 			|| ! isset( $_POST['wpe_scm_cost_amount'] )
 			|| ! is_string( $_POST['wpe_scm_cost_amount'] )
 			|| strlen( $_POST['wpe_scm_cost_amount'] ) > 64
