@@ -1,8 +1,10 @@
 # Compatibility baseline — proposal
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 **Research snapshot:** 2026-11-07  
 **Status:** Proposed implementation baseline; Phase 7 execution started 2026-11-07. Staging verified one current-platform + HPOS lane on WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3.36 and MySQL 8.0.46. Official release listings checked 2026-11-07 show WordPress 7.1.4 and WooCommerce 11.2.2 as current stable; the staging pair matches that observed current lane. This is one tested environment, not a compatibility matrix or broad support claim.  
-**Scope:** WPEssential Shipping Cost Monitor core plus optional WPML and Polylang multilingual-store coexistence.
+**Scope:** WPEssential Shipping Cost Monitor core on the exact WordPress, WooCommerce and PHP combinations recorded below. Multilingual add-on integration is outside release scope.
 
 ## Recommended baseline for the first release
 
@@ -13,8 +15,6 @@
 | WooCommerce | **11.2.2 current stable at snapshot; target 11.2+ for initial development.** Add latest stable and next beta to pre-release verification when available. | 11.3 is beta and scheduled for the week of 2026-11-09; do not declare it supported until stable and tested. WooCommerce documents per-version minimum WordPress/PHP requirements. |
 | Database | MySQL **8.0+** or MariaDB **10.6+** recommended; test both if infrastructure permits. | Align with WooCommerce server recommendations. Plugin tables must use WordPress database APIs/upgrade conventions. |
 | Memory / transport | WordPress memory limit **256 MB+** recommended; HTTPS required for provider connections. | Align with current WooCommerce server recommendations. This is not a guarantee of capacity for large imports. |
-| WPML | Optional, no runtime dependency. Target current WPML Multilingual CMS + WooCommerce Multilingual at release; language/currency data must remain separate from cost math. | WPML lists WP 6.0+, PHP 7.4–8.5 as its own minimum range; its WooCommerce add-on is independently versioned and tested. The plugin must test the actual supported combination, not infer compatibility from WPML's minimum. |
-| Polylang | Optional, no runtime dependency. For multilingual WooCommerce, test Polylang/Polylang Pro **with Polylang for WooCommerce**. | Polylang's WooCommerce add-on lists WordPress 6.5+, WooCommerce 9.2+, Polylang 3.7+ as its current minimum. Polylang core alone is not a multilingual WooCommerce setup. |
 | Admin UI | React for bespoke workflows; register pages through WooCommerce-supported extension admin APIs. Keep business rules and persistence on the PHP server. | Prefer stable page-registration APIs. Do not depend on experimental React Settings UI until WooCommerce marks it stable and the project explicitly chooses it. |
 
 These are project recommendations, not claims that the plugin currently supports those versions. At release, raise the minimum if the chosen WooCommerce stable line requires it. Avoid advertising broader compatibility than the tested matrix.
@@ -24,8 +24,8 @@ These are project recommendations, not claims that the plugin currently supports
 | Test lane | WordPress | WooCommerce | PHP | Database | Multilingual |
 |---|---|---|---|---|---|
 | Minimum supported | 7.0 | WooCommerce 11.2.2 development target | 8.1 | MySQL 8.0 | None |
-| Recommended baseline | Latest stable at release (7.1.4 observed in Playground) | 11.2.2 stable at snapshot | 8.3 | MariaDB 10.6 | WPML current |
-| PHP upper lane | Latest stable WP | Latest stable WC | 8.4; 8.5 after official stack support | One supported DB | Polylang + Polylang for WooCommerce current |
+| Recommended baseline | Latest stable at release (7.1.4 observed in Playground) | 11.2.2 stable at snapshot | 8.3 | MariaDB 10.6 | — |
+| PHP upper lane | Latest stable WP | Latest stable WC | 8.4; 8.5 after official stack support | One supported DB | — |
 | Forward check | Latest stable WP | Next WooCommerce beta before release, then stable | New PHP minor after official support | Both DB families where available | Run integrations independently and together only if supported |
 
 Every lane must cover install/upgrade/deactivation, manual cost record, CSV import/export, REST/admin permissions, background job retry, multilingual admin strings, locale-specific date/decimal parsing, and order read/write. Test both HPOS and legacy order storage before declaring HPOS compatibility. Any failed lane narrows the advertised matrix; document the exact tested versions.
@@ -46,7 +46,6 @@ Every lane must cover install/upgrade/deactivation, manual cost record, CSV impo
 1. Confirm whether PHP 8.1 is the chosen minimum or adopt 8.3 to align with current production recommendations.
 2. Reconfirm the newest stable WordPress/WooCommerce pair immediately before implementation and Marketplace submission.
 3. Confirm support for both MySQL and MariaDB in the project test environment.
-4. Decide whether WPML and Polylang are formal release support targets or best-effort compatibility targets, and test the WooCommerce-specific add-ons.
 5. Set an explicit policy for the latest beta lane; beta testing never equals a stable compatibility claim.
 
 ## Phase 7 execution log — 2026-11-07
@@ -59,8 +58,6 @@ Every lane must cover install/upgrade/deactivation, manual cost record, CSV impo
 | PHP 8.1–8.4 lint/autoload matrix | Pass (CI run #42374396949) | Composer install, PHP lint and PSR-4 class smoke passed on PHP 8.1, 8.2, 8.3 and 8.4. This is static/autoload verification, not full WordPress/WooCommerce runtime coverage. |
 | PHP runtime under WordPress/WooCommerce | Pending | The plugin was runtime-observed only on PHP 8.3.36 + WP 7.1.4 + WC 11.2.2. PHP 8.1/8.2/8.4 runtime combinations remain untested. |
 | Legacy order storage | Source dry run complete; runtime pending | Repository search found order reporting/export via wc_get_orders() and no direct $wpdb, wp_posts, or update_post_meta order-storage paths. The source follows WooCommerce CRUD abstractions, which are intended to support both storage backends. Legacy datastore was not activated or runtime-tested. |
-| WPML + WooCommerce Multilingual | Dry run complete; runtime pending | Source review found no direct WPML dependency/API calls. Core order queries use WooCommerce APIs and cost records are attached to order IDs. PHP strings use WordPress translation functions; React strings use `wp.i18n` and `wp_set_script_translations()` is registered. No `languages/` catalog directory is present in the repository. No WPML/WCML runtime interaction was exercised. |
-| Polylang + Polylang for WooCommerce | Dry run complete; runtime pending | Source review found no direct Polylang API calls or hard dependency. Core order queries use WooCommerce APIs; currency values remain explicit and are not implicitly converted. PHP/React localization hooks are present, but no `languages/` catalog directory exists. No Polylang/WooCommerce add-on runtime interaction was exercised. |
 | Regression, security, performance and beta review | Partial source review; full gate pending | Focused source review covered capability/nonce checks, bounded import, WooCommerce CRUD, overwrite protection and CSV formula guard; malformed optional manual-save fields now fail early and CI passed. No penetration test, runtime malformed-input test, automated suite, benchmark or beta feedback was run. |
 
 **Phase 7 progress:** 6 of 9 planned verification items complete (67%): 3 execution checks passed (current staging lane, selected HPOS read/display, PHP 8.1–8.4 lint/autoload CI) and 3 source-based dry runs completed (WPML/WCML, Polylang/WooCommerce add-on, legacy order-storage API boundary). The three dry runs establish only that source has no hard multilingual dependency and uses WooCommerce storage abstractions; they do not establish runtime interoperability, translated UI coverage, or a legacy datastore support claim. Full WP/WC runtime lanes, minimum versions, legacy storage, live multilingual checks, translation-catalog coverage, and regression/security/performance/beta remain open.
