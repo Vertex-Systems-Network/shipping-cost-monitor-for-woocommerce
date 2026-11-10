@@ -1,6 +1,6 @@
 # Phase 7 quality and release gates
 
-**Authority:** This is the canonical Phase 7 gate register. README shows a summary only.  
+**Authority:** This is the canonical Phase 7 gate register. README shows a summary only. Use [AI audit and execution plan](AI-AUDIT-AND-EXECUTION-PLAN.md) for current cross-document evidence, environment distinctions and ordered next actions.  
 **Last reviewed:** 2026-11-10  
 **Scope:** Compatibility, security, regression, performance, beta evidence for WPEssential Shipping Cost Monitor.  
 **Interpretation:** Gate rows are not equal-sized. The prior “6/9 = 67%” mixed source dry-runs with runtime checks and is retired as a release-readiness percentage. Historical evidence is retained below, but Phase 7 closes only when every mandatory gate is passed or explicitly removed from supported scope by the owner.
