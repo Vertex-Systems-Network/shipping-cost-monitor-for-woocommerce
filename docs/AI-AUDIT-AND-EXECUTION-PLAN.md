@@ -1,5 +1,7 @@
 # AI audit and execution plan
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 **Audit date:** 2026-11-11  
 **Repository:** `Vertex-Systems-Network/wpessential-shipping-cost-monitor`  
 **Purpose:** Give ChatGPT, Claude, Gemini, Cursor, Copilot and human contributors one unambiguous, evidence-led handoff for continuing the product. This document repairs task routing and status references. Phase 6 implementation is marked complete; compatibility, security review, provider-account runtime validation, beta and release remain unverified.
@@ -60,7 +62,6 @@ The gate register is definitive. This queue identifies the next action so a cont
 | 2 | P7-12 / AI-08 | Independent source/security review plus staging/browser malformed and oversized raw input, capability and nonce rejection probes. Record exact requests and safe responses without secrets/customer data. | Partial. Source hardening/static CI is not runtime security verification. |
 | 3 | P7-09 | Exercise manual save, invoice commit, refund-adjusted report/export against HPOS and legacy storage; compare order metadata, totals and no-overwrite behavior. | Pending. Use isolated disposable fixtures; keep each datastore/environment labelled. |
 | 4 | P7-08 | Run install/upgrade and core flows across the declared minimum and latest WP/WC/PHP matrix; publish actual versions. | Pending. PHP lint matrix is not a runtime version matrix. |
-| 5 | P7-10 | Test WPML+WCML and Polylang+its WooCommerce add-on separately, including locale formatting, metadata and cross-language/currency boundaries. | Pending; source-only dry-runs do not close runtime support. |
 | 6 | P7-13 / AI-39 | Benchmark 100, 1,000 and 10,000 eligible orders, five runs per size/workflow; capture elapsed time, PHP peak memory, query count/slow queries, CSV row count and correctness. Agree budgets only after baseline. | Pending. Do not fabricate results or block unrelated tasks while fixtures are prepared. |
 | 7 | P7-14 | Run approved beta with merchants; capture consented, sanitized, reproducible feedback and resolutions. | Pending. Requires merchant participation; continue independent engineering meanwhile. |
 | — | AI-31 | Live carrier adapter requires merchant/provider account evidence, shipment-level final-cost fields, scopes/terms and approved credential protection. | Blocked by external evidence/security decision; this does not block P7 QA. |
