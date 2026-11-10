@@ -1,5 +1,7 @@
 # Architecture decisions — Phase 4
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 **Status:** ADR-08 is implemented for ShipStation at source level; other ADRs retain their stated proposal/verification states. This is not independent security approval.  
 **Date:** 2026-11-06
 
