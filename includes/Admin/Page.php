@@ -58,14 +58,14 @@ final class Page {
 			'wpe-scm-admin',
 			WPE_SCM_URL . 'assets/css/admin.css',
 			array(),
-			WPE_SCM_VERSION
+			WPE_SCM_BUILD_ID
 		);
 
 		wp_enqueue_script(
 			'wpe-scm-admin',
 			WPE_SCM_URL . 'assets/js/admin.js',
 			array( 'wp-element', 'wp-i18n' ),
-			WPE_SCM_VERSION,
+			WPE_SCM_BUILD_ID,
 			true
 		);
 
