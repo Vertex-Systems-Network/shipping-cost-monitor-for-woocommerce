@@ -1,5 +1,7 @@
 # Product requirements and options bank
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 **Status:** Initial MVP boundary accepted; pricing, merchant validation and distribution mechanics pending  
 **Product:** WPEssential Shipping Cost Monitor  
 **Parent suite:** WPEssential  
@@ -158,7 +160,6 @@ Every distinct capability gets one stable ID. This table is the canonical option
 | SCM-SIM-01 | Shipping-rate what-if simulator | Pro | Later |
 | SCM-INT-01 | WooCommerce Shipping cost import | Free | Conditional MVP; data path verification required |
 | SCM-INT-02 | ShipStation/other provider adapters | Pro | Later; one or two selected after validation |
-| SCM-INT-03 | WPML / Polylang compatibility | Free | MVP |
 | SCM-INT-04 | Carrier/platform API adapter framework | Pro | MVP foundation |
 | SCM-INT-05 | Automatic API sync controls | Pro | MVP foundation |
 | SCM-INT-06 | API connection/security management | Pro | MVP foundation |
@@ -184,11 +185,9 @@ Initial policy based on official recommendations checked 2026-11-06. Recheck at 
 | Database | MySQL 8.0+ or MariaDB 10.6+ | Avoid version-specific SQL assumptions. |
 | HPOS | Supported | Use WooCommerce CRUD APIs; declare only after HPOS and legacy storage tests pass. |
 | React admin | WordPress/WooCommerce-supported React extension APIs | React for presentation; PHP/domain services authoritative. Toolchain choice waits for Gate D. |
-| WPML | Optional compatibility target | Translate plugin-owned strings, test latest stable stack; do not require it or alter order values. |
-| Polylang | Optional compatibility target | Translate plugin-owned strings; test Polylang for WooCommerce only if installed; do not require it. |
 | Memory | 256 MB WooCommerce recommendation | Bounded imports/jobs; document file-size limits and avoid unbounded data loads. |
 
-WPML and Polylang are compatibility targets, not plugin dependencies. Currency conversion is out of scope unless designed as its own feature.
+Currency conversion is out of scope unless designed as its own feature. WPML/WCML and Polylang integration are outside the release requirements.
 
 Official references:
 - [WordPress requirements](https://wordpress.org/about/requirements/)
