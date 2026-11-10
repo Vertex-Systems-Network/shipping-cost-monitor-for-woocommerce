@@ -1,7 +1,7 @@
 # Pre-development readiness — Phase 4
 
 **Status:** Phase 4 decisions accepted for the initial manual/no-API build; evidence-dependent items remain deferred.  
-**Updated:** 2026-11-07  
+**Updated:** 2026-11-10  
 **Implementation:** Initial plugin/admin shell started under OWNER-DECISION-REGISTER.md. A narrow GitHub Actions artifact workflow is authorized for Composer autoload generation, PHP lint, PSR-4 smoke verification and installable ZIP packaging; local/in-plugin CLI, npm and JS bundling remain prohibited.
 
 ## Phase 4 exit checklist
