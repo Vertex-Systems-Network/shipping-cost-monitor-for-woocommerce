@@ -1,5 +1,7 @@
 # AI-assisted development backlog and working protocol
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 > **Status authority:** The active backlog table and docs/PHASE-7-GATES.md define current state. Dated notes below preserve historical evidence and may contain superseded counts/statuses; never use them as current progress without checking the gate register.
 
 This backlog is for ChatGPT, Cursor, Claude, Gemini, Copilot, and human contributors. It is a shared project plan, not authorization for an agent to invent scope or skip review. For source-of-truth precedence, environment separation and the ordered current handoff, read `docs/AI-AUDIT-AND-EXECUTION-PLAN.md`.
