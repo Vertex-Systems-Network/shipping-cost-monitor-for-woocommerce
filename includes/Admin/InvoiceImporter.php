@@ -86,11 +86,12 @@ final class InvoiceImporter {
 			$results[] = $this->commit_row( $row );
 		}
 
+		$has_committed_row = in_array( 'committed', array_column( $results, 'status' ), true );
 		wp_send_json_success(
 			array(
 				'results'   => $results,
-				'persisted' => true,
-				'committed' => true,
+				'persisted' => $has_committed_row,
+				'committed' => $has_committed_row,
 			)
 		);
 	}
