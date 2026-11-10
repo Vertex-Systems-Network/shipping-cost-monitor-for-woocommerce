@@ -1,7 +1,7 @@
 # Owner decision register
 
-**Status:** Gates A and B approved; Gate C approved for the initial no-API foundation with credential handling deferred; Gate D approves no-build React plus the owner-authorized CI-only artifact workflow.  
-**Updated:** 2026-11-07  
+**Status:** Gates A and B approved; A-2 and C-3 are superseded by the 2026-11-11 read-only ShipStation implementation scope recorded below; Gate D approves no-build React plus the owner-authorized CI-only artifact workflow.  
+**Updated:** 2026-11-11  
 **Purpose:** Resolve the gates that block implementation without treating draft documents as approval.
 
 The owner said “start” after reviewing the gate register. For the initial scope, the proposed defaults below are accepted where they directly match prior instructions; unresolved or evidence-dependent items stay deferred.
@@ -11,7 +11,7 @@ The owner said “start” after reviewing the gate register. For the initial sc
 | ID | Decision needed | Recommended default | Evidence / impact | State |
 |---|---|---|---|---|
 | A-1 | MVP feature boundary | Free manual cost ledger/basic reporting/CSV export; Pro invoice CSV mapping, reconciliation and loss reports. | Scope accepted to start; pricing and market validation remain open. | Accepted for development |
-| A-2 | Provider priority | No provider API in the initial build; prioritize manual entry and generic CSV after sample validation. | Accepted; credentials and provider sync are out of initial scope pending account/security evidence. | Accepted; API deferred |
+| A-2 | Provider priority | Add a read-only ShipStation V2 label-cost adapter as booked-label evidence; keep invoice CSV as final-cost source unless provider account evidence proves otherwise. | 2026-11-11 execution directive supersedes the original no-API MVP boundary. Adapter implementation does not claim account-level runtime verification or final invoice data. | Implemented; account validation open |
 | A-3 | Merchant validation | Gather anonymized invoice examples before finalizing CSV parsing/matching. | Needed before import implementation; does not block the admin/bootstrap foundation. | Deferred to import phase |
 
 ## Gate B — UX
@@ -27,7 +27,7 @@ The owner said “start” after reviewing the gate register. For the initial sc
 |---|---|---|---|---|
 | C-1 | Order-linked storage | WooCommerce CRUD/order metadata for selected per-order cost; defer plugin tables until CSV/evidence volume justifies them. | Accepted as the initial implementation boundary; exact metadata contract still follows the feature spec. | Accepted for initial build |
 | C-2 | Money and comparisons | Preserve source amount, ISO currency and tax/basis; decimal-safe arithmetic; no implicit cross-currency totals. | Accepted from the metric contract. | Accepted |
-| C-3 | Credential security | No credential collection or API connections in the initial implementation. Revisit authenticated encryption/key lifecycle before adding integrations. | No plaintext storage; API work remains excluded until security review. | Deferred; blocks integrations only |
+| C-3 | Credential security | ShipStation key is accepted only after a read-only auth probe, encrypted with AES-256-GCM, and stored as ciphertext in a non-autoload option. Derive the encryption key from unique AUTH_KEY + SECURE_AUTH_KEY; fail closed on missing/default salts; salt rotation requires reconnect. Disconnect deletes the stored envelope. | Implemented defensively in code; independent security review, merchant-account runtime test, and key rotation/recovery runbook review remain release gates. No plaintext fallback. | Implementation complete; review pending |
 | C-4 | Data retention | No uploads/raw payloads in the bootstrap milestone. Final retention/export/delete/uninstall policy is required before CSV import and Marketplace release. | The first shell has no customer data persistence. | Deferred to data/import milestone |
 | C-5 | Compatibility target | PHP 8.1 minimum / 8.3 recommended; WP 7.0+; WooCommerce 11.2+ development baseline; revise at release. | Updated after WooCommerce 11.2.2 reported WP 7.0 minimum and an official WooCommerce readme declared 7.0; support claims and matrix testing remain pending. | Accepted as proposal |
 

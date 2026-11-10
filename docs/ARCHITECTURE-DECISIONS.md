@@ -1,6 +1,6 @@
 # Architecture decisions — Phase 4
 
-**Status:** Proposed decision records for Gate C review. These are documented design choices, not implemented or security-approved behavior.  
+**Status:** ADR-08 is implemented for ShipStation at source level; other ADRs retain their stated proposal/verification states. This is not independent security approval.  
 **Date:** 2026-11-06
 
 ## Decision summary
@@ -14,7 +14,7 @@
 | ADR-05 | Matching/import | Prefer exact merchant-selected order/shipment identifiers. Ambiguous, duplicate, split, currency-mismatched and unmatched rows require review. Validate and preview before commit; retries use stable source identity for idempotency. | Proposed |
 | ADR-06 | Jobs | Use WooCommerce Action Scheduler when available for bounded import/sync batches, with idempotency, locks, retry limits/backoff and visible partial failures. No long work in an admin request. | Proposed; verify availability/version support |
 | ADR-07 | Carrier adapters | Define capability-declared adapters with provider-specific auth, scopes, regions, pagination, limits, webhook verification and evidence semantics. Begin with manual/CSV; promote APIs only after account-level proof. | Proposed |
-| ADR-08 | Credentials | No plaintext secret storage or secret logging. Prefer provider OAuth where offered. Before API credentials are accepted, security review must approve authenticated encryption/key management, rotation, revoke/disconnect and behavior when required crypto support is unavailable. Fail closed; never silently store plaintext. | Gate C security decision required |
+| ADR-08 | Credentials | ShipStation V2 API key is probed read-only, stored only as AES-256-GCM ciphertext in a non-autoload option, and decrypted using a key derived from non-default WordPress AUTH_KEY and SECURE_AUTH_KEY values. Missing/default salts fail closed; salt rotation requires reconnect; disconnect deletes ciphertext. No plaintext fallback or secret logging. | Implemented for the adapter; independent security review, key-rotation recovery review and merchant runtime test remain open |
 | ADR-09 | REST/admin security | Enforce capability checks on every privileged endpoint, nonce/REST authentication appropriate to context, strict input validation, output escaping, prepared SQL and least-privilege provider scopes. | Proposed; requires implementation review |
 | ADR-10 | HPOS | Use WooCommerce CRUD/query APIs and declare HPOS compatibility only after supported-version test evidence; test legacy order storage too. | Requirement; verification pending |
 | ADR-11 | Languages | Keep UI strings translatable and separate from monetary/order data. Treat WPML and Polylang as optional compatibility targets; avoid hard dependency and verify admin strings, exports and localized dates/currencies. | Proposed; verification pending |

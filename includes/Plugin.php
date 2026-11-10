@@ -35,6 +35,18 @@ final class Plugin {
 	 * Register plugin hooks.
 	 */
 	public function init(): void {
+		add_filter(
+			'wpe_scm_carrier_adapters',
+			static function ( $adapters ) {
+				$adapters = is_array( $adapters ) ? $adapters : array();
+				$adapters[] = new Integrations\ShipStationAdapter();
+				return $adapters;
+			}
+		);
+
+		$carrier_sync = new Admin\CarrierSyncController();
+		$carrier_sync->register();
+
 		$page = new Admin\Page();
 		$page->register();
 

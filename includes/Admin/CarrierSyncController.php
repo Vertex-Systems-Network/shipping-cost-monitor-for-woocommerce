@@ -1,0 +1,91 @@
+<?php
+/**
+ * Authenticated ShipStation connection and bounded sync actions.
+ *
+ * @package WPEssentialShippingCostMonitor
+ */
+
+namespace WPEssential\ShippingCostMonitor\Admin;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Privileged AJAX boundary for API-key management and read-only label preview.
+ */
+final class CarrierSyncController {
+	/**
+	 * Register private admin actions.
+	 */
+	public function register(): void {
+		add_action( 'wp_ajax_wpe_scm_shipstation_connect', array( $this, 'connect' ) );
+		add_action( 'wp_ajax_wpe_scm_shipstation_disconnect', array( $this, 'disconnect' ) );
+		add_action( 'wp_ajax_wpe_scm_shipstation_sync', array( $this, 'sync' ) );
+	}
+
+	/**
+	 * Verify and securely store a ShipStation key.
+	 */
+	public function connect(): void {
+		$this->authorize( 'wpe_scm_carrier_manage' );
+		$key_value = isset( $_POST['api_key'] ) && is_string( $_POST['api_key'] ) ? wp_unslash( $_POST['api_key'] ) : '';
+		if ( strlen( $key_value ) > 512 ) {
+			wp_send_json_error( array( 'message' => __( 'The API key exceeds the supported length.', 'wpessential-shipping-cost-monitor' ) ), 400 );
+		}
+		$result = ( new \WPEssential\ShippingCostMonitor\Integrations\ShipStationAdapter() )->connect( trim( $key_value ) );
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+		}
+		wp_send_json_success( array( 'state' => 'connected', 'message' => __( 'ShipStation connected. Its API key is stored encrypted on this site.', 'wpessential-shipping-cost-monitor' ) ) );
+	}
+
+	/**
+	 * Delete the encrypted ShipStation credential envelope.
+	 */
+	public function disconnect(): void {
+		$this->authorize( 'wpe_scm_carrier_manage' );
+		( new \WPEssential\ShippingCostMonitor\Integrations\ShipStationAdapter() )->disconnect();
+		wp_send_json_success( array( 'state' => 'disconnected', 'message' => __( 'ShipStation disconnected and its saved key was removed.', 'wpessential-shipping-cost-monitor' ) ) );
+	}
+
+	/**
+	 * Fetch a bounded, PII-minimized label preview without changing orders.
+	 */
+	public function sync(): void {
+		$this->authorize( 'wpe_scm_carrier_sync' );
+		$from_raw = isset( $_POST['from'] ) && is_string( $_POST['from'] ) ? wp_unslash( $_POST['from'] ) : '';
+		$to_raw = isset( $_POST['to'] ) && is_string( $_POST['to'] ) ? wp_unslash( $_POST['to'] ) : '';
+		$cursor = isset( $_POST['cursor'] ) && is_scalar( $_POST['cursor'] ) ? (string) wp_unslash( $_POST['cursor'] ) : '1';
+		if ( strlen( $from_raw ) > 10 || strlen( $to_raw ) > 10 || strlen( $cursor ) > 4 || ! preg_match( '/^[1-9][0-9]{0,3}$/D', $cursor ) ) {
+			wp_send_json_error( array( 'message' => __( 'The label preview request is invalid.', 'wpessential-shipping-cost-monitor' ) ), 400 );
+		}
+		$from = sanitize_text_field( $from_raw );
+		$to = sanitize_text_field( $to_raw );
+		$result = ( new \WPEssential\ShippingCostMonitor\Integrations\ShipStationAdapter() )->fetch_shipments(
+			array(
+				'from'   => $from,
+				'to'     => $to,
+				'cursor' => $cursor,
+			)
+		);
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+		}
+		wp_send_json_success( $result );
+	}
+
+	/**
+	 * Enforce capability and bounded action nonce.
+	 *
+	 * @param string $action Nonce action.
+	 */
+	private function authorize( string $action ): void {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage carrier connections.', 'wpessential-shipping-cost-monitor' ) ), 403 );
+		}
+		$raw_nonce = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] ) ? wp_unslash( $_POST['nonce'] ) : '';
+		$nonce = strlen( $raw_nonce ) <= 128 ? sanitize_text_field( $raw_nonce ) : '';
+		if ( ! wp_verify_nonce( $nonce, $action ) ) {
+			wp_send_json_error( array( 'message' => __( 'The request expired. Reload the dashboard and try again.', 'wpessential-shipping-cost-monitor' ) ), 403 );
+		}
+	}
+}
