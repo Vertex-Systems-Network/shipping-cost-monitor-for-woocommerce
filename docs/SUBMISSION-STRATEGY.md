@@ -1,5 +1,7 @@
 # Distribution and marketplace submission strategy
 
+> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
+
 **Status:** Target channels recorded; vendor/listing mechanics and approval remain unverified.  
 **Updated:** 2026-11-06
 
@@ -51,7 +53,7 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 3. Confirm product-name/trademark compliance and price consistency across every sales environment.
 4. Prepare a production ZIP, business details, testing instructions, demo/test account instructions as appropriate, product page copy, screenshots and documentation.
 5. Complete full security, critical-flow, accessibility, UX, data lifecycle, upgrade and compatibility review.
-6. Confirm support for the two latest major releases of WooCommerce and WordPress at submission time, HPOS compatibility, and any listed WPML/Polylang support claims.
+6. Confirm support for the two latest major releases of WooCommerce and WordPress at submission time, HPOS compatibility, and publish only the verified platform combinations.
 7. Run and pass the current required WooCommerce Quality Insights Toolkit checks: API, E2E, Activation, Security, PHPCompatibility, Malware and Validation.
 8. Submit through the approved Marketplace vendor dashboard. Resolve test/reviewer feedback and upload corrected packages through the Marketplace process. Approval and launch are separate from submission.
 
