@@ -28,6 +28,7 @@
 		let row = [];
 		let field = '';
 		let inQuotes = false;
+		let quoteClosed = false;
 		const maximumColumns = 100;
 		const maximumFieldLength = 65536;
 
@@ -37,6 +38,7 @@
 			}
 			row.push( field );
 			field = '';
+			quoteClosed = false;
 		}
 
 		function appendCharacter( character ) {
@@ -50,15 +52,25 @@
 			const character = text[ index ];
 
 			if ( '"' === character ) {
+				if ( quoteClosed ) {
+					throw new Error( __( 'Unexpected text follows a closing quote.', 'wpessential-shipping-cost-monitor' ) );
+				}
 				if ( inQuotes && '"' === text[ index + 1 ] ) {
 					appendCharacter( '"' );
 					index++;
-				} else if ( inQuotes || '' === field ) {
-					inQuotes = ! inQuotes;
+				} else if ( inQuotes ) {
+					inQuotes = false;
+					quoteClosed = true;
+				} else if ( '' === field ) {
+					inQuotes = true;
 				} else {
 					throw new Error( __( 'A quote appears in an invalid position.', 'wpessential-shipping-cost-monitor' ) );
 				}
 				continue;
+			}
+
+			if ( quoteClosed && ( ! inQuotes && character !== delimiter && '\n' !== character && '\r' !== character ) ) {
+				throw new Error( __( 'Unexpected text follows a closing quote.', 'wpessential-shipping-cost-monitor' ) );
 			}
 
 			if ( ! inQuotes && character === delimiter ) {
