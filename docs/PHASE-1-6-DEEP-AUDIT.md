@@ -1,8 +1,10 @@
 # Phase 1–6 deep audit
 
+> **Current authority (2026-11-10):** This document preserves the dated Phase 1–6 audit chronology below; its older artifact and gate statements are historical. Current cross-document status and contributor routing are in [AI audit and execution plan](AI-AUDIT-AND-EXECUTION-PLAN.md). The only current Phase 7 count is in [Phase 7 gate register](PHASE-7-GATES.md): 7 narrow passes, 2 partial, 5 pending. TasteWP build/dashboard smoke and wpessential.org synthetic-order report evidence are separate environments.
+
 **Audit date:** 2026-11-07  
 **Scope:** Documentation, canonical feature bank, source-level workflow review, previously recorded Playground/staging evidence, and one new staging report-export check.  
-**Result:** Phases 1–5 satisfy only their explicitly documented desk/spec/code-delivery exit scopes. Phase 6 is not complete (83% implementation coverage). Source-level amount/identifier hardening was added after the staging observations; that change is not yet deployed or runtime-verified. Phase 7/8 gates remain open.
+**Result:** Phases 1–5 satisfy only their explicitly documented desk/spec/code-delivery exit scopes. Phase 6 is not complete (83% implementation coverage). Later source-level amount/identifier hardening passed CI; malformed-request runtime verification remains pending. Phase 7/8 gates remain open.
 
 ## Phase status
 
