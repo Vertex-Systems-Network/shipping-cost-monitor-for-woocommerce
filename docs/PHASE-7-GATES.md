@@ -76,3 +76,7 @@ P7-08 passed on exact tested combinations: minimum Playground WP 7.0.8 / WC 11.2
 ## 2026-11-11 Playground P7-12 negative-cost regression
 
 The CI package from commit `3320120` was installed in isolated WordPress Playground (WP 7.1.4, WC 11.2.2, PHP 8.3.36). A synthetic processing shipping order with USD 10 charged and malformed recorded cost `-5` was excluded from confirmed/comparable dashboard totals. Runtime CSV export left both Recorded cost and Comparable variance blank and reported `No confirmed cost`. [Fixture, exact CSV and limits](P7-12-PLAYGROUND-NEGATIVE-COST-CSV.md). This closes only the targeted CSV discrepancy check. P7-12 remains **Partial** pending independent security/privacy review and broader browser/HTTP probes; P7-13 and P7-14 remain Pending.
+
+## 2026-11-11 P7-12 Playground import handler probes
+
+On the installed `3320120` CI package in isolated WP 7.1.4 / WC 11.2.2 / PHP 8.3.36 Playground, direct PHP handler calls rejected anonymous access, invalid and 129-character nonces, a 51-row batch, a 65-character amount, and a negative amount. The synthetic target order retained its pre-existing `-5` cost and blank import fingerprint. [Exact cases and evidence limits](P7-12-PLAYGROUND-IMPORT-BOUNDARY-PROBES.md). These are handler-runtime probes, not HTTP AJAX/browser transport. P7-12 remains **Partial** pending the broader matrix and independent review; gate counts do not change.
