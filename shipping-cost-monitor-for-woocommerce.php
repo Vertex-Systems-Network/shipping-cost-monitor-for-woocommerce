@@ -107,7 +107,7 @@ define( 'WPE_SCM_VERSION', '1.0.0' );
 define( 'WPE_SCM_FILE', __FILE__ );
 define( 'WPE_SCM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPE_SCM_URL', plugin_dir_url( __FILE__ ) );
-define( 'WPE_SCM_DOCS_URL', 'https://github.com/Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce/blob/main/docs/user-guide/README.md' );
+define( 'WPE_SCM_DOCS_URL', admin_url( 'admin.php?page=shipping-cost-monitor-for-woocommerce&tab=docs' ) );
 
 $wpe_scm_build_id = 'source';
 $wpe_scm_build_file = WPE_SCM_DIR . 'BUILD-ID.txt';
@@ -148,14 +148,13 @@ add_filter(
 	'plugin_action_links_' . plugin_basename( WPE_SCM_FILE ),
 	static function ( $links ) {
 		$links = is_array( $links ) ? $links : array();
-		$extra = array(
-			'docs' => sprintf(
-				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+		$extra = array();
+		if ( class_exists( 'WooCommerce' ) && current_user_can( 'manage_woocommerce' ) ) {
+			$extra['docs']      = sprintf(
+				'<a href="%1$s">%2$s</a>',
 				esc_url( WPE_SCM_DOCS_URL ),
 				esc_html__( 'Documentation', 'shipping-cost-monitor-for-woocommerce' )
-			),
-		);
-		if ( class_exists( 'WooCommerce' ) && current_user_can( 'manage_woocommerce' ) ) {
+			);
 			$extra['dashboard'] = sprintf(
 				'<a href="%1$s">%2$s</a>',
 				esc_url( admin_url( 'admin.php?page=shipping-cost-monitor-for-woocommerce' ) ),

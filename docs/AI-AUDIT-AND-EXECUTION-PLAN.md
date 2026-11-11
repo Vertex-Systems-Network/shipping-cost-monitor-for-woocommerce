@@ -29,7 +29,7 @@ This document holds **rules and routing only**. It deliberately carries no gate 
 
 ## What is implemented, and what is not
 
-**In source (version 1.0.0, F-6):** Free — order-level cost record through WooCommerce CRUD; dashboard report with currency, tax-basis and evidence guardrails; shipping-method breakdown; privacy-minimized CSV export; Pro add-on — browser-local invoice CSV preview, mapping, exact-reference matching and reviewed commit; read-only ShipStation V2 booked-label adapter with AES-256-GCM encrypted key storage, bounded sync preview and hand-off to the same review/commit flow; HPOS compatibility declaration; uninstall cleanup of the stored credential; `readme.txt`, `changelog.txt` and `LICENSE` in the CI package; user guide with screenshots in `docs/user-guide/`.
+**In source (version 1.0.0, F-6):** Free — order-level cost record through WooCommerce CRUD; dashboard report with currency, tax-basis and evidence guardrails; shipping-method breakdown; privacy-minimized CSV export; Pro add-on — browser-local invoice CSV preview, mapping, exact-reference matching and reviewed commit; read-only ShipStation V2 booked-label adapter with AES-256-GCM encrypted key storage, bounded sync preview and hand-off to the same review/commit flow; HPOS compatibility declaration; uninstall cleanup of the stored credential; `readme.txt`, `changelog.txt` and `LICENSE` in the CI package; user guide with screenshots built into the plugin as a Documentation tab (`assets/docs/`, F-10).
 
 **Implemented but not validated with a real account:** the ShipStation adapter. No merchant API key has been used against it. Owner decision C-3 records the credential design as implemented with independent security review still pending. Do not describe it as merchant-verified.
 

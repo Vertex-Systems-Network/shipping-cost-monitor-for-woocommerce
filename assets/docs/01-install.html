@@ -1,0 +1,65 @@
+<h1 id="1-install-and-first-run">1. Install and first run</h1>
+<h2 id="requirements">Requirements</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WordPress</td>
+<td>7.0</td>
+</tr>
+<tr>
+<td>WooCommerce</td>
+<td>11.2</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>8.1</td>
+</tr>
+<tr>
+<td>Order storage</td>
+<td>High-Performance Order Storage (HPOS) or legacy post storage; both are supported</td>
+</tr>
+<tr>
+<td>User role</td>
+<td>Shop Manager or Administrator (the <code>manage_woocommerce</code> capability)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="install-the-free-plugin">Install the free plugin</h2>
+<p><strong>From WordPress.org</strong> (once published):</p>
+<ol>
+<li>In WordPress go to <strong>Plugins → Add New</strong>.</li>
+<li>Search for <strong>Shipping Cost Monitor for WooCommerce</strong>.</li>
+<li>Click <strong>Install Now</strong>, then <strong>Activate</strong>.</li>
+</ol>
+<p><strong>From a ZIP file:</strong></p>
+<ol>
+<li>Go to <strong>Plugins → Add New → Upload Plugin</strong>.</li>
+<li>Choose <code>shipping-cost-monitor-for-woocommerce.zip</code> and click <strong>Install Now</strong>.</li>
+<li>Click <strong>Activate Plugin</strong>.</li>
+</ol>
+<p>If WooCommerce is not active, WordPress will not activate the plugin and shows that it requires WooCommerce. Activate WooCommerce first.</p>
+<h2 id="install-the-pro-add-on">Install the Pro add-on</h2>
+<ol>
+<li>Make sure the free plugin is installed and active.</li>
+<li>Upload <code>shipping-cost-monitor-pro-for-woocommerce.zip</code> under <strong>Plugins → Add New → Upload Plugin</strong> and activate it.</li>
+</ol>
+<p>Pro shows <strong>"Shipping Cost Monitor Pro needs Shipping Cost Monitor for WooCommerce and WooCommerce to be installed and active."</strong> if either is missing, and stays inactive until they are.</p>
+<p>On the <strong>Plugins</strong> screen the free plugin then shows <strong>Required by: Shipping Cost Monitor Pro for WooCommerce</strong>. WordPress will not let you deactivate the free plugin while Pro is active; deactivate Pro first.</p>
+<h2 id="where-to-find-it">Where to find it</h2>
+<p><strong>WooCommerce → Shipping Cost Monitor</strong> opens the dashboard. On the <strong>Plugins</strong> screen each plugin also shows <strong>Documentation</strong> (this guide) next to <strong>Deactivate</strong>, and the free plugin shows <strong>Dashboard</strong>. The dashboard header has a <strong>Documentation</strong> button too. The cost fields are in every order's edit screen (<strong>WooCommerce → Orders → open an order</strong>).</p>
+<h2 id="what-you-see-on-day-one">What you see on day one</h2>
+<p>Until you record costs, the dashboard shows what customers paid for shipping but no confirmed cost, so variance reads <strong>Not available</strong> and coverage is <strong>0%</strong>. That is expected: the plugin never guesses a cost.</p>
+<p>Next: <a href="%%DOCS%%02-key-ideas">Key ideas</a> explains which costs count. Then <a href="%%DOCS%%03-record-a-cost">record your first cost</a>.</p>
+<h2 id="upgrading-from-a-test-build-named-wpessential-shipping-cost-monitor">Upgrading from a test build named "WPEssential Shipping Cost Monitor"</h2>
+<p>Test builds before version 1.0.0 used a different folder name. If one is still active, the new plugin pauses itself and shows <strong>"Shipping Cost Monitor for WooCommerce is paused because an older build named "WPEssential Shipping Cost Monitor" is active."</strong> Deactivate the old build; your cost records carry over because they are stored on the orders.</p>
+<h2 id="removing-the-plugin">Removing the plugin</h2>
+<ul>
+<li><strong>Free:</strong> deactivating or deleting keeps every cost record on your orders. Reinstalling shows them again. The free plugin stores no settings. Deleting it also removes a ShipStation key left by a pre-1.0 test build, unless Pro is installed.</li>
+<li><strong>Pro:</strong> deleting Pro removes the stored ShipStation API key. Costs it saved stay on the orders. Pro is sold on the WooCommerce.com Marketplace: its subscription, renewals and updates are managed there, through the WooCommerce.com Update Manager. Pro never asks WordPress.org for updates.</li>
+</ul>

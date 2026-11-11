@@ -1,0 +1,101 @@
+<h1 id="8-troubleshooting-and-faq">8. Troubleshooting and FAQ</h1>
+<h2 id="dashboard">Dashboard</h2>
+<p><strong>Variance says "Not available".</strong>
+No eligible order has a comparable cost yet. A cost is comparable only if it is Invoice-final or Merchant-confirmed, Tax-exclusive, and in the order's currency. See <a href="%%DOCS%%02-key-ideas">key ideas</a>.</p>
+<p><strong>An order I edited is missing from the report.</strong>
+Check that it is Processing or Completed, has a shipping line, and was created inside the date range. The date is the order creation date, not the shipping date.</p>
+<p><strong>Confirmed cost is lower than the costs I entered.</strong>
+Booked-label, estimate and other-currency costs are not counted. Export the CSV and look at <strong>Comparison status</strong>.</p>
+<p><strong>"The selected dates were invalid or exceeded 366 days."</strong>
+Choose a range of 366 days or less, with From before To.</p>
+<p><strong>"N confirmed cost record(s) use a different currency…"</strong>
+Those orders have a cost in another currency. They are kept but not totalled.</p>
+<p><strong>The dashboard is blank.</strong>
+Check that WooCommerce is active and your browser has JavaScript enabled. The page needs WordPress's built-in React (<code>wp-element</code>), which another plugin can break; try with other plugins deactivated.</p>
+<h2 id="order-editor">Order editor</h2>
+<p><strong>My cost disappeared after saving.</strong>
+The amount was not accepted. Use digits and a period only: <code>12.50</code>, not <code>12,50</code>, <code>$12.50</code> or <code>-12.50</code>.</p>
+<p><strong>I want to delete a cost.</strong>
+Empty <strong>Merchant-paid shipping cost</strong> and click <strong>Update</strong>. A private note records the removal.</p>
+<h2 id="invoice-import-messages">Invoice import messages</h2>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Choose a .csv file.</strong></td>
+<td>The file has another extension. Export as CSV.</td>
+</tr>
+<tr>
+<td><strong>Files must be 5 MB or smaller.</strong></td>
+<td>Split the file.</td>
+</tr>
+<tr>
+<td><strong>This preview is limited to 5,000 data rows.</strong></td>
+<td>Split the file.</td>
+</tr>
+<tr>
+<td><strong>This preview supports up to 100 columns per row.</strong></td>
+<td>Remove unused columns, or check the separator.</td>
+</tr>
+<tr>
+<td><strong>A CSV field exceeds the 65,536-character preview limit.</strong></td>
+<td>A cell is too long; usually a broken quote.</td>
+</tr>
+<tr>
+<td><strong>The CSV has an unclosed quoted field.</strong></td>
+<td>A <code>"</code> is not closed. Re-export, or fix the row.</td>
+</tr>
+<tr>
+<td><strong>Unexpected text follows a closing quote.</strong></td>
+<td>Text after a closing quote, like <code>"12"abc</code>. Re-export.</td>
+</tr>
+<tr>
+<td><strong>A quote appears in an invalid position.</strong></td>
+<td>A <code>"</code> in the middle of an unquoted value.</td>
+</tr>
+<tr>
+<td><strong>Every CSV column needs a non-empty header.</strong></td>
+<td>Name every column in the first row.</td>
+</tr>
+<tr>
+<td><strong>Select a CSV with a header row and at least one data row.</strong></td>
+<td>The file is empty or has only headers.</td>
+</tr>
+<tr>
+<td><strong>The selected file could not be read.</strong></td>
+<td>The browser could not open the file. Copy it to a local folder and try again.</td>
+</tr>
+<tr>
+<td><strong>This profile belongs to a different source format or header layout.</strong></td>
+<td>The saved mapping was made for other column names. Map by hand and save a new profile.</td>
+</tr>
+<tr>
+<td><strong>Browser storage is unavailable, so the mapping profile was not saved.</strong></td>
+<td>Private browsing or blocked storage. Profiles need browser local storage.</td>
+</tr>
+<tr>
+<td><strong>The import request expired. Reload the page and review the rows again.</strong></td>
+<td>The page was open too long. Reload, re-select the file and match again.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Every row says "Duplicate reference in this file".</strong>
+Your file has several rows per order (for example one per parcel or per surcharge). Pro saves one cost per order. Add the rows up per order in the spreadsheet first, then import.</p>
+<p><strong>Every row says "No matching shipping order".</strong>
+The mapped column is not the WooCommerce order number, or your store uses an order-number plugin with a different format. Map the column that matches what you see in <strong>WooCommerce → Orders</strong>.</p>
+<h2 id="faq">FAQ</h2>
+<p><strong>Does it change my shipping rates or order totals?</strong>
+No. It only adds cost records and notes.</p>
+<p><strong>Does it work with HPOS?</strong>
+Yes. All reads and writes use WooCommerce order APIs and work with both HPOS and legacy storage.</p>
+<p><strong>Is my data sent anywhere?</strong>
+The free plugin contacts no external service. Pro contacts ShipStation only after you connect it, and only with the request described in <a href="%%DOCS%%07-pro-shipstation#what-is-sent-to-shipstation">chapter 7</a>.</p>
+<p><strong>Can I record costs per parcel?</strong>
+Not in this version; one cost per order. Add parcel costs together.</p>
+<p><strong>Does it convert currencies?</strong>
+No, by design. See <a href="%%DOCS%%02-key-ideas#rule-3-currency--same-money-only">rule 3</a>.</p>

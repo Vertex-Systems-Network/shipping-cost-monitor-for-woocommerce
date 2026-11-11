@@ -1,0 +1,155 @@
+<h1 id="9-for-developers-hooks-and-data">9. For developers: hooks and data</h1>
+<h2 id="order-meta-keys">Order meta keys</h2>
+<p>All values are stored through WooCommerce order CRUD (<code>$order-&gt;update_meta_data()</code>), so they work with HPOS and legacy storage. Read them with <code>$order-&gt;get_meta( $key, true )</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_wpe_scm_cost_amount</code></td>
+<td>decimal string</td>
+<td>Non-negative, store decimals</td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_currency</code></td>
+<td>string</td>
+<td>ISO 4217 code</td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_evidence</code></td>
+<td>string</td>
+<td><code>invoice_final</code>, <code>merchant_confirmed</code>, <code>booked_label</code>, <code>estimate</code></td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_tax_basis</code></td>
+<td>string</td>
+<td><code>exclusive</code>, <code>inclusive</code>, <code>unknown</code></td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_note</code></td>
+<td>string</td>
+<td>Up to 2,000 characters</td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_updated_at</code></td>
+<td>string</td>
+<td>UTC <code>Y-m-d H:i:s</code></td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_updated_by</code></td>
+<td>int</td>
+<td>User ID</td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_import_fingerprint</code></td>
+<td>string</td>
+<td>Pro: SHA-256 of batch, row and order; used to detect replays</td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_import_batch</code></td>
+<td>string</td>
+<td>Pro: SHA-256 of the imported file</td>
+</tr>
+<tr>
+<td><code>_wpe_scm_cost_import_row</code></td>
+<td>int</td>
+<td>Pro: source row number</td>
+</tr>
+</tbody>
+</table>
+<p>A comparable cost is <code>invoice_final</code> or <code>merchant_confirmed</code>, <code>exclusive</code>, and in the order currency.</p>
+<h2 id="actions-and-filters-free-plugin">Actions and filters (free plugin)</h2>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Type</th>
+<th>Arguments</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wpe_scm_init</code></td>
+<td>action</td>
+<td><code>Plugin $plugin</code></td>
+<td>Fires after the core modules register, only when WooCommerce is active. Register add-on modules here.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_dashboard_data</code></td>
+<td>filter</td>
+<td><code>array $data</code></td>
+<td>Data passed to the dashboard script as <code>window.wpeScmDashboard</code>. Add keys; do not remove core ones.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_dashboard_enqueued</code></td>
+<td>action</td>
+<td>—</td>
+<td>Fires after the dashboard script <code>wpe-scm-admin</code> is enqueued. Enqueue scripts that depend on it.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_carrier_adapters</code></td>
+<td>filter</td>
+<td><code>array $adapters</code></td>
+<td>Register objects implementing <code>WPEssential\ShippingCostMonitor\Integrations\CarrierAdapterInterface</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adding-a-dashboard-panel">Adding a dashboard panel</h2>
+<p>The dashboard renders <code>window.wpeScmPro.InvoicePanel</code> when it is a component. An add-on can provide its own panel the same way:</p>
+<pre><code class="language-js">// Enqueued on wpe_scm_dashboard_enqueued with 'wpe-scm-admin' as a dependency.
+( function ( wp ) {
+    function MyPanel() {
+        return wp.element.createElement( 'section', { className: 'wpe-scm-card' }, 'Hello' );
+    }
+    window.wpeScmPro = Object.assign( window.wpeScmPro || {}, { InvoicePanel: MyPanel } );
+} )( window.wp );
+</code></pre>
+<p>Scripts enqueued on <code>wpe_scm_dashboard_enqueued</code> run after <code>wpe-scm-admin</code>, so <code>window.wpeScmDashboard</code> is already defined; the dashboard mounts on <code>DOMContentLoaded</code>, after footer scripts.</p>
+<h2 id="pro-ajax-endpoints">Pro AJAX endpoints</h2>
+<p>All require <code>manage_woocommerce</code>, a nonce from the dashboard data, and POST.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Nonce key</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wpe_scm_match_preview</code></td>
+<td><code>match_nonce</code></td>
+<td>Match up to 50 <code>references[i][row]</code> / <code>references[i][reference]</code>. Read-only.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_commit_invoice_rows</code></td>
+<td><code>import_nonce</code></td>
+<td>Save up to 50 matched rows. Never overwrites an existing cost. Idempotent per batch, row and order.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_shipstation_connect</code></td>
+<td><code>carrier_nonce</code></td>
+<td>Test and store an API key.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_shipstation_disconnect</code></td>
+<td><code>carrier_nonce</code></td>
+<td>Delete the stored key.</td>
+</tr>
+<tr>
+<td><code>wpe_scm_shipstation_sync</code></td>
+<td><code>carrier_sync_nonce</code></td>
+<td>Read one page of labels. Read-only.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="building-the-plugins">Building the plugins</h2>
+<p>The repository builds both ZIPs in GitHub Actions (<code>.github/workflows/build-installable-zip.yml</code>): Composer generates each plugin's PSR-4 autoloader, PHP 8.1–8.4 lint runs, versions are checked, the free package is checked for Pro code, and two artifacts are uploaded. There is no npm or JavaScript build step; the admin UI uses WordPress's bundled React (<code>wp.element</code>).</p>
+<h2 id="pro-distribution">Pro distribution</h2>
+<p>Pro is sold on the WooCommerce.com Marketplace. WooCommerce.com handles billing and subscriptions, and delivers updates through its Update Manager, so Pro has no license-key code. Its header declares an <code>Update URI</code> on woocommerce.com so WordPress core never checks WordPress.org for it. After acceptance, WooCommerce.com's deployment adds a <code>Woo: &lt;product_id&gt;:&lt;hash&gt;</code> header to the package it distributes. Do not add it to the source by hand; check that the deployed package carries it.</p>

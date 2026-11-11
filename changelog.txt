@@ -5,5 +5,6 @@
 * Add - Dashboard report: net shipping charged, confirmed cost, variance and coverage.
 * Add - Cost by shipping method.
 * Add - Privacy-minimized CSV export.
+* Add - Built-in documentation with screenshots (Documentation link on the Plugins screen and dashboard).
 * Add - High-Performance Order Storage compatibility declaration.
 * Add - Extension hooks for add-ons: wpe_scm_init, wpe_scm_dashboard_data, wpe_scm_dashboard_enqueued, wpe_scm_carrier_adapters.

@@ -194,3 +194,15 @@ After the rename, PHP lint, the JavaScript syntax check, the WPCS security/I18n 
 - Pro: "2 errors and 2 warnings" — `missing_composer_json_file` (fixed the same way); `plugin_updater_detected` for `Update URI`, `no_plugin_readme`, and `plugin_header_requires_plugins_not_in_directory`. The last three are WordPress.org-directory rules; Pro is distributed on WooCommerce.com (F-8), which requires the `Update URI` behaviour and `changelog.txt`, and the dependency warning clears once the free plugin is published on WordPress.org.
 
 **Not covered:** uninstall on this site, ShipStation with a real key, invoice import through the UI on the packaged build, WooCommerce QIT.
+
+### 2026-11-12 — Built-in documentation tab (F-10)
+
+**Environment:** WordPress Playground, PHP 8.3, latest WordPress, WooCommerce from WordPress.org; Free and Pro installed from the CI artifacts of run 43104088508 (commit 1205b6c on `claude/in-plugin-docs`).
+
+**Checked:**
+- The Plugins screen shows **Documentation** and **Dashboard** beside Deactivate for Free. Documentation opens `admin.php?page=shipping-cost-monitor-for-woocommerce&tab=docs` (Contents) in the same tab.
+- The chapter list works, and chapter 4 renders with its screenshots from `assets/docs/images/`.
+- The in-guide link "six example orders" opens chapter 2 at the matching section. The first build (run 43103695394) produced `chapter02-key-ideas` without `=`; fixed in 1205b6c and rechecked.
+- The dashboard still loads with Free + Pro active (Pro invoice panel present). Its header shows the Documentation button.
+
+**Not covered:** Pro's own Documentation row link, the narrow (mobile) layout, translations.

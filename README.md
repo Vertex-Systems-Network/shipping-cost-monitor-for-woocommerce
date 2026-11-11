@@ -6,7 +6,7 @@ Shipping Cost Monitor records what you paid the courier for each WooCommerce ord
 
 By [WPEssential](https://wpessential.org) · Version **1.0.0** · GPLv2 or later
 
-![Shipping Cost Monitor dashboard](docs/user-guide/images/dashboard-overview.png)
+![Shipping Cost Monitor dashboard](assets/docs/images/dashboard-overview.png)
 
 ## Features
 
@@ -26,7 +26,7 @@ By [WPEssential](https://wpessential.org) · Version **1.0.0** · GPLv2 or later
 - **Exact order matching**: duplicate, ambiguous, currency, refund and existing-cost checks before anything is saved. Existing costs are never overwritten, and re-importing the same file is safe.
 - **ShipStation V2 label costs**: read-only, with the API key encrypted at rest. Label prices are kept as booked-label evidence until the invoice confirms them.
 
-![Recording a cost in the order editor](docs/user-guide/images/order-editor-cost-fields.png)
+![Recording a cost in the order editor](assets/docs/images/order-editor-cost-fields.png)
 
 ## Requirements
 
@@ -43,31 +43,22 @@ By [WPEssential](https://wpessential.org) · Version **1.0.0** · GPLv2 or later
 3. Open **WooCommerce → Shipping Cost Monitor**.
 4. For Pro, upload `shipping-cost-monitor-pro-for-woocommerce.zip` the same way. It needs the free plugin.
 
-Full walkthrough: [Install and first run](docs/user-guide/01-install.md).
+Full walkthrough: see the built-in documentation (below).
 
 ## Documentation
 
-The [user guide](docs/user-guide/README.md) explains every screen, field and number, with screenshots and a worked example:
+The user guide ships inside the plugin. Open it from **Plugins → Shipping Cost Monitor for WooCommerce → Documentation**, or with the **Documentation** button on the dashboard (**WooCommerce → Shipping Cost Monitor**). It explains every screen, field and number, with screenshots and a worked example, in nine chapters: install and first run; key ideas (evidence, tax basis and currency); recording a cost; reading the dashboard; CSV export; Pro invoice import; Pro ShipStation label costs; troubleshooting; and developer hooks.
 
-1. [Install and first run](docs/user-guide/01-install.md)
-2. [Key ideas: evidence, tax basis and currency](docs/user-guide/02-key-ideas.md)
-3. [Recording a cost on an order](docs/user-guide/03-record-a-cost.md)
-4. [Reading the dashboard](docs/user-guide/04-dashboard.md)
-5. [Exporting the report as CSV](docs/user-guide/05-csv-export.md)
-6. [Pro: importing a courier invoice CSV](docs/user-guide/06-pro-invoice-import.md)
-7. [Pro: ShipStation label costs](docs/user-guide/07-pro-shipstation.md)
-8. [Troubleshooting and FAQ](docs/user-guide/08-troubleshooting.md)
-9. [For developers: hooks and data](docs/user-guide/09-developers.md)
+The chapters are HTML files in `assets/docs/`, with screenshots in `assets/docs/images/`. Edit those files to change the guide.
 
 ## Repository layout
 
 ```
 shipping-cost-monitor-for-woocommerce.php   Free plugin bootstrap
 includes/                                   Free PHP classes (PSR-4, WPEssential\ShippingCostMonitor)
-assets/                                     Free admin CSS and JavaScript (wp.element, no build step)
+assets/                                     Free admin CSS and JavaScript (wp.element, no build step); docs/ holds the built-in user guide
 readme.txt, changelog.txt, LICENSE          WordPress.org files for the free plugin
 pro/                                        Pro add-on (its own bootstrap, includes/, assets/, composer.json)
-docs/user-guide/                            User documentation and screenshots
 docs/                                       Product, architecture, QA gates and project records
 .github/workflows/                          CI: lint, autoload check and ZIP packaging
 ```

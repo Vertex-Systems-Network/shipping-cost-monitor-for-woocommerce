@@ -39,7 +39,7 @@ WooCommerce 11.2 or later. The plugin uses WooCommerce order APIs and works with
 
 **Documentation**
 
-Step-by-step guide with screenshots: https://github.com/Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce/blob/main/docs/user-guide/README.md
+A step-by-step guide with screenshots is built into the plugin: click **Documentation** under the plugin's name on the Plugins screen, or on the Shipping Cost Monitor dashboard.
 
 == Installation ==
 
@@ -75,7 +75,7 @@ Yes. All order reads and writes go through WooCommerce order APIs.
 == Changelog ==
 
 = 1.0.0 =
-* First public release: order shipping-cost record, dashboard report with shipping-method breakdown, and privacy-minimized CSV export.
+* First public release: order shipping-cost record, dashboard report with shipping-method breakdown, privacy-minimized CSV export, and built-in documentation.
 
 == Upgrade Notice ==
 

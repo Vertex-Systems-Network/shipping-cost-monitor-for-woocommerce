@@ -104,7 +104,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -rlE 'ShippingCostMonitorPro|wpe_scm_shipstation|wpe_scm_commit_invoice_rows|api\.shipstation\.com' shipping-cost-monitor-for-woocommerce.php includes assets; then
+          if grep -rlE --exclude-dir=docs 'ShippingCostMonitorPro|wpe_scm_shipstation|wpe_scm_commit_invoice_rows|api\.shipstation\.com' shipping-cost-monitor-for-woocommerce.php includes assets; then
             echo "Pro code found in the Free plugin files above" >&2
             exit 1
           fi
