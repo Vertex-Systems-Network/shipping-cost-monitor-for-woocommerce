@@ -26,8 +26,15 @@ If a task is ambiguous, report the conflict or assumption. This repository is AI
 - Carrier connections are optional adapters. Do not claim API access, supported regions or final-invoice data without provider-specific evidence.
 - No runtime AI service or customer-data transmission to an LLM is currently in scope.
 - Do not claim work, compatibility, tests, security review or Marketplace acceptance that has not been evidenced.
-- The GitHub repository is `Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce` (F-9). The free plugin's slug, text domain, package folder and main file are `shipping-cost-monitor-for-woocommerce` (F-5). The Pro add-on lives in `pro/` as `shipping-cost-monitor-pro-for-woocommerce` (F-7). Never put Pro code in the free plugin; CI rejects it. Pro is sold on WooCommerce.com, which handles billing and updates (F-8); do not add licensing code.
+- The GitHub repository is `Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce` (F-9). The free plugin's slug, text domain, package folder and main file are `shipping-cost-monitor-for-woocommerce` (F-5). The Pro add-on `shipping-cost-monitor-pro-for-woocommerce` (F-7) lives in its own repository, `Vertex-Systems-Network/shipping-cost-monitor-pro-for-woocommerce` (F-11). This repository must never contain Pro code or a `pro/` folder; CI rejects it. Pro works only with the free plugin installed. Pro is sold on WooCommerce.com, which handles billing and updates (F-8); do not add licensing code.
 - Keep status/progress in README aligned with actual evidence and mark target dates as proposed until approved.
+
+## Keeping Free and Pro in step (F-11)
+
+- Pro may use only the Free contract listed in the Pro repository's `README.md` (actions `wpe_scm_init`, `wpe_scm_dashboard_enqueued`; filters `wpe_scm_dashboard_data`, `wpe_scm_carrier_adapters`; constant `WPE_SCM_FILE`; script handle `wpe-scm-admin`; JS globals `wpeScmDashboard` and `wpeScmPro`). `.github/scripts/check-contract.sh`, identical in both repositories, fails CI when they drift.
+- **Every change, in either repository, must be checked against the other.** When a Free change alters or removes anything Pro uses, or Pro needs something new from Free, change both: use a branch with the **same name** in each repository and open both PRs. CI builds each branch against the same-named branch of the other repository, so the pair is tested together. Merge Free first.
+- When a change affects documented behaviour, update the built-in documentation (`assets/docs/`) and the GitHub wiki in the same work.
+- Keep `.github/workflows/build-installable-zip.yml` and `.github/scripts/check-contract.sh` identical in both repositories, apart from the `paths:` trigger list. CI always builds and uploads both ZIPs.
 
 ## Work handoff
 
