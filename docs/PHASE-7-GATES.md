@@ -155,3 +155,13 @@ Each line now carries a `phpcs:ignore` (or a `phpcs:disable`/`enable` pair for t
 - 3 warnings `trademarked_term`: the plugin name and slug contained the restricted term "wp". Addressed by decision F-5 (rename to Shipping Cost Monitor for WooCommerce / `shipping-cost-monitor-for-woocommerce`) in the follow-up change; the text domain, menu slug, main file and package folder were renamed with it.
 
 After the rename, PHP lint, the JavaScript syntax check, the WPCS security/I18n sniffs with `text_domain=shipping-cost-monitor-for-woocommerce` and the ShipStation/uninstall stub harness all pass. Plugin Check has not yet been run on the renamed package.
+
+
+## 2026-11-11 Plugin Check on the renamed plugin (`main` at `2aee2e461f8d`)
+
+**Environment:** fresh non-persistent playground.wordpress.net site, WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3 (PHP.wasm), Plugin Check 2.2.0. Source installed into `shipping-cost-monitor-for-woocommerce/` through a Blueprint `git:directory` resource with a hand-written autoloader stand-in (not the CI ZIP).
+
+- Activation succeeded; the dashboard at `page=shipping-cost-monitor-for-woocommerce` showed build ID `2aee2e461f8d`. One synthetic Processing order (USD 12 Flat rate, USD 8.25 invoice-final tax-exclusive cost) gave USD 12.00 charged, USD 8.25 confirmed cost, USD 3.75 variance, 100% coverage (1 / 1); the note read "1 order with…" (singular) and the method table fit without horizontal scrolling.
+- Plugin Check (General, Plugin Repo, Security; errors and warnings): **"Checks complete. 5 warnings found."** No errors. All five are repository-only files (`.cursor`, `.github`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) that the CI package does not contain. The `trademarked_term` warnings are gone.
+
+**Still not covered:** Plugin Check on the CI ZIP itself (which would also exercise the Composer autoloader), uninstall on a WordPress site, the legacy-build pause notice in a real WordPress install (verified only in a PHP stub), invoice import on this build, phone-width layout, and the ShipStation connection. P7-12 stays Partial pending independent review.
