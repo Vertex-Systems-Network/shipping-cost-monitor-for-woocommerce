@@ -201,7 +201,7 @@ final class Page {
 		$html = is_readable( $file ) ? (string) file_get_contents( $file ) : '';
 		$html = str_replace(
 			array( '%%IMAGES%%', '%%DOCS%%' ),
-			array( esc_url( WPE_SCM_URL . 'assets/docs/images/' ), esc_url( add_query_arg( 'chapter', '', self::docs_url() ) ) ),
+			array( esc_url( WPE_SCM_URL . 'assets/docs/images/' ), esc_url( self::docs_url() . '&chapter=' ) ),
 			$html
 		);
 
