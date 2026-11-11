@@ -1018,7 +1018,7 @@
 						h( 'tbody', null, methodRows.map( function ( method, index ) {
 							return h( 'tr', { key: method.currency + '-' + index },
 								h( 'td', null, method.label + ' (' + method.currency + ')' ),
-								h( 'td', null, method.comparable_orders ),
+								h( 'td', null, method.orders ),
 								h( 'td', null, method.currency + ' ' + method.shipping_charged ),
 								h( 'td', null, method.currency + ' ' + method.comparable_confirmed_cost ),
 								h( 'td', null, method.currency + ' ' + method.variance )
