@@ -428,3 +428,91 @@
 	min-width: 760px;
 	border: 0;
 }
+
+/* Report cards that previously had no inner spacing. */
+.wpe-scm-method-report,
+.wpe-scm-carrier-connections {
+	display: grid;
+	gap: 12px;
+	padding: 22px;
+}
+
+.wpe-scm-method-report h2,
+.wpe-scm-carrier-connections h2 {
+	margin: 0;
+	color: var(--wpe-scm-ink);
+	font-size: 18px;
+	letter-spacing: -0.02em;
+}
+
+.wpe-scm-import-review-detail {
+	margin-top: 4px;
+	color: var(--wpe-scm-muted);
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+/* Readable metric values; loss and surplus are also stated by the sign. */
+.wpe-scm-card-value {
+	color: var(--wpe-scm-ink);
+	font-variant-numeric: tabular-nums;
+	overflow-wrap: anywhere;
+}
+
+.wpe-scm-metric-card.is-negative {
+	border-left: 3px solid #b32d2e;
+}
+
+.wpe-scm-metric-card.is-negative .wpe-scm-card-value {
+	color: #b32d2e;
+}
+
+.wpe-scm-metric-card.is-positive {
+	border-left: 3px solid #1a7f47;
+}
+
+.wpe-scm-metric-card.is-positive .wpe-scm-card-value {
+	color: #1a7f47;
+}
+
+/* Errors look different from informational notices. */
+.wpe-scm-report-notice[role="alert"] {
+	border-left-color: #b32d2e;
+	background: #fcf0f1;
+	color: #8a2424;
+}
+
+.wpe-scm-method-table th:nth-child(n+2),
+.wpe-scm-method-table td:nth-child(n+2) {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+.wpe-scm-import-table thead th,
+.wpe-scm-carrier-table thead th {
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.wpe-scm-wrap a:focus-visible,
+.wpe-scm-wrap button:focus-visible,
+.wpe-scm-wrap input:focus-visible,
+.wpe-scm-wrap select:focus-visible {
+	outline: 2px solid var(--wpe-scm-accent);
+	outline-offset: 2px;
+	box-shadow: none;
+}
+
+@media screen and (max-width: 782px) {
+	.wpe-scm-wrap input,
+	.wpe-scm-wrap select,
+	.wpe-scm-wrap .button {
+		min-height: 40px;
+	}
+
+	.wpe-scm-carrier-key-label,
+	.wpe-scm-carrier-key-label input {
+		width: 100%;
+		min-width: 0;
+	}
+}

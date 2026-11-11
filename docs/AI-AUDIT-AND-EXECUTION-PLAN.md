@@ -1,88 +1,82 @@
 # AI audit and execution plan
 
-> **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
-
-**Audit date:** 2026-11-11  
+**Last reconciled:** 2026-11-11 against repository head `4e568c4` plus the release-preparation change set that introduced this revision.  
 **Repository:** `Vertex-Systems-Network/wpessential-shipping-cost-monitor`  
-**Purpose:** Give ChatGPT, Claude, Gemini, Cursor, Copilot and human contributors one unambiguous, evidence-led handoff for continuing the product. This document repairs task routing and status references. Phase 6 implementation is marked complete; compatibility, security review, provider-account runtime validation, beta and release remain unverified.
+**Purpose:** Route ChatGPT, Claude, Gemini, Cursor, Copilot and human contributors to the right source of truth and the next unblocked task.
 
-## Current verified snapshot
+This document holds **rules and routing only**. It deliberately carries no gate counts, build IDs or staging snapshots, because copies of status drift. Read status where it is owned:
 
-| Area | Current evidence | Boundary |
-|---|---|---|
-| Product scope | WooCommerce shipping-cost ledger, invoice reconciliation and optional carrier evidence; free and paid distribution targets are documented. | Pricing, merchant validation and final freemium packaging mechanics remain open. |
-| Implementation | Phase 6 has 6 of 6 implementation packages (100%): read-only ShipStation V2 adapter, encrypted credentials, bounded label sync, and review/match/explicit commit handoff are in source. | Runtime connection/sync with an eligible merchant API key and independent security review remain pending. `shipment_cost` is booked-label evidence, not final carrier invoice cost. |
-| CI artifact | Latest source includes `50f37db` read-only ShipStation V2 adapter and documentation, following `e1c0621` repeated-header labels, `fd81d99` build-specific asset cache keys, and `e08f91b` duplicate-order preflight protection. Actions run #42891830660 passed PHP 8.1–8.4 Composer/autoload/lint and ZIP packaging; artifact ID 13798567208, archive digest `sha256:0fe5122020257036688269d782e5090b9614bfd7ef6ee5415a28280cb12416b1`. The workflow does not execute JavaScript. The new artifact has not been installed to staging, and no ShipStation account key is available for connection/sync runtime verification. Prior staging build ID `e08f91b6af9d` installed and rendered; two references `# 51` and `51` were blocked as duplicate before commit. This is historical evidence for the invoice workflow, not installation or runtime verification of new commit `50f37db`. The server duplicate guard is source/CI verified but was not directly called because the UI blocked the rows. Prior `fd81d99` staging flows verified repeated-header labels and malformed trailing-quote rejection. Earlier TasteWP runtime artifact build remains `9a7ae7e35951384eba21213cf390baa247e6765e`. | CI does not prove WordPress runtime compatibility. |
-| TasteWP site | On 2026-11-10, build ID `9a7ae7e35951` was visible after install/activation on a separate TasteWP site (WP 7.1.4, WooCommerce 11.2.2). Dashboard rendered; 3 synthetic products were imported and there were 0 eligible orders. | This verifies install identity and dashboard shell only; no report calculation, order workflow, environment PHP/database fingerprint or compatibility matrix was exercised. |
-| wpessential.org staging | Separate historical environment: WP 7.1.4, WooCommerce 11.2.2, PHP 8.3.36, MySQL 8.0.46, HTTPS, HPOS selected. Synthetic orders #51/#52 supported selected report, manual cost, CSV preview/match/commit, export and no-overwrite observations. On 2026-11-10, artifact `e08f91b` was replaced and active on this staging site; dashboard build ID `e08f91b6af9d` rendered and retained its PKR 750/PKR 1,950/PKR -1,200, 2/2 synthetic report. A duplicate invoice preview containing references `# 51` and `51` classified both as duplicates before match/commit; no order was modified. Previous artifact `fd81d99` verified repeated-header labels and malformed trailing-quote rejection. | Selected synthetic flows only. Do not attribute these orders/results to TasteWP or call them broad runtime coverage. |
-| Phase 7 | Canonical gate register: 7 narrow passes, 2 partial and 5 pending. | Counts are heterogeneous and not a readiness percentage. Current exact gates and evidence live only in `PHASE-7-GATES.md`. |
-| Automated tests | No repository `tests/` suite or WordPress integration harness was found in the audited tree. CI currently covers Composer PSR-4 generation, PHP lint/autoload smoke and artifact packaging. | Do not say automated functional/regression tests passed. Manual browser/staging observations are identified individually. |
-| Integrations | Public API research is recorded; no live carrier integration/account credentials are enabled. | Quotes, labels and booked charges are not proof of invoice-final cost. Provider work stays blocked until its evidence/security gates are met. |
-
-## Audit findings and repairs required
-
-| Finding | Risk | Canonical repair |
-|---|---|---|
-| README, Phase 7 register, backlog and pre-development summary contain stale or conflicting current status. | An AI may repeat a completed build-ID check or overstate runtime evidence. | Apply the environment-specific corrections in this document; then keep each source aligned. |
-| Old audit chronology contains retired gate counts and pre-hardening snapshots. | Older paragraphs can be mistaken for current state. | Preserve dated history, add a current-authority note and append the new evidence; do not rewrite history as though the check happened earlier. |
-| Test sites have different roles and evidence. | TasteWP package smoke may be conflated with wpessential.org order-report evidence. | Always name the site, build, environment fingerprint, fixture and exact flow for each runtime claim. |
-| Source/static checks are stronger than runtime and independent review. | Security, compatibility and data correctness could be overclaimed. | Keep P7-08 through P7-14 open as specified until their exit evidence is attached. |
-| Active work is not consistently routed to one next task, and no performance task is currently defined as a backlog row. | Contributors can loop on blocked staging checks or cite a missing AI-39. | Use the ordered queue below; add AI-39 with the exact P7-13 benchmark acceptance criteria. |
-| Product proposal can be confused with delivered code. | Zone/category analytics, alerts, simulation and carrier automation may be promised prematurely. | Use the feature-status distinction below and the Product Spec as the canonical feature bank. |
+| Question | Owner document |
+|---|---|
+| What has the owner approved or deferred? | `OWNER-DECISION-REGISTER.md` |
+| Which Phase 7 gates pass, and on what evidence? | `PHASE-7-GATES.md` (gate table and "Current count" line) |
+| What is the status of a task? | `AI-BACKLOG.md` (backlog table) |
+| What is left before each marketplace submission? | `SUBMISSION-STRATEGY.md` ("Submission readiness checklist") |
+| What does the product do and not do? | `PRODUCT-SPEC.md` |
 
 ## Source-of-truth order
 
 1. `OWNER-DECISION-REGISTER.md` — accepted authority, deferrals and owner-only decisions.
 2. `PRODUCT-SPEC.md` — canonical feature IDs, Free/Pro options and acceptance criteria.
-3. `ARCHITECTURE.md` and `ARCHITECTURE-DECISIONS.md` — approved system/data boundaries and proposals.
-4. `AI-BACKLOG.md` — implementation task queue and task-level evidence.
-5. `PHASE-7-GATES.md` — sole authority for Phase 7 gate status/closure.
-6. `README.md` — concise current status and roadmap mirror; not a competing evidence ledger.
-7. `PHASE-1-6-DEEP-AUDIT.md` and dated notes — historical audit trail; older statements are superseded where newer evidence is linked.
+3. `ARCHITECTURE.md` and `ARCHITECTURE-DECISIONS.md` — system and data boundaries.
+4. `AI-BACKLOG.md` — task queue and task-level evidence.
+5. `PHASE-7-GATES.md` — sole authority for Phase 7 gate status and closure.
+6. `SUBMISSION-STRATEGY.md` — marketplace tracks and the readiness checklist.
+7. `README.md` — concise status mirror; not an evidence ledger.
+8. `PHASE-1-6-DEEP-AUDIT.md` and dated notes — history; superseded where newer evidence exists.
 
-If sources conflict, do not choose a convenient status. Follow this order, fix the stale lower-level reference, and record the change in README when current state changes.
+`AGENTS.md` lists what to *read first*; this list decides which document *wins* when two disagree. If sources conflict, follow this order, fix the stale lower-level reference in the same change, and never pick the more convenient status.
 
-## Product boundary: proposed vs implemented
+## What is implemented, and what is not
 
-**Observed implementation slices:** order-level cost entry via WooCommerce CRUD; reporting for recorded cost and customer-paid shipping with currency/evidence guardrails; browser-local CSV preview/mapping and reviewed exact-reference commit; duplicate/unmatched/invalid/refund review states; CI-generated PSR-4 autoloader and traceable ZIP.
+**In source:** order-level cost record through WooCommerce CRUD; dashboard report with currency, tax-basis and evidence guardrails; shipping-method breakdown; privacy-minimized CSV export; browser-local invoice CSV preview, mapping, exact-reference matching and reviewed commit; read-only ShipStation V2 booked-label adapter with AES-256-GCM encrypted key storage, bounded sync preview and hand-off to the same review/commit flow; HPOS compatibility declaration; uninstall cleanup of the stored credential; `readme.txt`, `changelog.txt` and `LICENSE` in the CI package.
 
-**Not established as delivered:** zone/category loss analysis, scheduled threshold alerts, historical comparisons, rate-change simulation, PDF reports, per-parcel allocation, background reconciliation, live carrier synchronization, merchant-ready provider support, persistent invoice archive, or final Free/Pro entitlements. These remain proposed/deferred unless code and acceptance evidence are added.
+**Implemented but not validated with a real account:** the ShipStation adapter. No merchant API key has been used against it. Owner decision C-3 records the credential design as implemented with independent security review still pending. Do not describe it as merchant-verified.
 
-**Architecture/privacy guardrails:** never persist raw invoice uploads or customer profile data without approved retention; do not store provider credentials before the credential-security decision; use WooCommerce CRUD/query abstractions; keep currency and tax basis comparable; never silently overwrite an existing cost; no runtime LLM/customer-data transmission is authorized.
+**Not delivered:** zone/category loss analysis, scheduled alerts, historical comparisons, rate-change simulation, PDF reports, per-parcel allocation, background reconciliation, persistent invoice archive, server-synchronized mapping profiles, and a Free/Pro split in code. The repository builds one free plugin (decision F-2).
+
+**Guardrails that still apply:** never persist raw invoice uploads or customer profile data; use WooCommerce CRUD and query abstractions; keep currency and tax basis comparable; never silently overwrite an existing cost; a quote or booked label is never a final cost; no runtime LLM or customer-data transmission.
 
 ## Ordered execution queue
 
-**Latest staging QA update (2026-11-10):** Artifact `e08f91b` is installed on the owner-designated `wpessential.org/el-test` site. Dashboard/report remained stable and duplicate references `# 51` / `51` were blocked at preview before commit. This adds no Phase 7 gate closure; direct server-guard runtime, replay, ambiguity, security and compatibility requirements remain.
+Take the first row you can act on. Rows 1–3 need no external party.
 
-The gate register is definitive. This queue identifies the next action so a contributor can make progress without waiting on unrelated external blockers.
-
-| Order | ID | Action and acceptance evidence | Status / stop rule |
+| Order | ID | Action and acceptance evidence | Blocker / stop rule |
 |---:|---|---|---|
-| 1 | P7-11 / AI-24 | On the existing staging lane, verify exact same AJAX commit replay returns an explicit already-imported/idempotent result, and an ambiguous duplicate order-number reference remains review-only. Save sanitized request/result evidence. Reuse fixture only if it is safe and available. | Partial. Make one focused fixture attempt. If the staging system cannot create the required duplicate number safely, record the exact constraint and proceed; do not loop or mutate production data. |
-| 2 | P7-12 / AI-08 | Independent source/security review plus staging/browser malformed and oversized raw input, capability and nonce rejection probes. Record exact requests and safe responses without secrets/customer data. | Partial. Source hardening/static CI is not runtime security verification. |
-| 3 | P7-09 | Exercise manual save, invoice commit, refund-adjusted report/export against HPOS and legacy storage; compare order metadata, totals and no-overwrite behavior. | Pending. Use isolated disposable fixtures; keep each datastore/environment labelled. |
-| 4 | P7-08 | Run install/upgrade and core flows across the declared minimum and latest WP/WC/PHP matrix; publish actual versions. | Pending. PHP lint matrix is not a runtime version matrix. |
-| 6 | P7-13 / AI-39 | Benchmark 100, 1,000 and 10,000 eligible orders, five runs per size/workflow; capture elapsed time, PHP peak memory, query count/slow queries, CSV row count and correctness. Agree budgets only after baseline. | Pending. Do not fabricate results or block unrelated tasks while fixtures are prepared. |
-| 7 | P7-14 | Run approved beta with merchants; capture consented, sanitized, reproducible feedback and resolutions. | Pending. Requires merchant participation; continue independent engineering meanwhile. |
-| — | AI-31 | Live carrier adapter requires merchant/provider account evidence, shipment-level final-cost fields, scopes/terms and approved credential protection. | Blocked by external evidence/security decision; this does not block P7 QA. |
+| 1 | P7-12 / AI-08 | Finish the security and privacy review: someone other than the code's author reviews capability/nonce boundaries, import bounds, export escaping, credential storage and uninstall behaviour, and records findings and fixes. Complete the remaining browser upload-boundary cases (5 MB, 5,000 rows, 100 columns, 65,536-character field). | Open. Source hardening and handler/HTTP probes exist; they are not an independent review. |
+| 2 | P7-13 / AI-39 | Extend the benchmark from the recorded 100-order lane to 1,000 and 10,000 eligible orders, five runs per size and workflow; capture elapsed time, peak PHP memory, query count, slow queries, CSV row count and correctness. Agree budgets after the baseline. | Open. Do not fabricate results. A real-database staging copy is preferred over Playground. |
+| 3 | AI-45 | Install the CI ZIP built from the release-preparation change set and confirm: activation, HPOS compatibility shown as compatible in WooCommerce > Settings > Advanced > Features, dashboard layout, uninstall removes `wpe_scm_shipstation_credentials`, and Plugin Check reports no errors. | Open. Needs a CI run on the merged change and a test site. |
+| 4 | AI-31 | Connect a real ShipStation V2 key on a test site; record connect, sync, review and commit results and the exact fields returned. | Blocked: owner must supply a merchant or sandbox API key. Does not block rows 1–3. |
+| 5 | P7-14 | Run the approved beta with consenting merchants; record sanitized, reproducible feedback and resolutions. | Blocked: needs participating merchants and anonymized invoice samples (decision A-3). |
+| 6 | Phase 8 | Work through the submission readiness checklist in `SUBMISSION-STRATEGY.md`. | Starts when Phase 7 closes or the owner narrows scope. Several items are owner-only. |
+
+Gates P7-08, P7-09 and P7-11 are passed for their stated scopes. Do not re-run them unless the build, dataset, environment or test path changes.
+
+## Who decides
+
+The repository is AI-operated (Gate F in `OWNER-DECISION-REGISTER.md`). When a task needs a product or engineering decision, make it, record it in Gate F with the reasoning, then act. Ask the owner only for what an AI cannot supply: external-account actions, secrets, and real merchants.
 
 ## Contributor protocol (all AI tools and humans)
 
-1. Confirm the repository is exactly `Vertex-Systems-Network/wpessential-shipping-cost-monitor` and inspect the current default branch/head before edits. Never infer that a similarly named repo is the target.
-2. Read `AGENTS.md`, this execution plan, current README status, the assigned active backlog row, and its cited source documents. Check current files rather than trusting copied chat context.
-3. Select the first unblocked task above or the highest-priority unblocked backlog item. In one session, perform a concrete implementation or verification and meet its acceptance evidence where possible.
-4. Check existing feature IDs before adding any option or setting. Do not duplicate controls, reports, integrations or status counters.
-5. If blocked, document the exact missing fixture/permission/provider/owner decision once, its smallest unblock action, and continue the next independent task. Repeat a check only when the artifact, environment, fixture, permission or code changed.
-6. Keep **implemented**, **static-verified**, **runtime-verified**, **blocked**, and **deferred** separate. Include commit/build ID, environment, fixture and exact flow in runtime claims. An attempted check is not a pass.
-7. Update the task row and the relevant canonical evidence document, then update README for meaningful state changes. Do not edit README alone to imply progress. Never mark a whole phase done from a code change or a partial gate.
-8. If an AI cannot access GitHub/staging, state the precise access gap and provide a ready-to-execute bounded handoff; do not pretend the work occurred.
-9. Never put credentials, non-anonymized customer data, or raw invoice contents into repository docs, logs, prompts or AI context. No secrets from prior chat messages belong in source control.
-10. No local/in-plugin CLI, npm package or JavaScript bundler. GitHub Actions is the authorized Composer/PHP/package route. Use WordPress-bundled `wp.element` for React.
+1. Confirm the repository is exactly `Vertex-Systems-Network/wpessential-shipping-cost-monitor` and inspect the current default branch head before editing.
+2. Read `AGENTS.md`, this plan, the README status block, the assigned backlog row and its cited sources. Check current files rather than trusting copied chat context.
+3. Take the first actionable row above, or the highest-priority unblocked backlog item. Do a concrete implementation or verification in the session and meet its acceptance evidence where possible.
+4. Check existing feature IDs before adding any option or setting. Do not duplicate controls, reports, integrations or counters.
+5. If blocked, record the missing fixture, permission, provider or owner decision once, with its smallest unblock action, and continue with the next independent task. Repeat a check only when the artifact, environment, fixture, permission or code changed.
+6. Keep **implemented**, **static-verified**, **runtime-verified**, **blocked** and **deferred** separate. Runtime claims name the commit or build ID, environment, fixture and exact flow. An attempted check is not a pass.
+7. Update the task row and the owning evidence document first, then the README mirror. When a status changes, change it in its owner document and delete or date-stamp every other copy; do not add a new copy here.
+8. If a tool cannot reach GitHub or staging, state the access gap and leave a bounded hand-off. Do not pretend the work occurred.
+9. Never put credentials, non-anonymized customer data or raw invoice contents into docs, logs, prompts or AI context.
+10. No in-plugin CLI, npm package or JavaScript bundler as a project requirement. GitHub Actions is the authorized Composer/PHP/package route. Use WordPress-bundled `wp.element` for React. A contributor may run read-only syntax checks in their own environment; label those as static checks, never as CI or runtime results.
+
+## Environment evidence rules
+
+Evidence belongs to the site it came from. The TasteWP site, the `wpessential.org/el-test` staging site and WordPress Playground lanes are separate; never transfer order or report results between them. Playground runs on PHP.wasm and does not establish MySQL or MariaDB behaviour.
 
 ## Artifact handling
 
-No ZIP or test file should be delivered to the user in chat or saved to a personal file library for this project. When authorized runtime testing requires an artifact, install the successful CI artifact directly in the private test site if the available tools permit, then remove temporary local/shared copies after the check. Keep only source and truthful evidence in the GitHub repository. Do not publish a test artifact or expose staging credentials.
+Do not deliver a ZIP or test file to the user in chat or keep one in a personal file library. When authorized runtime testing needs an artifact, install the successful CI artifact directly on the private test site if tools permit, then remove temporary copies. Keep only source and truthful evidence in the repository. Do not publish a test artifact or expose staging credentials.
 
 ## Definition of complete
 
-A task closes only when its task-specific acceptance evidence is recorded and independently retrievable. Phase 6 closes only when all six implementation packages, including its provider workflow under approved evidence/security boundaries, meet their defined exit outcomes or the owner explicitly narrows that scope. Phase 7 closes only under `PHASE-7-GATES.md`. Marketplace readiness/submission is Phase 8 and has not started.
+A task closes only when its acceptance evidence is recorded and independently retrievable. Phase 6 implementation is complete in source; its provider workflow is not merchant-validated until AI-31 is evidenced. Phase 7 closes only under `PHASE-7-GATES.md`. Marketplace submission is Phase 8 and has not started; preparing files for it is not a submission.

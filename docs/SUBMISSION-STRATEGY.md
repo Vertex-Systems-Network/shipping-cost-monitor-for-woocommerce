@@ -77,12 +77,48 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 
 **Submission order proposal:** reach a release candidate, complete shared quality/security evidence, confirm vendor/account and freemium mechanics, then submit both channel tracks with aligned names, versions and feature matrix. Do not claim acceptance or schedule an exact launch date before each reviewer approves.
 
-## Current repository readiness
+## Submission readiness checklist
 
-- Repository is development/planning source, not either marketplace distribution repository.
-- Current version is an early bootstrap/admin shell and is not submission-ready.
-- No readme.txt, production ZIP, WP.org SVN submission, Woo vendor application, QIT result, listing assets, support plan or compatibility evidence is complete.
-- CLI/package/build tooling remains prohibited until the plugin is final. Submission prep must respect this constraint; do not add SVN/packaging automation before that point.
+**Updated:** 2026-11-11. Nothing has been submitted to either marketplace. "Done in source" means the file or code exists and passed static checks; it does not mean a reviewer has accepted it.
+
+### Shared
+
+| Item | State | Owner / next action |
+|---|---|---|
+| GPL-compatible license file and headers | Done in source (`LICENSE`, GPL-2.0-or-later) | — |
+| Plugin headers: name, URIs, version, requires, text domain | Done in source | Owner confirms `https://wpessential.org` as Plugin/Author URI |
+| HPOS compatibility declared | Done in source; runtime confirmation pending | AI-45 |
+| Uninstall cleanup | Done in source (credential option removed; order cost metadata kept by design) | Decided F-4 |
+| External service disclosure (ShipStation) | Done in `readme.txt` | Recheck ShipStation terms/privacy URLs before submitting |
+| Translation template (`languages/*.pot`) | Not done | WordPress.org generates language packs from source; a `.pot` is needed for WooCommerce.com distribution |
+| Public version number | Decided F-3: 0.1.0 until Phase 7 closes, then 1.0.0 | — |
+| Free/Pro packaging | Decided F-2: one free plugin; WooCommerce.com paid track deferred until a Pro add-on exists | The WooCommerce.com table below applies only when that add-on is built |
+| Phase 7 gates | Open (see gate register) | P7-12, P7-13, P7-14 |
+
+### WordPress.org (account `wpessential`)
+
+| Item | State | Owner / next action |
+|---|---|---|
+| `readme.txt` in directory format | Done in source; meta follows the existing `wpessential` plugin (contributor `wpessential`, 5 tags, same field set). This plugin stays GPLv2-or-later, while that plugin is GPLv3-or-later | Run the official readme validator before upload |
+| Stable tag equals plugin version | Enforced in CI | — |
+| "Tested up to" | 7.1, matching recorded WP 7.1.4 runs | Update at release |
+| Plugin Check (PCP) | Not run | Run on the CI ZIP on a test site; fix errors |
+| Slug availability | Not checked | `wpessential-shipping-cost-monitor` is requested at submission; only the account owner can submit |
+| Screenshots, banner and icon assets | Not done | Owner/design; captions already listed in `readme.txt` |
+| Submission upload and review replies | Not done | Account owner, from the `wpessential` WordPress.org account with 2FA |
+| SVN release | Not done | After approval |
+
+### WooCommerce.com Marketplace
+
+| Item | State | Owner / next action |
+|---|---|---|
+| Vendor account and product application | Not done | Owner |
+| `Woo:` plugin header (product ID and hash) | Not possible yet | Assigned by WooCommerce.com after the product is accepted |
+| `changelog.txt` in Marketplace format | Done in source | — |
+| `WC requires at least` / `WC tested up to` headers | Done in source (11.2 / 11.2) | Update at release |
+| QIT test runs (activation, security, PHPStan, PHPCompatibility, Woo API/E2E) | Not run | Requires vendor access to QIT |
+| Latest two major WordPress and WooCommerce lines | Partly evidenced (see P7-08) | Extend the matrix before submission |
+| Product page copy, docs, support and refund terms, pricing | Not done | Owner |
 
 ## Official references checked 2026-11-06
 

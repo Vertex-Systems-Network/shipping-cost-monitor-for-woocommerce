@@ -910,7 +910,7 @@
 	function MetricCard( props ) {
 		return h(
 			'section',
-			{ className: 'wpe-scm-card wpe-scm-metric-card' },
+			{ className: 'wpe-scm-card wpe-scm-metric-card' + ( props.tone ? ' is-' + props.tone : '' ) },
 			h( 'span', { className: 'wpe-scm-card-label' }, props.label ),
 			h( 'strong', { className: 'wpe-scm-card-value' }, props.value ),
 			h( 'span', { className: 'wpe-scm-card-note' }, props.note )
@@ -926,6 +926,10 @@
 		const confirmedValue = moneyByCurrency( 'confirmed_cost', 'confirmed_orders' );
 		const varianceValue = report.variance_available ? moneyByCurrency( 'variance', 'comparable_orders' ) : __( 'Not available', 'wpessential-shipping-cost-monitor' );
 		const hasOrders = eligible > 0;
+		const comparableVariances = report.variance_available ? groups.filter( function ( group ) { return Number( group.comparable_orders ) > 0; } ).map( function ( group ) { return Number( group.variance ); } ) : [];
+		const varianceTone = comparableVariances.length < 1 || comparableVariances.some( function ( value ) { return ! Number.isFinite( value ); } )
+			? ''
+			: ( comparableVariances.every( function ( value ) { return value < 0; } ) ? 'negative' : ( comparableVariances.every( function ( value ) { return value > 0; } ) ? 'positive' : '' ) );
 		const methodRows = groups.reduce( function ( rows, group ) {
 			return rows.concat( ( group.shipping_methods || [] ).filter( function ( method ) { return Number( method.comparable_orders ) > 0; } ).map( function ( method ) { return Object.assign( { currency: group.currency }, method ); } ) );
 		}, [] );
@@ -969,8 +973,6 @@
 				report.export_url ? h( 'a', { className: 'button wpe-scm-export-action', href: report.export_url }, __( 'Export CSV', 'wpessential-shipping-cost-monitor' ) ) : null
 			),
 			report.period_reset ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'The selected dates were invalid or exceeded 366 days. Showing the default 30-day period.', 'wpessential-shipping-cost-monitor' ) ) : null,
-			h( CsvInvoicePreview ),
-
 			h(
 				'section',
 				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
@@ -987,6 +989,7 @@
 				h( MetricCard, {
 					label: __( 'Shipping variance', 'wpessential-shipping-cost-monitor' ),
 					value: varianceValue,
+					tone: varianceTone,
 					note: report.variance_available ? report.comparable_orders + ' ' + __( 'orders with matching currency and tax-exclusive cost', 'wpessential-shipping-cost-monitor' ) : __( 'No comparable confirmed costs in this period', 'wpessential-shipping-cost-monitor' ),
 				} ),
 				h( MetricCard, {
@@ -1007,7 +1010,7 @@
 				h( 'h2', null, __( 'Comparable shipping cost by method', 'wpessential-shipping-cost-monitor' ) ),
 				h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Variance includes only currency-matched, confirmed tax-exclusive cost records. Mixed-method orders are grouped by their method combination.', 'wpessential-shipping-cost-monitor' ) ),
 				h( 'div', { className: 'wpe-scm-import-table-wrap' },
-					h( 'table', { className: 'widefat striped wpe-scm-import-table' },
+					h( 'table', { className: 'widefat striped wpe-scm-import-table wpe-scm-method-table' },
 						h( 'thead', null, h( 'tr', null,
 							h( 'th', null, __( 'Shipping method', 'wpessential-shipping-cost-monitor' ) ),
 							h( 'th', null, __( 'Orders', 'wpessential-shipping-cost-monitor' ) ),
@@ -1036,16 +1039,16 @@
 					h( 'p', null, hasOrders ? __( 'Variance uses net shipping after allocated refunds and only currency-matched, tax-exclusive confirmed costs.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
 				)
 			),
+			h( CsvInvoicePreview ),
 			h(
 				'div',
 				{ className: 'wpe-scm-lower-grid' },
 				h(
 					'section',
 					{ className: 'wpe-scm-card wpe-scm-next-card' },
-					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'NEXT: REPORT CONTROLS', 'wpessential-shipping-cost-monitor' ) ),
+					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'HOW THIS REPORT WORKS', 'wpessential-shipping-cost-monitor' ) ),
 					h( 'h2', null, __( 'Reporting scope', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export includes refund allocation; custom statuses and multi-currency conversion are not supported.', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'span', { className: 'wpe-scm-status-pill' }, __( 'Initial summary', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export includes refund allocation; custom statuses and multi-currency conversion are not supported.', 'wpessential-shipping-cost-monitor' ) )
 				),
 				h(
 					'aside',

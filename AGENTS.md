@@ -11,7 +11,7 @@ This file is the canonical project brief for repository-aware coding agents. Rea
    - `docs/MARKET-RESEARCH.md` for competitor/provider evidence and dated findings.
    - `docs/ARCHITECTURE.md` for systems, data flow, APIs, privacy and security boundaries.
 
-If a task is ambiguous, report the conflict or assumption. Do not invent product decisions.
+If a task is ambiguous, report the conflict or assumption. This repository is AI-operated: under Gate F of `docs/OWNER-DECISION-REGISTER.md` (owner statement, 2026-11-11) AI contributors make product and engineering decisions themselves, record each one with its reasoning in that register before acting on it, and do not wait for human approval. Do not make an unrecorded decision, and do not treat a decision as evidence: testing and review claims still need real evidence. Only external-account actions, secrets and real merchant data require the owner.
 
 ## Project rules
 
@@ -19,9 +19,9 @@ If a task is ambiguous, report the conflict or assumption. Do not invent product
 - Use the feature IDs in `docs/PRODUCT-SPEC.md`; check them before adding options, settings or workflows. Avoid duplicate capabilities under different names/screens.
 - The owner authorized the initial implementation on 2026-11-06; see `docs/OWNER-DECISION-REGISTER.md` for the accepted scope and limits. Phase 5 may proceed within that scope.
 - On 2026-11-07, the owner explicitly authorized a CI-only GitHub Actions workflow that builds a downloadable installable ZIP, generates the Composer PSR-4 vendor autoloader, runs PHP lint and checks PSR-4 loading. This is a narrow exception to the earlier no-build boundary. Do not add local CLI setup, an in-plugin CLI, npm, a JS bundler or unrelated build tooling. The approved React path remains plain JavaScript using WordPress-bundled `wp.element`.
-- API credentials and carrier connections are out of initial scope until credential-security review. CSV import persistence waits for anonymized merchant invoice samples and the retention decision.
+- Carrier credentials: a read-only ShipStation V2 adapter with encrypted key storage is implemented under owner decisions A-2 and C-3 (2026-11-11). Independent security review and a merchant-account runtime test are still pending, so do not describe it as reviewed or merchant-verified, and do not add another provider or credential type without a recorded owner decision. CSV import persistence waits for anonymized merchant invoice samples and the retention decision.
 - Do not claim compatibility, tests, security review or Marketplace acceptance without evidence.
-- Use WooCommerce CRUD APIs; HPOS compatibility must be proven before it is declared.
+- Use WooCommerce CRUD APIs. HPOS compatibility is declared under decision F-1 on the evidence of gates P7-04 and P7-09; keep order access on CRUD so that stays true.
 - Keep customer-paid shipping, estimates, label/manifest amounts, final billed charges, credits/refunds and merchant-confirmed costs distinct. Never call a quote “actual cost.”
 - Carrier connections are optional adapters. Do not claim API access, supported regions or final-invoice data without provider-specific evidence.
 - No runtime AI service or customer-data transmission to an LLM is currently in scope.
