@@ -1,4 +1,4 @@
-=== WPEssential Shipping Cost Monitor ===
+=== Shipping Cost Monitor for WooCommerce ===
 Contributors: wpessential
 Tags: woocommerce, shipping, shipping cost, reports, reconciliation
 Requires at least: 7.0
@@ -12,7 +12,7 @@ Record what each WooCommerce order really cost to ship and compare it with what 
 
 == Description ==
 
-WPEssential Shipping Cost Monitor is a WooCommerce add-on that keeps a shipping-cost record on each order and reports the difference between the shipping your customers paid and the shipping you paid.
+Shipping Cost Monitor for WooCommerce, by WPEssential, is an add-on that keeps a shipping-cost record on each order and reports the difference between the shipping your customers paid and the shipping you paid.
 
 It is built around one rule: a quote is an estimate, a booked label is provisional, and only an invoice-final or merchant-confirmed amount counts as a confirmed cost.
 
@@ -49,7 +49,7 @@ ShipStation is provided by Auctane LLC: [Terms of Service](https://www.shipstati
 == Installation ==
 
 1. Install and activate WooCommerce 11.2 or later.
-2. In WordPress, go to Plugins > Add New, search for "WPEssential Shipping Cost Monitor", then install and activate it. Or upload the plugin ZIP on the same screen.
+2. In WordPress, go to Plugins > Add New, search for "Shipping Cost Monitor for WooCommerce", then install and activate it. Or upload the plugin ZIP on the same screen.
 3. Open WooCommerce > Shipping Cost Monitor.
 4. Open any order with a shipping line and fill in the shipping-cost record, or import a courier invoice CSV from the dashboard.
 

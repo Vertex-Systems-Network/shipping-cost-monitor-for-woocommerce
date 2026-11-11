@@ -55,27 +55,27 @@ final class OrderCostFields {
 		$nonce_key = 'wpe_scm_order_cost_nonce_' . $order_id;
 
 		echo '<div class="wpe-scm-order-cost">';
-		echo '<h3>' . esc_html__( 'Shipping Cost Monitor', 'wpessential-shipping-cost-monitor' ) . '</h3>';
-		echo '<p class="description">' . esc_html__( 'Record the merchant-paid shipping cost and its evidence. Quotes remain estimates and are not treated as confirmed costs.', 'wpessential-shipping-cost-monitor' ) . '</p>';
+		echo '<h3>' . esc_html__( 'Shipping Cost Monitor', 'shipping-cost-monitor-for-woocommerce' ) . '</h3>';
+		echo '<p class="description">' . esc_html__( 'Record the merchant-paid shipping cost and its evidence. Quotes remain estimates and are not treated as confirmed costs.', 'shipping-cost-monitor-for-woocommerce' ) . '</p>';
 
 		wp_nonce_field( 'wpe_scm_save_order_cost_' . $order_id, $nonce_key );
 
 		if ( '' !== $amount ) {
 			printf(
 				'<p><strong>%1$s</strong> %2$s %3$s <span class="description">(%4$s)</span></p>',
-				esc_html__( 'Current recorded cost:', 'wpessential-shipping-cost-monitor' ),
+				esc_html__( 'Current recorded cost:', 'shipping-cost-monitor-for-woocommerce' ),
 				esc_html( $currency ),
 				esc_html( $amount ),
 				esc_html( $this->evidence_label( $evidence ) )
 			);
 		} else {
-			echo '<p class="description">' . esc_html__( 'No cost has been recorded for this order.', 'wpessential-shipping-cost-monitor' ) . '</p>';
+			echo '<p class="description">' . esc_html__( 'No cost has been recorded for this order.', 'shipping-cost-monitor-for-woocommerce' ) . '</p>';
 		}
 
 		echo '<p class="form-field form-field-wide">';
 		printf(
 			'<label for="wpe_scm_cost_amount">%s</label>',
-			esc_html__( 'Merchant-paid shipping cost', 'wpessential-shipping-cost-monitor' )
+			esc_html__( 'Merchant-paid shipping cost', 'shipping-cost-monitor-for-woocommerce' )
 		);
 		printf(
 			'<input type="number" class="short wc_input_price" id="wpe_scm_cost_amount" name="wpe_scm_cost_amount" min="0" step="%1$s" value="%2$s" inputmode="decimal" />',
@@ -87,19 +87,19 @@ final class OrderCostFields {
 		echo '<p class="form-field form-field-wide">';
 		printf(
 			'<label for="wpe_scm_cost_currency">%s</label>',
-			esc_html__( 'Cost currency (ISO 4217)', 'wpessential-shipping-cost-monitor' )
+			esc_html__( 'Cost currency (ISO 4217)', 'shipping-cost-monitor-for-woocommerce' )
 		);
 		printf(
 			'<input type="text" class="short" id="wpe_scm_cost_currency" name="wpe_scm_cost_currency" maxlength="3" pattern="[A-Za-z]{3}" value="%1$s" aria-describedby="wpe-scm-cost-currency-help" />',
 			esc_attr( $currency )
 		);
-		echo '<span id="wpe-scm-cost-currency-help" class="description">' . esc_html__( 'Defaults to the order currency. A different currency will not be compared automatically.', 'wpessential-shipping-cost-monitor' ) . '</span>';
+		echo '<span id="wpe-scm-cost-currency-help" class="description">' . esc_html__( 'Defaults to the order currency. A different currency will not be compared automatically.', 'shipping-cost-monitor-for-woocommerce' ) . '</span>';
 		echo '</p>';
 
 		echo '<p class="form-field form-field-wide">';
 		printf(
 			'<label for="wpe_scm_cost_evidence">%s</label>',
-			esc_html__( 'Cost evidence', 'wpessential-shipping-cost-monitor' )
+			esc_html__( 'Cost evidence', 'shipping-cost-monitor-for-woocommerce' )
 		);
 		echo '<select class="short" id="wpe_scm_cost_evidence" name="wpe_scm_cost_evidence">';
 		foreach ( $this->evidence_options() as $value => $label ) {
@@ -116,13 +116,13 @@ final class OrderCostFields {
 		echo '<p class="form-field form-field-wide">';
 		printf(
 			'<label for="wpe_scm_cost_tax_basis">%s</label>',
-			esc_html__( 'Cost tax treatment', 'wpessential-shipping-cost-monitor' )
+			esc_html__( 'Cost tax treatment', 'shipping-cost-monitor-for-woocommerce' )
 		);
 		echo '<select class="short" id="wpe_scm_cost_tax_basis" name="wpe_scm_cost_tax_basis">';
 		$tax_options = array(
-			'unknown'   => __( 'Unknown — do not compare', 'wpessential-shipping-cost-monitor' ),
-			'exclusive' => __( 'Tax-exclusive', 'wpessential-shipping-cost-monitor' ),
-			'inclusive' => __( 'Tax-inclusive', 'wpessential-shipping-cost-monitor' ),
+			'unknown'   => __( 'Unknown — do not compare', 'shipping-cost-monitor-for-woocommerce' ),
+			'exclusive' => __( 'Tax-exclusive', 'shipping-cost-monitor-for-woocommerce' ),
+			'inclusive' => __( 'Tax-inclusive', 'shipping-cost-monitor-for-woocommerce' ),
 		);
 		foreach ( $tax_options as $value => $label ) {
 			printf(
@@ -133,13 +133,13 @@ final class OrderCostFields {
 			);
 		}
 		echo '</select>';
-		echo '<span class="description">' . esc_html__( 'Variance is calculated only when the entered courier amount is tax-exclusive, matching the shipping total shown in reports.', 'wpessential-shipping-cost-monitor' ) . '</span>';
+		echo '<span class="description">' . esc_html__( 'Variance is calculated only when the entered courier amount is tax-exclusive, matching the shipping total shown in reports.', 'shipping-cost-monitor-for-woocommerce' ) . '</span>';
 		echo '</p>';
 
 		echo '<p class="form-field form-field-wide">';
 		printf(
 			'<label for="wpe_scm_cost_note">%s</label>',
-			esc_html__( 'Source or note', 'wpessential-shipping-cost-monitor' )
+			esc_html__( 'Source or note', 'shipping-cost-monitor-for-woocommerce' )
 		);
 		printf(
 			'<textarea class="short" id="wpe_scm_cost_note" name="wpe_scm_cost_note" rows="2" maxlength="2000">%s</textarea>',
@@ -147,7 +147,7 @@ final class OrderCostFields {
 		);
 		echo '</p>';
 
-		echo '<p class="description">' . esc_html__( 'Leave the amount empty and save the order to remove the current cost record.', 'wpessential-shipping-cost-monitor' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Leave the amount empty and save the order to remove the current cost record.', 'shipping-cost-monitor-for-woocommerce' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -223,7 +223,7 @@ final class OrderCostFields {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: currency code, 2: amount, 3: evidence label, 4: tax treatment. */
-					__( 'Shipping cost record removed: %1$s %2$s (%3$s; tax %4$s).', 'wpessential-shipping-cost-monitor' ),
+					__( 'Shipping cost record removed: %1$s %2$s (%3$s; tax %4$s).', 'shipping-cost-monitor-for-woocommerce' ),
 					$previous_currency,
 					$previous_amount,
 					$this->evidence_label( $previous_evidence ),
@@ -291,7 +291,7 @@ final class OrderCostFields {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: action, 2: old currency, 3: old amount, 4: old evidence, 5: new currency, 6: new amount, 7: new evidence, 8: new tax basis, 9: optional source note change. */
-					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s; tax %8$s)%9$s.', 'wpessential-shipping-cost-monitor' ),
+					__( 'Shipping cost record %1$s: %2$s %3$s (%4$s) → %5$s %6$s (%7$s; tax %8$s)%9$s.', 'shipping-cost-monitor-for-woocommerce' ),
 					$action,
 					$previous_currency,
 					$previous_amount,
@@ -300,14 +300,14 @@ final class OrderCostFields {
 					$amount,
 					$this->evidence_label( $evidence ),
 					$tax_basis,
-					$previous_note !== $note ? __( '; source note updated', 'wpessential-shipping-cost-monitor' ) : ''
+					$previous_note !== $note ? __( '; source note updated', 'shipping-cost-monitor-for-woocommerce' ) : ''
 				),
 				0,
 				true
 			);
 		} elseif ( $previous_note !== $note ) {
 			$order->add_order_note(
-				__( 'Shipping cost source note updated.', 'wpessential-shipping-cost-monitor' ),
+				__( 'Shipping cost source note updated.', 'shipping-cost-monitor-for-woocommerce' ),
 				0,
 				true
 			);
@@ -345,10 +345,10 @@ final class OrderCostFields {
 	 */
 	private function evidence_options(): array {
 		return array(
-			'merchant_confirmed' => __( 'Merchant-confirmed', 'wpessential-shipping-cost-monitor' ),
-			'invoice_final'      => __( 'Invoice-final', 'wpessential-shipping-cost-monitor' ),
-			'booked_label'       => __( 'Booked label / manifest', 'wpessential-shipping-cost-monitor' ),
-			'estimate'           => __( 'Estimate only', 'wpessential-shipping-cost-monitor' ),
+			'merchant_confirmed' => __( 'Merchant-confirmed', 'shipping-cost-monitor-for-woocommerce' ),
+			'invoice_final'      => __( 'Invoice-final', 'shipping-cost-monitor-for-woocommerce' ),
+			'booked_label'       => __( 'Booked label / manifest', 'shipping-cost-monitor-for-woocommerce' ),
+			'estimate'           => __( 'Estimate only', 'shipping-cost-monitor-for-woocommerce' ),
 		);
 	}
 
@@ -359,6 +359,6 @@ final class OrderCostFields {
 	 */
 	private function evidence_label( string $evidence ): string {
 		$options = $this->evidence_options();
-		return isset( $options[ $evidence ] ) ? $options[ $evidence ] : __( 'Unclassified', 'wpessential-shipping-cost-monitor' );
+		return isset( $options[ $evidence ] ) ? $options[ $evidence ] : __( 'Unclassified', 'shipping-cost-monitor-for-woocommerce' );
 	}
 }

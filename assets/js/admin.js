@@ -35,7 +35,7 @@
 
 		function appendField() {
 			if ( row.length >= maximumColumns ) {
-				throw new Error( __( 'This preview supports up to 100 columns per row.', 'wpessential-shipping-cost-monitor' ) );
+				throw new Error( __( 'This preview supports up to 100 columns per row.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 			row.push( field );
 			field = '';
@@ -45,7 +45,7 @@
 		function appendCharacter( character ) {
 			field += character;
 			if ( field.length > maximumFieldLength ) {
-				throw new Error( __( 'A CSV field exceeds the 65,536-character preview limit.', 'wpessential-shipping-cost-monitor' ) );
+				throw new Error( __( 'A CSV field exceeds the 65,536-character preview limit.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 		}
 
@@ -54,7 +54,7 @@
 
 			if ( '"' === character ) {
 				if ( quoteClosed ) {
-					throw new Error( __( 'Unexpected text follows a closing quote.', 'wpessential-shipping-cost-monitor' ) );
+					throw new Error( __( 'Unexpected text follows a closing quote.', 'shipping-cost-monitor-for-woocommerce' ) );
 				}
 				if ( inQuotes && '"' === text[ index + 1 ] ) {
 					appendCharacter( '"' );
@@ -65,13 +65,13 @@
 				} else if ( '' === field ) {
 					inQuotes = true;
 				} else {
-					throw new Error( __( 'A quote appears in an invalid position.', 'wpessential-shipping-cost-monitor' ) );
+					throw new Error( __( 'A quote appears in an invalid position.', 'shipping-cost-monitor-for-woocommerce' ) );
 				}
 				continue;
 			}
 
 			if ( quoteClosed && ( ! inQuotes && character !== delimiter && '\n' !== character && '\r' !== character ) ) {
-				throw new Error( __( 'Unexpected text follows a closing quote.', 'wpessential-shipping-cost-monitor' ) );
+				throw new Error( __( 'Unexpected text follows a closing quote.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 
 			if ( ! inQuotes && character === delimiter ) {
@@ -87,7 +87,7 @@
 				rows.push( row );
 				row = [];
 				if ( rows.length > 5001 ) {
-					throw new Error( __( 'This preview is limited to 5,000 data rows.', 'wpessential-shipping-cost-monitor' ) );
+					throw new Error( __( 'This preview is limited to 5,000 data rows.', 'shipping-cost-monitor-for-woocommerce' ) );
 				}
 				continue;
 			}
@@ -96,7 +96,7 @@
 		}
 
 		if ( inQuotes ) {
-			throw new Error( __( 'The CSV has an unclosed quoted field.', 'wpessential-shipping-cost-monitor' ) );
+			throw new Error( __( 'The CSV has an unclosed quoted field.', 'shipping-cost-monitor-for-woocommerce' ) );
 		}
 
 		if ( '' !== field || row.length > 0 ) {
@@ -105,7 +105,7 @@
 		}
 
 		if ( rows.length > 5001 ) {
-			throw new Error( __( 'This preview is limited to 5,000 data rows.', 'wpessential-shipping-cost-monitor' ) );
+			throw new Error( __( 'This preview is limited to 5,000 data rows.', 'shipping-cost-monitor-for-woocommerce' ) );
 		}
 
 		return rows.filter( function ( values ) {
@@ -198,14 +198,14 @@
 				const text = rawCsv.replace( /^\uFEFF/, '' );
 				const records = parseCsvRecords( text, delimiter );
 				if ( records.length < 2 ) {
-					throw new Error( __( 'Select a CSV with a header row and at least one data row.', 'wpessential-shipping-cost-monitor' ) );
+					throw new Error( __( 'Select a CSV with a header row and at least one data row.', 'shipping-cost-monitor-for-woocommerce' ) );
 				}
 
 				const headers = records[ 0 ].map( function ( value ) {
 					return value.trim();
 				} );
 				if ( headers.some( function ( value ) { return '' === value; } ) ) {
-					throw new Error( __( 'Every CSV column needs a non-empty header.', 'wpessential-shipping-cost-monitor' ) );
+					throw new Error( __( 'Every CSV column needs a non-empty header.', 'shipping-cost-monitor-for-woocommerce' ) );
 				}
 
 				const rows = records.slice( 1 ).map( function ( values, index ) {
@@ -239,7 +239,7 @@
 				setError( '' );
 			} catch ( parseError ) {
 				setParsed( null );
-				setError( parseError.message || __( 'Could not read this CSV.', 'wpessential-shipping-cost-monitor' ) );
+				setError( parseError.message || __( 'Could not read this CSV.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 		}, [ rawCsv, delimiter, sourceFormat ] );
 
@@ -249,7 +249,7 @@
 			} );
 			setSourceFormat( 'shipstation_api' );
 			setRawCsv( '' );
-			setFileName( __( 'ShipStation label API preview', 'wpessential-shipping-cost-monitor' ) );
+			setFileName( __( 'ShipStation label API preview', 'shipping-cost-monitor-for-woocommerce' ) );
 			setParsed( { headers: [ 'Order reference', 'Booked cost', 'Currency', 'Refund status', 'Label ID', 'Created at' ], rows: rows } );
 			setMapping( { reference: '0', amount: '1', currency: '2' } );
 			setEvidence( 'booked_label' );
@@ -263,11 +263,11 @@
 
 		function saveMappingProfile() {
 			if ( ! parsed || ! mapping.reference || ! mapping.amount ) {
-				setProfileNotice( __( 'Choose a file and map its order reference and amount columns first.', 'wpessential-shipping-cost-monitor' ) );
+				setProfileNotice( __( 'Choose a file and map its order reference and amount columns first.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 
-			const name = window.prompt( __( 'Name this CSV mapping profile', 'wpessential-shipping-cost-monitor' ) );
+			const name = window.prompt( __( 'Name this CSV mapping profile', 'shipping-cost-monitor-for-woocommerce' ) );
 			if ( ! name ) {
 				return;
 			}
@@ -293,9 +293,9 @@
 				window.localStorage.setItem( mappingProfileStorageKey, JSON.stringify( nextProfiles ) );
 				setMappingProfiles( nextProfiles );
 				setSelectedProfileId( profile.id );
-				setProfileNotice( __( 'Mapping profile saved in this browser. It contains column names and import settings only.', 'wpessential-shipping-cost-monitor' ) );
+				setProfileNotice( __( 'Mapping profile saved in this browser. It contains column names and import settings only.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} catch ( error ) {
-				setProfileNotice( __( 'Browser storage is unavailable, so the mapping profile was not saved.', 'wpessential-shipping-cost-monitor' ) );
+				setProfileNotice( __( 'Browser storage is unavailable, so the mapping profile was not saved.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 		}
 
@@ -305,7 +305,7 @@
 				return;
 			}
 			if ( profile.sourceFormat !== sourceFormat || JSON.stringify( profile.headers ) !== JSON.stringify( parsed.headers ) ) {
-				setProfileNotice( __( 'This profile belongs to a different source format or header layout.', 'wpessential-shipping-cost-monitor' ) );
+				setProfileNotice( __( 'This profile belongs to a different source format or header layout.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 			setMapping( profile.mapping );
@@ -318,7 +318,7 @@
 			setTaxBasis( profile.taxBasis );
 			setMatchResults( {} );
 			setCommitResults( {} );
-			setProfileNotice( __( 'Mapping profile applied to the current preview.', 'wpessential-shipping-cost-monitor' ) );
+			setProfileNotice( __( 'Mapping profile applied to the current preview.', 'shipping-cost-monitor-for-woocommerce' ) );
 		}
 
 		function deleteMappingProfile() {
@@ -327,9 +327,9 @@
 				window.localStorage.setItem( mappingProfileStorageKey, JSON.stringify( nextProfiles ) );
 				setMappingProfiles( nextProfiles );
 				setSelectedProfileId( '' );
-				setProfileNotice( __( 'Mapping profile deleted from this browser.', 'wpessential-shipping-cost-monitor' ) );
+				setProfileNotice( __( 'Mapping profile deleted from this browser.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} catch ( error ) {
-				setProfileNotice( __( 'Browser storage is unavailable, so the mapping profile could not be deleted.', 'wpessential-shipping-cost-monitor' ) );
+				setProfileNotice( __( 'Browser storage is unavailable, so the mapping profile could not be deleted.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 		}
 
@@ -346,12 +346,12 @@
 			setCommitResults( {} );
 			if ( file.size > 5242880 ) {
 				setFileName( '' );
-				setError( __( 'Files must be 5 MB or smaller.', 'wpessential-shipping-cost-monitor' ) );
+				setError( __( 'Files must be 5 MB or smaller.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 			if ( ! /\.csv$/i.test( file.name ) ) {
 				setFileName( '' );
-				setError( __( 'Choose a .csv file.', 'wpessential-shipping-cost-monitor' ) );
+				setError( __( 'Choose a .csv file.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 
@@ -362,7 +362,7 @@
 				setRawCsv( String( reader.result || '' ) );
 			};
 			reader.onerror = function () {
-				setError( __( 'The selected file could not be read.', 'wpessential-shipping-cost-monitor' ) );
+				setError( __( 'The selected file could not be read.', 'shipping-cost-monitor-for-woocommerce' ) );
 			};
 			reader.readAsText( file );
 		}
@@ -472,13 +472,13 @@
 
 		function matchReferences() {
 			if ( ! report.ajax_url || ! report.match_nonce || ! parsed ) {
-				setMatchError( __( 'Matching is unavailable. Reload the dashboard and try again.', 'wpessential-shipping-cost-monitor' ) );
+				setMatchError( __( 'Matching is unavailable. Reload the dashboard and try again.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 
 			const rowsToMatch = validRows.slice( 0, 50 );
 			if ( rowsToMatch.length < 1 ) {
-				setMatchError( __( 'Map the order ID/number and amount columns, then map a currency column or choose the matched order currency.', 'wpessential-shipping-cost-monitor' ) );
+				setMatchError( __( 'Map the order ID/number and amount columns, then map a currency column or choose the matched order currency.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 
@@ -498,7 +498,7 @@
 				.then( function ( response ) { return response.json(); } )
 				.then( function ( payload ) {
 					if ( ! payload || ! payload.success || ! payload.data || ! Array.isArray( payload.data.results ) ) {
-						throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The matching request failed.', 'wpessential-shipping-cost-monitor' ) );
+						throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The matching request failed.', 'shipping-cost-monitor-for-woocommerce' ) );
 					}
 					const resultMap = {};
 					payload.data.results.forEach( function ( result ) {
@@ -507,14 +507,14 @@
 					setMatchResults( resultMap );
 				} )
 				.catch( function ( requestError ) {
-					setMatchError( requestError.message || __( 'The matching request failed.', 'wpessential-shipping-cost-monitor' ) );
+					setMatchError( requestError.message || __( 'The matching request failed.', 'shipping-cost-monitor-for-woocommerce' ) );
 				} )
 				.finally( function () { setMatching( false ); } );
 		}
 
 		async function createBatchHash() {
 			if ( ! window.crypto || ! window.crypto.subtle || ! window.TextEncoder ) {
-				throw new Error( __( 'Secure file fingerprinting is unavailable in this browser. No invoice data was sent.', 'wpessential-shipping-cost-monitor' ) );
+				throw new Error( __( 'Secure file fingerprinting is unavailable in this browser. No invoice data was sent.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 
 			const signature = [
@@ -536,11 +536,11 @@
 
 		async function commitMatchedRows() {
 			if ( ! report.ajax_url || ! report.import_nonce || matchedRows.length < 1 ) {
-				setCommitError( __( 'There are no matched rows ready to save.', 'wpessential-shipping-cost-monitor' ) );
+				setCommitError( __( 'There are no matched rows ready to save.', 'shipping-cost-monitor-for-woocommerce' ) );
 				return;
 			}
 
-			if ( ! window.confirm( __( 'Save these matched courier costs to their WooCommerce orders? Existing cost records will be left unchanged.', 'wpessential-shipping-cost-monitor' ) ) ) {
+			if ( ! window.confirm( __( 'Save these matched courier costs to their WooCommerce orders? Existing cost records will be left unchanged.', 'shipping-cost-monitor-for-woocommerce' ) ) ) {
 				return;
 			}
 
@@ -569,7 +569,7 @@
 				const response = await fetch( report.ajax_url, { method: 'POST', credentials: 'same-origin', body: body } );
 				const payload = await response.json();
 				if ( ! payload || ! payload.success || ! payload.data || ! Array.isArray( payload.data.results ) ) {
-					throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The invoice rows could not be saved.', 'wpessential-shipping-cost-monitor' ) );
+					throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The invoice rows could not be saved.', 'shipping-cost-monitor-for-woocommerce' ) );
 				}
 
 				const resultMap = {};
@@ -578,7 +578,7 @@
 				} );
 				setCommitResults( resultMap );
 			} catch ( commitRequestError ) {
-				setCommitError( commitRequestError.message || __( 'The invoice rows could not be saved.', 'wpessential-shipping-cost-monitor' ) );
+				setCommitError( commitRequestError.message || __( 'The invoice rows could not be saved.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} finally {
 				setCommitting( false );
 			}
@@ -604,12 +604,12 @@
 							setCommitResults( {} );
 						},
 					},
-					h( 'option', { value: '' }, __( 'Choose a column', 'wpessential-shipping-cost-monitor' ) ),
-					field === 'currency' ? h( 'option', { value: '__order_currency__' }, __( 'Use matched order currency', 'wpessential-shipping-cost-monitor' ) ) : null,
+					h( 'option', { value: '' }, __( 'Choose a column', 'shipping-cost-monitor-for-woocommerce' ) ),
+					field === 'currency' ? h( 'option', { value: '__order_currency__' }, __( 'Use matched order currency', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
 					parsed ? parsed.headers.map( function ( header, index ) {
 						const normalized = header.trim().toLowerCase();
 						const headerLabel = headerCounts[ normalized ] > 1
-							? header + ' (' + __( 'Column', 'wpessential-shipping-cost-monitor' ) + ' ' + ( index + 1 ) + ')'
+							? header + ' (' + __( 'Column', 'shipping-cost-monitor-for-woocommerce' ) + ' ' + ( index + 1 ) + ')'
 							: header;
 						return h( 'option', { key: index, value: String( index ) }, headerLabel );
 					} ) : null
@@ -620,65 +620,65 @@
 		return h(
 			'section',
 			{ className: 'wpe-scm-card wpe-scm-import-card' },
-			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'INVOICE CSV PREVIEW', 'wpessential-shipping-cost-monitor' ) ),
-			h( 'h2', null, __( 'Preview a courier invoice CSV', 'wpessential-shipping-cost-monitor' ) ),
-			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'The file stays in this browser. Matching sends mapped order references to WordPress. Saving sends only matched row values and order IDs; the raw file and other columns are not stored. Mapping profiles are saved only in this browser and contain column names/settings, not invoice rows.', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'INVOICE CSV PREVIEW', 'shipping-cost-monitor-for-woocommerce' ) ),
+			h( 'h2', null, __( 'Preview a courier invoice CSV', 'shipping-cost-monitor-for-woocommerce' ) ),
+			h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'The file stays in this browser. Matching sends mapped order references to WordPress. Saving sends only matched row values and order IDs; the raw file and other columns are not stored. Mapping profiles are saved only in this browser and contain column names/settings, not invoice rows.', 'shipping-cost-monitor-for-woocommerce' ) ),
 			mappingProfiles.length && 'shipstation_api' !== sourceFormat ? h( 'div', { className: 'wpe-scm-import-toolbar' },
-				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Saved mapping profile', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: selectedProfileId, onChange: function ( event ) { setSelectedProfileId( event.target.value ); } }, h( 'option', { value: '' }, __( 'Choose a saved profile', 'wpessential-shipping-cost-monitor' ) ), mappingProfiles.map( function ( profile ) { return h( 'option', { key: profile.id, value: profile.id }, profile.name ); } ) ) ),
-				h( 'button', { type: 'button', className: 'button', onClick: applyMappingProfile, disabled: ! parsed || ! selectedProfileId }, __( 'Apply profile', 'wpessential-shipping-cost-monitor' ) ),
-				h( 'button', { type: 'button', className: 'button', onClick: deleteMappingProfile, disabled: ! selectedProfileId }, __( 'Delete profile', 'wpessential-shipping-cost-monitor' ) )
+				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Saved mapping profile', 'shipping-cost-monitor-for-woocommerce' ), h( 'select', { value: selectedProfileId, onChange: function ( event ) { setSelectedProfileId( event.target.value ); } }, h( 'option', { value: '' }, __( 'Choose a saved profile', 'shipping-cost-monitor-for-woocommerce' ) ), mappingProfiles.map( function ( profile ) { return h( 'option', { key: profile.id, value: profile.id }, profile.name ); } ) ) ),
+				h( 'button', { type: 'button', className: 'button', onClick: applyMappingProfile, disabled: ! parsed || ! selectedProfileId }, __( 'Apply profile', 'shipping-cost-monitor-for-woocommerce' ) ),
+				h( 'button', { type: 'button', className: 'button', onClick: deleteMappingProfile, disabled: ! selectedProfileId }, __( 'Delete profile', 'shipping-cost-monitor-for-woocommerce' ) )
 			) : null,
-			parsed && 'shipstation_api' !== sourceFormat ? h( 'div', { className: 'wpe-scm-import-toolbar' }, h( 'button', { type: 'button', className: 'button', onClick: saveMappingProfile }, __( 'Save current mapping', 'wpessential-shipping-cost-monitor' ) ) ) : null,
+			parsed && 'shipstation_api' !== sourceFormat ? h( 'div', { className: 'wpe-scm-import-toolbar' }, h( 'button', { type: 'button', className: 'button', onClick: saveMappingProfile }, __( 'Save current mapping', 'shipping-cost-monitor-for-woocommerce' ) ) ) : null,
 			profileNotice ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, profileNotice ) : null,
 			h( CarrierConnections, { onReviewLabels: useShipStationLabels } ),
 			h(
 				'div',
 				{ className: 'wpe-scm-import-toolbar' },
-				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Source format', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: sourceFormat, onChange: selectSourceFormat }, sourceFormat === 'shipstation_api' ? h( 'option', { value: 'shipstation_api', disabled: true }, __( 'ShipStation API label preview', 'wpessential-shipping-cost-monitor' ) ) : null, h( 'option', { value: 'generic' }, __( 'Generic courier CSV', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'woocommerce_shipping_labels' }, __( 'WooCommerce Shipping label report', 'wpessential-shipping-cost-monitor' ) ) ) ),
+				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Source format', 'shipping-cost-monitor-for-woocommerce' ), h( 'select', { value: sourceFormat, onChange: selectSourceFormat }, sourceFormat === 'shipstation_api' ? h( 'option', { value: 'shipstation_api', disabled: true }, __( 'ShipStation API label preview', 'shipping-cost-monitor-for-woocommerce' ) ) : null, h( 'option', { value: 'generic' }, __( 'Generic courier CSV', 'shipping-cost-monitor-for-woocommerce' ) ), h( 'option', { value: 'woocommerce_shipping_labels' }, __( 'WooCommerce Shipping label report', 'shipping-cost-monitor-for-woocommerce' ) ) ) ),
 
-				h( 'label', { className: 'wpe-scm-file-field' }, __( 'Choose CSV file (5 MB max)', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'file', accept: '.csv,text/csv', onChange: chooseFile } ) ),
+				h( 'label', { className: 'wpe-scm-file-field' }, __( 'Choose CSV file (5 MB max)', 'shipping-cost-monitor-for-woocommerce' ), h( 'input', { type: 'file', accept: '.csv,text/csv', onChange: chooseFile } ) ),
 				h(
 					'label',
 					{ className: 'wpe-scm-import-field' },
-					__( 'Column separator', 'wpessential-shipping-cost-monitor' ),
+					__( 'Column separator', 'shipping-cost-monitor-for-woocommerce' ),
 					h( 'select', { value: delimiter, onChange: function ( event ) { setDelimiter( event.target.value ); setMatchResults( {} ); setCommitResults( {} ); } },
-						h( 'option', { value: ',' }, __( 'Comma', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: ';' }, __( 'Semicolon', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: '\t' }, __( 'Tab', 'wpessential-shipping-cost-monitor' ) )
+						h( 'option', { value: ',' }, __( 'Comma', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: ';' }, __( 'Semicolon', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: '\t' }, __( 'Tab', 'shipping-cost-monitor-for-woocommerce' ) )
 					)
 				),
 				h(
 					'label',
 					{ className: 'wpe-scm-import-field' },
-					__( 'Decimal mark', 'wpessential-shipping-cost-monitor' ),
+					__( 'Decimal mark', 'shipping-cost-monitor-for-woocommerce' ),
 					h( 'select', { value: decimalMark, onChange: function ( event ) { setDecimalMark( event.target.value ); setMatchResults( {} ); setCommitResults( {} ); } },
-						h( 'option', { value: '.' }, __( 'Period (1,234.56)', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: ',' }, __( 'Comma (1.234,56)', 'wpessential-shipping-cost-monitor' ) )
+						h( 'option', { value: '.' }, __( 'Period (1,234.56)', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: ',' }, __( 'Comma (1.234,56)', 'shipping-cost-monitor-for-woocommerce' ) )
 					)
 				),
 				h(
 					'label',
 					{ className: 'wpe-scm-import-field' },
-					__( 'Imported evidence', 'wpessential-shipping-cost-monitor' ),
+					__( 'Imported evidence', 'shipping-cost-monitor-for-woocommerce' ),
 					h( 'select', { value: evidence, onChange: function ( event ) { setEvidence( event.target.value ); setCommitResults( {} ); } },
-						h( 'option', { value: 'invoice_final' }, __( 'Invoice-final', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: 'booked_label' }, __( 'Booked label / manifest', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: 'merchant_confirmed' }, __( 'Merchant-confirmed', 'wpessential-shipping-cost-monitor' ) )
+						h( 'option', { value: 'invoice_final' }, __( 'Invoice-final', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: 'booked_label' }, __( 'Booked label / manifest', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: 'merchant_confirmed' }, __( 'Merchant-confirmed', 'shipping-cost-monitor-for-woocommerce' ) )
 					)
 				),
 				h(
 					'label',
 					{ className: 'wpe-scm-import-field' },
-					__( 'Cost tax treatment', 'wpessential-shipping-cost-monitor' ),
+					__( 'Cost tax treatment', 'shipping-cost-monitor-for-woocommerce' ),
 					h( 'select', { value: taxBasis, onChange: function ( event ) { setTaxBasis( event.target.value ); setCommitResults( {} ); } },
-						h( 'option', { value: 'unknown' }, __( 'Unknown — do not compare', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: 'exclusive' }, __( 'Tax-exclusive', 'wpessential-shipping-cost-monitor' ) ),
-						h( 'option', { value: 'inclusive' }, __( 'Tax-inclusive', 'wpessential-shipping-cost-monitor' ) )
+						h( 'option', { value: 'unknown' }, __( 'Unknown — do not compare', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: 'exclusive' }, __( 'Tax-exclusive', 'shipping-cost-monitor-for-woocommerce' ) ),
+						h( 'option', { value: 'inclusive' }, __( 'Tax-inclusive', 'shipping-cost-monitor-for-woocommerce' ) )
 					)
 				)
 			),
-			fileName ? h( 'p', { className: 'wpe-scm-import-file' }, __( 'Selected:', 'wpessential-shipping-cost-monitor' ) + ' ' + fileName ) : null,
-			sourceFormat === 'woocommerce_shipping_labels' ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'This preset treats label prices as booked costs, uses the matched order currency and holds refund-status rows for review. Orders with multiple label rows may be marked duplicate and require separate reconciliation.', 'wpessential-shipping-cost-monitor' ) ) : null,
+			fileName ? h( 'p', { className: 'wpe-scm-import-file' }, __( 'Selected:', 'shipping-cost-monitor-for-woocommerce' ) + ' ' + fileName ) : null,
+			sourceFormat === 'woocommerce_shipping_labels' ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'This preset treats label prices as booked costs, uses the matched order currency and holds refund-status rows for review. Orders with multiple label rows may be marked duplicate and require separate reconciliation.', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
 			error ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, error ) : null,
 			matchError ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, matchError ) : null,
 			commitError ? h( 'p', { className: 'wpe-scm-report-notice', role: 'alert' }, commitError ) : null,
@@ -686,50 +686,50 @@
 				'div',
 				{ className: 'wpe-scm-import-preview' },
 				h( 'div', { className: 'wpe-scm-import-mapping' },
-					fieldSelect( __( 'Order ID / number', 'wpessential-shipping-cost-monitor' ), 'reference' ),
-					fieldSelect( __( 'Charge amount', 'wpessential-shipping-cost-monitor' ), 'amount' ),
-					fieldSelect( __( 'Currency code', 'wpessential-shipping-cost-monitor' ), 'currency' )
+					fieldSelect( __( 'Order ID / number', 'shipping-cost-monitor-for-woocommerce' ), 'reference' ),
+					fieldSelect( __( 'Charge amount', 'shipping-cost-monitor-for-woocommerce' ), 'amount' ),
+					fieldSelect( __( 'Currency code', 'shipping-cost-monitor-for-woocommerce' ), 'currency' )
 				),
-				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency (or inferred order currency). Negative rows and rows with a refund status require review and are excluded.', 'wpessential-shipping-cost-monitor' ) ),
-				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Show rows', 'wpessential-shipping-cost-monitor' ), h( 'select', { value: rowFilter, onChange: function ( event ) { setRowFilter( event.target.value ); } }, h( 'option', { value: 'all' }, __( 'All preview rows', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'needs_review' }, __( 'Needs review', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'ready', }, __( 'Ready to save', 'wpessential-shipping-cost-monitor' ) ), h( 'option', { value: 'saved', }, __( 'Saved', 'wpessential-shipping-cost-monitor' ) ) ) ),
+				h( 'p', { className: 'wpe-scm-import-count' }, validRows.length + ' / ' + parsed.rows.length + ' ' + __( 'rows have a valid reference, non-negative amount and three-letter currency (or inferred order currency). Negative rows and rows with a refund status require review and are excluded.', 'shipping-cost-monitor-for-woocommerce' ) ),
+				h( 'label', { className: 'wpe-scm-import-field' }, __( 'Show rows', 'shipping-cost-monitor-for-woocommerce' ), h( 'select', { value: rowFilter, onChange: function ( event ) { setRowFilter( event.target.value ); } }, h( 'option', { value: 'all' }, __( 'All preview rows', 'shipping-cost-monitor-for-woocommerce' ) ), h( 'option', { value: 'needs_review' }, __( 'Needs review', 'shipping-cost-monitor-for-woocommerce' ) ), h( 'option', { value: 'ready', }, __( 'Ready to save', 'shipping-cost-monitor-for-woocommerce' ) ), h( 'option', { value: 'saved', }, __( 'Saved', 'shipping-cost-monitor-for-woocommerce' ) ) ) ),
 				h( 'div', { className: 'wpe-scm-import-actions' },
-					h( 'button', { type: 'button', className: 'button', onClick: matchReferences, disabled: matching || validRows.length < 1 }, matching ? __( 'Matching…', 'wpessential-shipping-cost-monitor' ) : __( 'Match first 50 valid rows', 'wpessential-shipping-cost-monitor' ) ),
-					matchedRows.length > 0 ? h( 'button', { type: 'button', className: 'button button-primary', onClick: commitMatchedRows, disabled: committing }, committing ? __( 'Saving…', 'wpessential-shipping-cost-monitor' ) : __( 'Save matched costs to orders', 'wpessential-shipping-cost-monitor' ) ) : null,
-					h( 'button', { type: 'button', className: 'button', onClick: clearPreview, disabled: matching || committing }, __( 'Clear preview', 'wpessential-shipping-cost-monitor' ) )
+					h( 'button', { type: 'button', className: 'button', onClick: matchReferences, disabled: matching || validRows.length < 1 }, matching ? __( 'Matching…', 'shipping-cost-monitor-for-woocommerce' ) : __( 'Match first 50 valid rows', 'shipping-cost-monitor-for-woocommerce' ) ),
+					matchedRows.length > 0 ? h( 'button', { type: 'button', className: 'button button-primary', onClick: commitMatchedRows, disabled: committing }, committing ? __( 'Saving…', 'shipping-cost-monitor-for-woocommerce' ) : __( 'Save matched costs to orders', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
+					h( 'button', { type: 'button', className: 'button', onClick: clearPreview, disabled: matching || committing }, __( 'Clear preview', 'shipping-cost-monitor-for-woocommerce' ) )
 				),
-				matchedRows.length > 0 ? h( 'p', { className: 'wpe-scm-import-count' }, __( 'Saving updates only matched orders with no existing cost record. Existing costs are never replaced. After saving, reload the dashboard to refresh report totals.', 'wpessential-shipping-cost-monitor' ) ) : null,
+				matchedRows.length > 0 ? h( 'p', { className: 'wpe-scm-import-count' }, __( 'Saving updates only matched orders with no existing cost record. Existing costs are never replaced. After saving, reload the dashboard to refresh report totals.', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
 				h(
 					'div',
 					{ className: 'wpe-scm-import-table-wrap' },
 					h( 'table', { className: 'widefat striped wpe-scm-import-table' },
 						h( 'thead', null, h( 'tr', null,
-							h( 'th', null, __( 'Source row', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Reference', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Amount', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Currency', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Validation / match result', 'wpessential-shipping-cost-monitor' ) )
+							h( 'th', null, __( 'Source row', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Reference', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Amount', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Currency', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Validation / match result', 'shipping-cost-monitor-for-woocommerce' ) )
 						) ),
 						h( 'tbody', null, previewRows.map( function ( item ) {
 							const reference = '' !== mapping.reference ? item.values[ Number( mapping.reference ) ] || '' : '';
 							const amountRaw = '' !== mapping.amount ? item.values[ Number( mapping.amount ) ] || '' : '';
 							const amount = '' !== mapping.amount ? parseInvoiceAmount( amountRaw, decimalMark ) : null;
-							const currency = '__order_currency__' === mapping.currency ? __( 'Order currency', 'wpessential-shipping-cost-monitor' ) : ( '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '' );
+							const currency = '__order_currency__' === mapping.currency ? __( 'Order currency', 'shipping-cost-monitor-for-woocommerce' ) : ( '' !== mapping.currency ? String( item.values[ Number( mapping.currency ) ] || '' ).trim() : '' );
 							const valid = '' !== reference.trim() && null !== amount && '-' !== amount.charAt( 0 ) && ( '__order_currency__' === mapping.currency || /^[A-Za-z]{3}$/.test( currency ) ) && ! hasRefundStatus( item );
 							const match = matchResults[ item.number ];
 							const commitResult = commitResults[ item.number ];
 							const status = hasRefundStatus( item )
-								? __( 'Refund status needs review', 'wpessential-shipping-cost-monitor' )
+								? __( 'Refund status needs review', 'shipping-cost-monitor-for-woocommerce' )
 								: commitResult
 									? ( 'duplicate_order_in_batch' === commitResult.status
-										? __( 'Duplicate order in this invoice batch; none of its rows were saved.', 'wpessential-shipping-cost-monitor' )
+										? __( 'Duplicate order in this invoice batch; none of its rows were saved.', 'shipping-cost-monitor-for-woocommerce' )
 										: commitResult.status )
 								: match && 'matched' === match.status && match.order_number && '__order_currency__' !== mapping.currency && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
-									? __( 'Currency differs from order', 'wpessential-shipping-cost-monitor' ) + ' (' + match.currency + ')'
+									? __( 'Currency differs from order', 'shipping-cost-monitor-for-woocommerce' ) + ' (' + match.currency + ')'
 									: match && 'existing_cost' === match.status && match.order_number
-										? __( 'Existing cost on order', 'wpessential-shipping-cost-monitor' ) + ' #' + match.order_number
+										? __( 'Existing cost on order', 'shipping-cost-monitor-for-woocommerce' ) + ' #' + match.order_number
 										: match && 'matched' === match.status && match.order_number
 											? 'matched: #' + match.order_number + ' (' + match.order_status + ')'
-											: match ? match.status : valid ? __( 'Ready to match', 'wpessential-shipping-cost-monitor' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'wpessential-shipping-cost-monitor' ) : __( 'Missing or invalid required value', 'wpessential-shipping-cost-monitor' );
+											: match ? match.status : valid ? __( 'Ready to match', 'shipping-cost-monitor-for-woocommerce' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'shipping-cost-monitor-for-woocommerce' ) : __( 'Missing or invalid required value', 'shipping-cost-monitor-for-woocommerce' );
 							return h( 'tr', { key: item.number },
 								h( 'td', null, item.number ),
 								h( 'td', null, reference ),
@@ -739,10 +739,10 @@
 									status,
 									match && 'existing_cost' === match.status && match.existing_cost
 										? h( 'div', { className: 'wpe-scm-import-review-detail' },
-											h( 'strong', null, __( 'Review comparison:', 'wpessential-shipping-cost-monitor' ) ),
-											' ' + __( 'Recorded', 'wpessential-shipping-cost-monitor' ) + ': ' + match.existing_cost.currency + ' ' + match.existing_cost.amount + ' (' + match.existing_cost.evidence + '; tax ' + match.existing_cost.tax_basis + '). ',
-											__( 'CSV row', 'wpessential-shipping-cost-monitor' ) + ': ' + ( '__order_currency__' === mapping.currency ? match.currency : currency.toUpperCase() ) + ' ' + ( amount || amountRaw ) + '. ',
-											__( 'Existing value is kept; review the difference before changing the order.', 'wpessential-shipping-cost-monitor' )
+											h( 'strong', null, __( 'Review comparison:', 'shipping-cost-monitor-for-woocommerce' ) ),
+											' ' + __( 'Recorded', 'shipping-cost-monitor-for-woocommerce' ) + ': ' + match.existing_cost.currency + ' ' + match.existing_cost.amount + ' (' + match.existing_cost.evidence + '; tax ' + match.existing_cost.tax_basis + '). ',
+											__( 'CSV row', 'shipping-cost-monitor-for-woocommerce' ) + ': ' + ( '__order_currency__' === mapping.currency ? match.currency : currency.toUpperCase() ) + ' ' + ( amount || amountRaw ) + '. ',
+											__( 'Existing value is kept; review the difference before changing the order.', 'shipping-cost-monitor-for-woocommerce' )
 										)
 										: null
 								)
@@ -769,10 +769,10 @@
 		const [ syncFrom, setSyncFrom ] = useState( report.period ? report.period.start : '' );
 		const [ syncTo, setSyncTo ] = useState( report.period ? report.period.end : '' );
 		const stateLabels = {
-			connected: __( 'Connected', 'wpessential-shipping-cost-monitor' ),
-			disconnected: __( 'Not connected', 'wpessential-shipping-cost-monitor' ),
-			reauth_required: __( 'Reconnect required', 'wpessential-shipping-cost-monitor' ),
-			unavailable: __( 'Unavailable', 'wpessential-shipping-cost-monitor' ),
+			connected: __( 'Connected', 'shipping-cost-monitor-for-woocommerce' ),
+			disconnected: __( 'Not connected', 'shipping-cost-monitor-for-woocommerce' ),
+			reauth_required: __( 'Reconnect required', 'shipping-cost-monitor-for-woocommerce' ),
+			unavailable: __( 'Unavailable', 'shipping-cost-monitor-for-woocommerce' ),
 		};
 
 		async function requestAction( action, nonce, fields ) {
@@ -785,7 +785,7 @@
 			const response = await fetch( report.ajax_url, { method: 'POST', credentials: 'same-origin', body: body } );
 			const payload = await response.json();
 			if ( ! payload || ! payload.success || ! payload.data ) {
-				throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The carrier request failed.', 'wpessential-shipping-cost-monitor' ) );
+				throw new Error( payload && payload.data && payload.data.message ? payload.data.message : __( 'The carrier request failed.', 'shipping-cost-monitor-for-woocommerce' ) );
 			}
 			return payload.data;
 		}
@@ -799,7 +799,7 @@
 				setApiKey( '' );
 				setMessage( result.message );
 			} catch ( requestError ) {
-				setMessage( requestError.message || __( 'ShipStation could not be connected.', 'wpessential-shipping-cost-monitor' ) );
+				setMessage( requestError.message || __( 'ShipStation could not be connected.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} finally {
 				setBusy( false );
 			}
@@ -815,7 +815,7 @@
 				setNextCursor( '' );
 				setMessage( result.message );
 			} catch ( requestError ) {
-				setMessage( requestError.message || __( 'ShipStation could not be disconnected.', 'wpessential-shipping-cost-monitor' ) );
+				setMessage( requestError.message || __( 'ShipStation could not be disconnected.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} finally {
 				setBusy( false );
 			}
@@ -832,9 +832,9 @@
 				);
 				setPreviewItems( Array.isArray( result.items ) ? result.items : [] );
 				setNextCursor( result.next_cursor || '' );
-				setMessage( __( 'Label evidence loaded as a preview. No WooCommerce orders or costs were changed.', 'wpessential-shipping-cost-monitor' ) );
+				setMessage( __( 'Label evidence loaded as a preview. No WooCommerce orders or costs were changed.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} catch ( requestError ) {
-				setMessage( requestError.message || __( 'ShipStation labels could not be loaded.', 'wpessential-shipping-cost-monitor' ) );
+				setMessage( requestError.message || __( 'ShipStation labels could not be loaded.', 'shipping-cost-monitor-for-woocommerce' ) );
 			} finally {
 				setSyncing( false );
 			}
@@ -844,25 +844,25 @@
 			? h(
 				'div',
 				{ className: 'wpe-scm-carrier-controls' },
-				h( 'p', { className: 'description' }, __( 'ShipStation label shipment_cost is booked-label evidence, not the carrier’s final invoice. Return and void labels are excluded. Sync is read-only and previews a maximum of 100 labels per page.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'p', { className: 'description' }, __( 'ShipStation label shipment_cost is booked-label evidence, not the carrier’s final invoice. Return and void labels are excluded. Sync is read-only and previews a maximum of 100 labels per page.', 'shipping-cost-monitor-for-woocommerce' ) ),
 				h( 'div', { className: 'wpe-scm-carrier-date-fields' },
-					h( 'label', null, __( 'From', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'date', value: syncFrom, onChange: function ( event ) { setSyncFrom( event.target.value ); } } ) ),
-					h( 'label', null, __( 'To', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'date', value: syncTo, onChange: function ( event ) { setSyncTo( event.target.value ); } } ) )
+					h( 'label', null, __( 'From', 'shipping-cost-monitor-for-woocommerce' ), h( 'input', { type: 'date', value: syncFrom, onChange: function ( event ) { setSyncFrom( event.target.value ); } } ) ),
+					h( 'label', null, __( 'To', 'shipping-cost-monitor-for-woocommerce' ), h( 'input', { type: 'date', value: syncTo, onChange: function ( event ) { setSyncTo( event.target.value ); } } ) )
 				),
 				h( 'div', { className: 'wpe-scm-import-actions' },
-					h( 'button', { type: 'button', className: 'button button-primary', disabled: syncing || busy, onClick: function () { syncLabels( '1' ); } }, syncing ? __( 'Loading labels…', 'wpessential-shipping-cost-monitor' ) : __( 'Preview ShipStation labels', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'button', { type: 'button', className: 'button', disabled: busy || syncing, onClick: disconnectShipStation }, __( 'Disconnect', 'wpessential-shipping-cost-monitor' ) )
+					h( 'button', { type: 'button', className: 'button button-primary', disabled: syncing || busy, onClick: function () { syncLabels( '1' ); } }, syncing ? __( 'Loading labels…', 'shipping-cost-monitor-for-woocommerce' ) : __( 'Preview ShipStation labels', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'button', { type: 'button', className: 'button', disabled: busy || syncing, onClick: disconnectShipStation }, __( 'Disconnect', 'shipping-cost-monitor-for-woocommerce' ) )
 				),
 				previewItems.length
 					? h( 'div', { className: 'wpe-scm-import-table-wrap' },
 						h( 'table', { className: 'widefat striped wpe-scm-carrier-table' },
 							h( 'thead', null, h( 'tr', null,
-								h( 'th', null, __( 'Label', 'wpessential-shipping-cost-monitor' ) ),
-								h( 'th', null, __( 'External reference', 'wpessential-shipping-cost-monitor' ) ),
-								h( 'th', null, __( 'Tracking ID', 'wpessential-shipping-cost-monitor' ) ),
-								h( 'th', null, __( 'Booked cost', 'wpessential-shipping-cost-monitor' ) ),
-								h( 'th', null, __( 'Created', 'wpessential-shipping-cost-monitor' ) ),
-								h( 'th', null, __( 'Review', 'wpessential-shipping-cost-monitor' ) )
+								h( 'th', null, __( 'Label', 'shipping-cost-monitor-for-woocommerce' ) ),
+								h( 'th', null, __( 'External reference', 'shipping-cost-monitor-for-woocommerce' ) ),
+								h( 'th', null, __( 'Tracking ID', 'shipping-cost-monitor-for-woocommerce' ) ),
+								h( 'th', null, __( 'Booked cost', 'shipping-cost-monitor-for-woocommerce' ) ),
+								h( 'th', null, __( 'Created', 'shipping-cost-monitor-for-woocommerce' ) ),
+								h( 'th', null, __( 'Review', 'shipping-cost-monitor-for-woocommerce' ) )
 							) ),
 							h( 'tbody', null, previewItems.map( function ( item, index ) {
 								return h( 'tr', { key: item.label_id || item.provider_shipment_id || index },
@@ -871,29 +871,29 @@
 									h( 'td', null, item.tracking_id || '—' ),
 									h( 'td', null, item.currency + ' ' + item.amount ),
 									h( 'td', null, item.occurred_at || '—' ),
-									h( 'td', null, item.refund_status ? __( 'Refund status: ', 'wpessential-shipping-cost-monitor' ) + item.refund_status : __( 'Booked label; verify invoice', 'wpessential-shipping-cost-monitor' ) )
+									h( 'td', null, item.refund_status ? __( 'Refund status: ', 'shipping-cost-monitor-for-woocommerce' ) + item.refund_status : __( 'Booked label; verify invoice', 'shipping-cost-monitor-for-woocommerce' ) )
 								);
 							} ) )
 						)
 					)
 					: null,
-				nextCursor ? h( 'button', { type: 'button', className: 'button', disabled: syncing, onClick: function () { syncLabels( nextCursor ); } }, __( 'Load next page', 'wpessential-shipping-cost-monitor' ) ) : null,
-				previewItems.length && props.onReviewLabels ? h( 'button', { type: 'button', className: 'button button-primary', onClick: function () { props.onReviewLabels( previewItems ); } }, __( 'Review and match these labels', 'wpessential-shipping-cost-monitor' ) ) : null
+				nextCursor ? h( 'button', { type: 'button', className: 'button', disabled: syncing, onClick: function () { syncLabels( nextCursor ); } }, __( 'Load next page', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
+				previewItems.length && props.onReviewLabels ? h( 'button', { type: 'button', className: 'button button-primary', onClick: function () { props.onReviewLabels( previewItems ); } }, __( 'Review and match these labels', 'shipping-cost-monitor-for-woocommerce' ) ) : null
 			)
 			: h( 'div', { className: 'wpe-scm-carrier-controls' },
-				h( 'p', { className: 'description' }, __( 'ShipStation V2 API key. It is tested before saving and stored encrypted with site salts; it is never returned to the browser.', 'wpessential-shipping-cost-monitor' ) ),
-				h( 'label', { className: 'wpe-scm-carrier-key-label' }, __( 'API key', 'wpessential-shipping-cost-monitor' ),
+				h( 'p', { className: 'description' }, __( 'ShipStation V2 API key. It is tested before saving and stored encrypted with site salts; it is never returned to the browser.', 'shipping-cost-monitor-for-woocommerce' ) ),
+				h( 'label', { className: 'wpe-scm-carrier-key-label' }, __( 'API key', 'shipping-cost-monitor-for-woocommerce' ),
 					h( 'input', { type: 'password', autoComplete: 'new-password', value: apiKey, onChange: function ( event ) { setApiKey( event.target.value ); }, maxLength: 512 } )
 				),
-				h( 'button', { type: 'button', className: 'button button-primary', disabled: busy || apiKey.trim().length < 12, onClick: connectShipStation }, busy ? __( 'Testing connection…', 'wpessential-shipping-cost-monitor' ) : __( 'Test and connect', 'wpessential-shipping-cost-monitor' ) )
+				h( 'button', { type: 'button', className: 'button button-primary', disabled: busy || apiKey.trim().length < 12, onClick: connectShipStation }, busy ? __( 'Testing connection…', 'shipping-cost-monitor-for-woocommerce' ) : __( 'Test and connect', 'shipping-cost-monitor-for-woocommerce' ) )
 			);
 
 		return h(
 			'section',
 			{ className: 'wpe-scm-card wpe-scm-carrier-connections' },
-			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'OPTIONAL CARRIER DATA', 'wpessential-shipping-cost-monitor' ) ),
-			h( 'h2', null, __( 'Carrier connections', 'wpessential-shipping-cost-monitor' ) ),
-			h( 'p', null, __( 'Connect a supported shipping platform to preview booked shipment costs. API evidence never changes checkout rates or order totals automatically.', 'wpessential-shipping-cost-monitor' ) ),
+			h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'OPTIONAL CARRIER DATA', 'shipping-cost-monitor-for-woocommerce' ) ),
+			h( 'h2', null, __( 'Carrier connections', 'shipping-cost-monitor-for-woocommerce' ) ),
+			h( 'p', null, __( 'Connect a supported shipping platform to preview booked shipment costs. API evidence never changes checkout rates or order totals automatically.', 'shipping-cost-monitor-for-woocommerce' ) ),
 			h( 'div', { className: 'wpe-scm-carrier-provider' },
 				h( 'div', { className: 'wpe-scm-carrier-provider-heading' },
 					h( 'strong', null, 'ShipStation V2' ),
@@ -925,7 +925,7 @@
 		const period = report.period || {};
 		const mismatchCount = Number( report.currency_mismatch_orders || 0 );
 		const confirmedValue = moneyByCurrency( 'confirmed_cost', 'confirmed_orders' );
-		const varianceValue = report.variance_available ? moneyByCurrency( 'variance', 'comparable_orders' ) : __( 'Not available', 'wpessential-shipping-cost-monitor' );
+		const varianceValue = report.variance_available ? moneyByCurrency( 'variance', 'comparable_orders' ) : __( 'Not available', 'shipping-cost-monitor-for-woocommerce' );
 		const hasOrders = eligible > 0;
 		const comparableVariances = report.variance_available ? groups.filter( function ( group ) { return Number( group.comparable_orders ) > 0; } ).map( function ( group ) { return Number( group.variance ); } ) : [];
 		const varianceTone = comparableVariances.length < 1 || comparableVariances.some( function ( value ) { return ! Number.isFinite( value ); } )
@@ -934,7 +934,7 @@
 		const methodRows = groups.reduce( function ( rows, group ) {
 			return rows.concat( ( group.shipping_methods || [] ).filter( function ( method ) { return Number( method.comparable_orders ) > 0; } ).map( function ( method ) { return Object.assign( { currency: group.currency }, method ); } ) );
 		}, [] );
-		const periodLabel = period.start && period.end ? period.start + ' — ' + period.end + ' (' + ( period.timezone || 'UTC' ) + ')' : __( 'Last 30 days', 'wpessential-shipping-cost-monitor' );
+		const periodLabel = period.start && period.end ? period.start + ' — ' + period.end + ' (' + ( period.timezone || 'UTC' ) + ')' : __( 'Last 30 days', 'shipping-cost-monitor-for-woocommerce' );
 
 		return h(
 			'main',
@@ -945,11 +945,11 @@
 				h(
 					'div',
 					null,
-					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'SHIPPING INTELLIGENCE', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'h1', null, __( 'Shipping Cost Monitor', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', { className: 'wpe-scm-intro' }, __( 'Understand what customers paid for delivery and what your store paid to fulfil it.', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', { className: 'wpe-scm-period' }, __( 'Order period:', 'wpessential-shipping-cost-monitor' ) + ' ' + periodLabel ),
-					h( 'p', { className: 'wpe-scm-build-id' }, __( 'Build ID:', 'wpessential-shipping-cost-monitor' ) + ' ' + ( report.build_id || 'source' ) )
+					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'SHIPPING INTELLIGENCE', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'h1', null, __( 'Shipping Cost Monitor', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'p', { className: 'wpe-scm-intro' }, __( 'Understand what customers paid for delivery and what your store paid to fulfil it.', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'p', { className: 'wpe-scm-period' }, __( 'Order period:', 'shipping-cost-monitor-for-woocommerce' ) + ' ' + periodLabel ),
+					h( 'p', { className: 'wpe-scm-build-id' }, __( 'Build ID:', 'shipping-cost-monitor-for-woocommerce' ) + ' ' + ( report.build_id || 'source' ) )
 				),
 				h(
 					'a',
@@ -957,7 +957,7 @@
 						className: 'button button-primary wpe-scm-primary-action',
 						href: 'admin.php?page=wc-orders',
 					},
-					__( 'View WooCommerce orders', 'wpessential-shipping-cost-monitor' )
+					__( 'View WooCommerce orders', 'shipping-cost-monitor-for-woocommerce' )
 				)
 			),
 			h(
@@ -966,58 +966,58 @@
 				h(
 					'form',
 					{ className: 'wpe-scm-report-controls', method: 'get' },
-					h( 'input', { type: 'hidden', name: 'page', value: 'wpessential-shipping-cost-monitor' } ),
-					h( 'label', null, __( 'From', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'date', name: 'wpe_scm_start', value: period.start || '' } ) ),
-					h( 'label', null, __( 'To', 'wpessential-shipping-cost-monitor' ), h( 'input', { type: 'date', name: 'wpe_scm_end', value: period.end || '' } ) ),
-					h( 'button', { type: 'submit', className: 'button button-primary' }, __( 'Update report', 'wpessential-shipping-cost-monitor' ) )
+					h( 'input', { type: 'hidden', name: 'page', value: 'shipping-cost-monitor-for-woocommerce' } ),
+					h( 'label', null, __( 'From', 'shipping-cost-monitor-for-woocommerce' ), h( 'input', { type: 'date', name: 'wpe_scm_start', value: period.start || '' } ) ),
+					h( 'label', null, __( 'To', 'shipping-cost-monitor-for-woocommerce' ), h( 'input', { type: 'date', name: 'wpe_scm_end', value: period.end || '' } ) ),
+					h( 'button', { type: 'submit', className: 'button button-primary' }, __( 'Update report', 'shipping-cost-monitor-for-woocommerce' ) )
 				),
-				report.export_url ? h( 'a', { className: 'button wpe-scm-export-action', href: report.export_url }, __( 'Export CSV', 'wpessential-shipping-cost-monitor' ) ) : null
+				report.export_url ? h( 'a', { className: 'button wpe-scm-export-action', href: report.export_url }, __( 'Export CSV', 'shipping-cost-monitor-for-woocommerce' ) ) : null
 			),
-			report.period_reset ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'The selected dates were invalid or exceeded 366 days. Showing the default 30-day period.', 'wpessential-shipping-cost-monitor' ) ) : null,
+			report.period_reset ? h( 'p', { className: 'wpe-scm-report-notice', role: 'status' }, __( 'The selected dates were invalid or exceeded 366 days. Showing the default 30-day period.', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
 			h(
 				'section',
-				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'wpessential-shipping-cost-monitor' ) },
+				{ className: 'wpe-scm-metrics', 'aria-label': __( 'Shipping cost summary', 'shipping-cost-monitor-for-woocommerce' ) },
 				h( MetricCard, {
-					label: __( 'Shipping charged net', 'wpessential-shipping-cost-monitor' ),
+					label: __( 'Shipping charged net', 'shipping-cost-monitor-for-woocommerce' ),
 					value: moneyByCurrency( 'shipping_charged', 'orders' ),
-					note: __( 'After allocated shipping refunds; before shipping tax', 'wpessential-shipping-cost-monitor' ),
+					note: __( 'After allocated shipping refunds; before shipping tax', 'shipping-cost-monitor-for-woocommerce' ),
 				} ),
 				h( MetricCard, {
-					label: __( 'Confirmed cost', 'wpessential-shipping-cost-monitor' ),
+					label: __( 'Confirmed cost', 'shipping-cost-monitor-for-woocommerce' ),
 					value: confirmedValue,
-					note: __( 'Invoice-final or merchant-confirmed; matching currency only', 'wpessential-shipping-cost-monitor' ),
+					note: __( 'Invoice-final or merchant-confirmed; matching currency only', 'shipping-cost-monitor-for-woocommerce' ),
 				} ),
 				h( MetricCard, {
-					label: __( 'Shipping variance', 'wpessential-shipping-cost-monitor' ),
+					label: __( 'Shipping variance', 'shipping-cost-monitor-for-woocommerce' ),
 					value: varianceValue,
 					tone: varianceTone,
-					note: report.variance_available ? report.comparable_orders + ' ' + _n( 'order with matching currency and tax-exclusive cost', 'orders with matching currency and tax-exclusive cost', Number( report.comparable_orders ), 'wpessential-shipping-cost-monitor' ) : __( 'No comparable confirmed costs in this period', 'wpessential-shipping-cost-monitor' ),
+					note: report.variance_available ? report.comparable_orders + ' ' + _n( 'order with matching currency and tax-exclusive cost', 'orders with matching currency and tax-exclusive cost', Number( report.comparable_orders ), 'shipping-cost-monitor-for-woocommerce' ) : __( 'No comparable confirmed costs in this period', 'shipping-cost-monitor-for-woocommerce' ),
 				} ),
 				h( MetricCard, {
-					label: __( 'Cost coverage', 'wpessential-shipping-cost-monitor' ),
+					label: __( 'Cost coverage', 'shipping-cost-monitor-for-woocommerce' ),
 					value: hasOrders ? coverage + '%' : '—',
-					note: hasOrders ? covered + ' / ' + eligible + ' ' + __( 'eligible orders', 'wpessential-shipping-cost-monitor' ) : __( 'No eligible orders in this period', 'wpessential-shipping-cost-monitor' ),
+					note: hasOrders ? covered + ' / ' + eligible + ' ' + __( 'eligible orders', 'shipping-cost-monitor-for-woocommerce' ) : __( 'No eligible orders in this period', 'shipping-cost-monitor-for-woocommerce' ),
 				} )
 			),
 			mismatchCount > 0 ? h(
 				'p',
 				{ className: 'wpe-scm-report-notice', role: 'status' },
-				mismatchCount + ' ' + __( 'confirmed cost record(s) use a different currency and are excluded from the confirmed-cost total and coverage.', 'wpessential-shipping-cost-monitor' )
+				mismatchCount + ' ' + __( 'confirmed cost record(s) use a different currency and are excluded from the confirmed-cost total and coverage.', 'shipping-cost-monitor-for-woocommerce' )
 			) : null,
 			methodRows.length > 0 ? h(
 				'section',
 				{ className: 'wpe-scm-card wpe-scm-method-report' },
-				h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'COST BY SHIPPING METHOD', 'wpessential-shipping-cost-monitor' ) ),
-				h( 'h2', null, __( 'Comparable shipping cost by method', 'wpessential-shipping-cost-monitor' ) ),
-				h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Variance includes only currency-matched, confirmed tax-exclusive cost records. Mixed-method orders are grouped by their method combination.', 'wpessential-shipping-cost-monitor' ) ),
+				h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'COST BY SHIPPING METHOD', 'shipping-cost-monitor-for-woocommerce' ) ),
+				h( 'h2', null, __( 'Comparable shipping cost by method', 'shipping-cost-monitor-for-woocommerce' ) ),
+				h( 'p', { className: 'wpe-scm-import-privacy' }, __( 'Variance includes only currency-matched, confirmed tax-exclusive cost records. Mixed-method orders are grouped by their method combination.', 'shipping-cost-monitor-for-woocommerce' ) ),
 				h( 'div', { className: 'wpe-scm-import-table-wrap' },
 					h( 'table', { className: 'widefat striped wpe-scm-import-table wpe-scm-method-table' },
 						h( 'thead', null, h( 'tr', null,
-							h( 'th', null, __( 'Shipping method', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Orders', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Shipping charged', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Confirmed cost', 'wpessential-shipping-cost-monitor' ) ),
-							h( 'th', null, __( 'Variance', 'wpessential-shipping-cost-monitor' ) )
+							h( 'th', null, __( 'Shipping method', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Orders', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Shipping charged', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Confirmed cost', 'shipping-cost-monitor-for-woocommerce' ) ),
+							h( 'th', null, __( 'Variance', 'shipping-cost-monitor-for-woocommerce' ) )
 						) ),
 						h( 'tbody', null, methodRows.map( function ( method, index ) {
 							return h( 'tr', { key: method.currency + '-' + index },
@@ -1036,8 +1036,8 @@
 				{ className: 'wpe-scm-card wpe-scm-empty-state', 'aria-live': 'polite' },
 				h( 'div', { className: 'wpe-scm-empty-icon', 'aria-hidden': 'true' }, hasOrders ? '✓' : '↗' ),
 				h( 'div', null,
-					h( 'h2', null, hasOrders ? __( 'Currency-separated order summary', 'wpessential-shipping-cost-monitor' ) : __( 'No eligible shipping orders found', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, hasOrders ? __( 'Variance uses net shipping after allocated refunds and only currency-matched, tax-exclusive confirmed costs.', 'wpessential-shipping-cost-monitor' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'h2', null, hasOrders ? __( 'Currency-separated order summary', 'shipping-cost-monitor-for-woocommerce' ) : __( 'No eligible shipping orders found', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'p', null, hasOrders ? __( 'Variance uses net shipping after allocated refunds and only currency-matched, tax-exclusive confirmed costs.', 'shipping-cost-monitor-for-woocommerce' ) : __( 'Eligible orders are Processing or Completed orders with a WooCommerce shipping line, created during the displayed period.', 'shipping-cost-monitor-for-woocommerce' ) )
 				)
 			),
 			h( CsvInvoicePreview ),
@@ -1047,16 +1047,16 @@
 				h(
 					'section',
 					{ className: 'wpe-scm-card wpe-scm-next-card' },
-					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'HOW THIS REPORT WORKS', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'h2', null, __( 'Reporting scope', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export includes refund allocation; custom statuses and multi-currency conversion are not supported.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'p', { className: 'wpe-scm-eyebrow' }, __( 'HOW THIS REPORT WORKS', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'h2', null, __( 'Reporting scope', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'p', null, __( 'Choose a date range of up to 366 days. CSV export includes refund allocation; custom statuses and multi-currency conversion are not supported.', 'shipping-cost-monitor-for-woocommerce' ) )
 				),
 				h(
 					'aside',
 					{ className: 'wpe-scm-card wpe-scm-principle-card' },
 					h( 'span', { className: 'wpe-scm-principle-mark', 'aria-hidden': 'true' }, '“' ),
-					h( 'h2', null, __( 'Evidence before estimates', 'wpessential-shipping-cost-monitor' ) ),
-					h( 'p', null, __( 'A quote is an estimate. A booked label is provisional. Only invoice-final or merchant-confirmed costs count as confirmed.', 'wpessential-shipping-cost-monitor' ) )
+					h( 'h2', null, __( 'Evidence before estimates', 'shipping-cost-monitor-for-woocommerce' ) ),
+					h( 'p', null, __( 'A quote is an estimate. A booked label is provisional. Only invoice-final or merchant-confirmed costs count as confirmed.', 'shipping-cost-monitor-for-woocommerce' ) )
 				)
 			)
 		);

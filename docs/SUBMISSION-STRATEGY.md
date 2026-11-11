@@ -102,8 +102,8 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 | `readme.txt` in directory format | Done in source; meta follows the existing `wpessential` plugin (contributor `wpessential`, 5 tags, same field set). This plugin stays GPLv2-or-later, while that plugin is GPLv3-or-later | Run the official readme validator before upload |
 | Stable tag equals plugin version | Enforced in CI | — |
 | "Tested up to" | 7.1, matching recorded WP 7.1.4 runs | Update at release |
-| Plugin Check (PCP) | Not run | Run on the CI ZIP on a test site; fix errors |
-| Slug availability | Not checked | `wpessential-shipping-cost-monitor` is requested at submission; only the account owner can submit |
+| Plugin Check (PCP) | Run 2026-11-11 on `main` at `93c63a4` in Playground: 0 errors; 3 trademark warnings fixed by F-5; 5 warnings are repository-only files absent from the CI ZIP | Re-run on the renamed CI ZIP | Run on the CI ZIP on a test site; fix errors |
+| Plugin name and slug | Done in source (F-5): "Shipping Cost Monitor for WooCommerce" / `shipping-cost-monitor-for-woocommerce`; WordPress.org API returned "Plugin not found" on 2026-11-11 | Reserved only on acceptance; only the account owner can submit |
 | Screenshots, banner and icon assets | Not done | Owner/design; captions already listed in `readme.txt` |
 | Submission upload and review replies | Not done | Account owner, from the `wpessential` WordPress.org account with 2FA |
 | SVN release | Not done | After approval |

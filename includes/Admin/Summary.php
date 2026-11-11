@@ -91,14 +91,14 @@ final class Summary {
 					$instance_id = method_exists( $shipping_item, 'get_instance_id' ) ? (string) $shipping_item->get_instance_id() : '';
 					$label = trim( (string) $shipping_item->get_method_title() );
 					$key = '' !== $method_id ? $method_id . ':' . $instance_id : 'label:' . strtolower( $label );
-					$method_labels[ $key ] = '' !== $label ? $label : __( 'Unspecified shipping method', 'wpessential-shipping-cost-monitor' );
+					$method_labels[ $key ] = '' !== $label ? $label : __( 'Unspecified shipping method', 'shipping-cost-monitor-for-woocommerce' );
 				}
 			ksort( $method_labels );
 			$method_key = implode( '|', array_keys( $method_labels ) );
 			$method_label = implode( ' + ', array_values( $method_labels ) );
 			if ( '' === $method_key ) {
 				$method_key = 'unknown';
-				$method_label = __( 'Unspecified shipping method', 'wpessential-shipping-cost-monitor' );
+				$method_label = __( 'Unspecified shipping method', 'shipping-cost-monitor-for-woocommerce' );
 			}
 			if ( ! isset( $groups[ $order_currency ]['shipping_methods'][ $method_key ] ) ) {
 				$groups[ $order_currency ]['shipping_methods'][ $method_key ] = array(

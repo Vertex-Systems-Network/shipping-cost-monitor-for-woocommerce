@@ -34,10 +34,10 @@ final class Page {
 	public function add_menu_page(): void {
 		$page_hook = add_submenu_page(
 			'woocommerce',
-			__( 'Shipping Cost Monitor', 'wpessential-shipping-cost-monitor' ),
-			__( 'Shipping Cost Monitor', 'wpessential-shipping-cost-monitor' ),
+			__( 'Shipping Cost Monitor', 'shipping-cost-monitor-for-woocommerce' ),
+			__( 'Shipping Cost Monitor', 'shipping-cost-monitor-for-woocommerce' ),
 			'manage_woocommerce',
-			'wpessential-shipping-cost-monitor',
+			'shipping-cost-monitor-for-woocommerce',
 			array( $this, 'render_page' )
 		);
 
@@ -110,7 +110,7 @@ final class Page {
 			$dashboard
 		);
 
-		wp_set_script_translations( 'wpe-scm-admin', 'wpessential-shipping-cost-monitor' );
+		wp_set_script_translations( 'wpe-scm-admin', 'shipping-cost-monitor-for-woocommerce' );
 	}
 
 	/**
@@ -119,8 +119,8 @@ final class Page {
 	public function render_page(): void {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_die(
-				esc_html__( 'You do not have permission to view shipping cost reports.', 'wpessential-shipping-cost-monitor' ),
-				esc_html__( 'Access denied', 'wpessential-shipping-cost-monitor' ),
+				esc_html__( 'You do not have permission to view shipping cost reports.', 'shipping-cost-monitor-for-woocommerce' ),
+				esc_html__( 'Access denied', 'shipping-cost-monitor-for-woocommerce' ),
 				array( 'response' => 403 )
 			);
 		}

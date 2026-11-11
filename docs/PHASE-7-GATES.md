@@ -144,3 +144,14 @@ Each flagged line was read. None was an exploitable defect:
 - `base64_encode/decode` store the AES-256-GCM credential envelope; not obfuscation.
 
 Each line now carries a `phpcs:ignore` (or a `phpcs:disable`/`enable` pair for the base64 envelope) with its reason. Code behaviour is unchanged. After the change the same sniffs report no findings, and the ShipStation/uninstall stub harness still passes all cases. Remaining WordPress-Extra findings are file names (PSR-4 class files) and WooCommerce capabilities unknown to WPCS; both are intentional. Plugin Check itself has not been re-run on this change.
+
+
+## 2026-11-11 Plugin Check re-run after triage (P7-12 evidence, not closure)
+
+**Environment:** fresh non-persistent playground.wordpress.net site (`storage=none`), WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3 (PHP.wasm), Plugin Check 2.2.0. **Source:** `main` at `93c63a4` through a Blueprint `git:directory` resource with a hand-written autoloader stand-in (not the CI ZIP). An earlier attempt reused an autosaved site with old code and was discarded.
+
+**Result (General, Plugin Repo, Security; errors and warnings):** "Checks complete. 8 warnings found." No errors.
+- 5 warnings: `.cursor`, `.github`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` in the plugin root. These are repository files; the CI package copies only `assets`, `includes`, `vendor` and the release files.
+- 3 warnings `trademarked_term`: the plugin name and slug contained the restricted term "wp". Addressed by decision F-5 (rename to Shipping Cost Monitor for WooCommerce / `shipping-cost-monitor-for-woocommerce`) in the follow-up change; the text domain, menu slug, main file and package folder were renamed with it.
+
+After the rename, PHP lint, the JavaScript syntax check, the WPCS security/I18n sniffs with `text_domain=shipping-cost-monitor-for-woocommerce` and the ShipStation/uninstall stub harness all pass. Plugin Check has not yet been run on the renamed package.

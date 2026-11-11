@@ -1,4 +1,4 @@
-*** WPEssential Shipping Cost Monitor Changelog ***
+*** Shipping Cost Monitor for WooCommerce Changelog ***
 
 2026-11-11 - version 0.1.0
 * Add - Shipping-cost record on WooCommerce orders with private order-note history.
