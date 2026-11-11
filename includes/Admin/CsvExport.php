@@ -55,6 +55,7 @@ final class CsvExport {
 			$period['start'] . '-to-' . $period['end'] . '.csv"'
 		);
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streams the CSV to the HTTP response; no file is written.
 		$output = fopen( 'php://output', 'w' );
 		if ( false === $output ) {
 			wp_die( esc_html__( 'Unable to open the report stream.', 'wpessential-shipping-cost-monitor' ) );
@@ -163,6 +164,7 @@ final class CsvExport {
 			++$page;
 		} while ( $page <= $max_pages );
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Closes the php://output response stream opened above.
 		fclose( $output );
 		exit;
 	}

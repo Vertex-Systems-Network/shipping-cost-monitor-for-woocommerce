@@ -106,3 +106,26 @@ A source review of every PHP entry point confirmed each AJAX and admin-post hand
 An isolated PHP 8.3.6 stub harness (no WordPress; WordPress functions replaced by minimal stand-ins) exercised `ShipStationAdapter`: a too-short key and an HTTP 401 probe saved nothing; a valid key was stored only as an AES-256-GCM envelope with no plaintext; a tampered ciphertext returned `reauth_required`; default salts were rejected; a 32-day range and an invalid calendar date were rejected; voided, return and negative-cost labels were dropped; requests went only to the fixed `https://api.shipstation.com/v2/labels` host. `uninstall.php` removed the stored envelope, and the bootstrap registered an admin notice instead of failing when `vendor/autoload.php` was absent. PHP lint and a JavaScript syntax check passed on the working tree. These are static and stub results: no WordPress runtime, no real ShipStation account and no CI run are claimed.
 
 Changes in the same change set that need runtime confirmation (backlog AI-45): HPOS compatibility declaration, autoloader guard, `uninstall.php`, dashboard layout and style changes, and the packaged `readme.txt`, `changelog.txt` and `LICENSE`.
+
+
+## 2026-11-11 Playground runtime check of `main` at `a872b191de0e` (AI-45 / AI-46)
+
+**Environment:** playground.wordpress.net, WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3 (PHP.wasm, SQLite), Plugin Check 2.2.0. **Build:** repository source of `main` at `a872b191de0e` installed through a Blueprint `git:directory` resource, with a hand-written PSR-4 `vendor/autoload.php` stand-in and a `BUILD-ID.txt`. This is **not** the CI ZIP: the Composer autoloader and the package contents were not exercised here (CI run #43052869273 covers those statically).
+
+**Fixture:** two synthetic Processing orders created through WooCommerce CRUD, each with one Flat rate shipping line: USD 12 with a recorded cost of USD 8.25 (invoice-final, tax-exclusive), and USD 10 with no cost.
+
+**Observed:**
+- Plugin activated; dashboard rendered with build ID `a872b191de0e`.
+- Summary: USD 22.00 charged, USD 8.25 confirmed cost, USD 3.75 variance (positive style), 50% coverage (1 / 2). Matches the fixture.
+- Method table: Flat rate (USD), 2 orders, USD 22.00 charged, USD 8.25 confirmed cost.
+- New layout confirmed at an 800px-wide viewport: report cards precede the invoice importer; method and carrier cards have inner spacing.
+- The Plugins screen showed no HPOS-incompatibility notice for the plugin. The WooCommerce Features screen itself was not opened, and whether HPOS was the active datastore on this site was not recorded.
+- Plugin Check (General, Plugin Repo, Security; errors and warnings): "1 error and 90 warnings".
+  - Error: `fclose()` on the `php://output` CSV stream in `CsvExport.php`.
+  - Warnings from installing the raw repository (`.cursor`, `.github`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`): these files are not in the CI ZIP.
+  - Warnings: `Domain Path` pointing at a missing `languages` folder; discouraged `load_plugin_textdomain()`.
+  - Remaining warnings seen were `NonceVerification.Missing` and `InputNotSanitized` in the AJAX handlers and date inputs. In the lines inspected, the nonce is verified in a helper (`authorize()`) or before use, and input is length-checked before sanitizing, which the sniffs do not follow. Not every one of the 90 rows was read.
+
+**Fixed in the follow-up change:** the stream calls carry a justified `phpcs:ignore`; the `Domain Path` header and `load_plugin_textdomain()` call were removed (WordPress loads translations for the slug); the method table no longer forces horizontal scrolling at this width; "1 orders" now uses a plural-aware string.
+
+**Not tested:** uninstall on a real site, the ShipStation connection, the invoice import flow on this build, a narrow phone viewport, and a Plugin Check re-run after the fixes. P7-12 stays Partial.

@@ -14,7 +14,6 @@
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wpessential-shipping-cost-monitor
- * Domain Path: /languages
  *
  * @package WPEssentialShippingCostMonitor
  */
@@ -59,12 +58,6 @@ add_action(
  * Start the plugin after WooCommerce has loaded.
  */
 function wpe_scm_initialize(): void {
-	load_plugin_textdomain(
-		'wpessential-shipping-cost-monitor',
-		false,
-		dirname( plugin_basename( WPE_SCM_FILE ) ) . '/languages'
-	);
-
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'wpe_scm_missing_woocommerce_notice' );
 		return;

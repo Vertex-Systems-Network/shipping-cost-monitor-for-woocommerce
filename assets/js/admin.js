@@ -7,6 +7,7 @@
 
 	const h = wp.element.createElement;
 	const __ = wp.i18n.__;
+	const _n = wp.i18n._n;
 	const report = window.wpeScmDashboard || {};
 	const carrierAdapters = Array.isArray( report.carrier_adapters ) ? report.carrier_adapters : [];
 	const groups = Array.isArray( report.groups ) ? report.groups : [];
@@ -990,7 +991,7 @@
 					label: __( 'Shipping variance', 'wpessential-shipping-cost-monitor' ),
 					value: varianceValue,
 					tone: varianceTone,
-					note: report.variance_available ? report.comparable_orders + ' ' + __( 'orders with matching currency and tax-exclusive cost', 'wpessential-shipping-cost-monitor' ) : __( 'No comparable confirmed costs in this period', 'wpessential-shipping-cost-monitor' ),
+					note: report.variance_available ? report.comparable_orders + ' ' + _n( 'order with matching currency and tax-exclusive cost', 'orders with matching currency and tax-exclusive cost', Number( report.comparable_orders ), 'wpessential-shipping-cost-monitor' ) : __( 'No comparable confirmed costs in this period', 'wpessential-shipping-cost-monitor' ),
 				} ),
 				h( MetricCard, {
 					label: __( 'Cost coverage', 'wpessential-shipping-cost-monitor' ),
