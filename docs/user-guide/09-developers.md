@@ -64,4 +64,4 @@ The repository builds both ZIPs in GitHub Actions (`.github/workflows/build-inst
 
 ## Pro distribution
 
-Pro is sold on the WooCommerce.com Marketplace. WooCommerce.com handles billing and subscriptions, and delivers updates through its Update Manager, so Pro has no license-key code. Its header declares an `Update URI` on woocommerce.com so WordPress core never checks WordPress.org for it. When WooCommerce.com accepts the product it assigns a `Woo: <product_id>:<hash>` header, which goes into `pro/shipping-cost-monitor-pro-for-woocommerce.php`.
+Pro is sold on the WooCommerce.com Marketplace. WooCommerce.com handles billing and subscriptions, and delivers updates through its Update Manager, so Pro has no license-key code. Its header declares an `Update URI` on woocommerce.com so WordPress core never checks WordPress.org for it. After acceptance, WooCommerce.com's deployment adds a `Woo: <product_id>:<hash>` header to the package it distributes. Do not add it to the source by hand; check that the deployed package carries it.

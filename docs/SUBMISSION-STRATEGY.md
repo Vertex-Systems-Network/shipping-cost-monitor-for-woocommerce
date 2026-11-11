@@ -113,7 +113,7 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 | Item | State | Owner / next action |
 |---|---|---|
 | Vendor account and product application | Not done | Owner |
-| `Woo:` plugin header (product ID and hash) | Not possible yet | Assigned by WooCommerce.com after the product is accepted; add it to `pro/shipping-cost-monitor-pro-for-woocommerce.php` |
+| `Woo:` plugin header (product ID and hash) | Not possible yet | Added by WooCommerce.com's deployment after acceptance. Do not add it to the source manually; verify the deployed package carries it |
 | Update URI not pointing at WordPress.org | Done in source (WooCommerce.com product URL) | — |
 | `changelog.txt` in Marketplace format | Done in source | — |
 | `WC requires at least` / `WC tested up to` headers | Done in source (11.2 / 11.2) | Update at release |
