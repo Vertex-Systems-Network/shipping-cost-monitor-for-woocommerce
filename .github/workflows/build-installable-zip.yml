@@ -123,7 +123,13 @@ jobs:
           if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
           (cd build && zip -qr "../${slug}.zip" "$slug")
           unzip -t "${slug}.zip"
-          sha256sum "${slug}.zip" > "${slug}.zip.sha256"
+          sha256sum "${slug}.zip" | tee "${slug}.zip.sha256"
+          {
+            echo "### Free plugin"
+            echo "Download **shipping-cost-monitor-for-woocommerce-${GITHUB_SHA}** and upload that file directly in WordPress (Plugins → Add New → Upload Plugin). It already contains the \`${slug}/\` folder."
+            echo ""
+            echo "Inner ZIP SHA-256: \`$(cut -d' ' -f1 "${slug}.zip.sha256")\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Package Pro ZIP
         shell: bash
@@ -138,26 +144,26 @@ jobs:
           printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           (cd build-pro && zip -qr "../${slug}.zip" "$slug")
           unzip -t "${slug}.zip"
-          sha256sum "${slug}.zip" > "${slug}.zip.sha256"
+          sha256sum "${slug}.zip" | tee "${slug}.zip.sha256"
+          {
+            echo "### Pro add-on"
+            echo "Download **shipping-cost-monitor-pro-for-woocommerce-${GITHUB_SHA}** and upload that file directly in WordPress. It already contains the \`${slug}/\` folder."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Free ZIP
         uses: actions/upload-artifact@v7.0.1
         with:
           name: shipping-cost-monitor-for-woocommerce-${{ github.sha }}
-          path: |
-            shipping-cost-monitor-for-woocommerce.zip
-            shipping-cost-monitor-for-woocommerce.zip.sha256
+          # GitHub always wraps an artifact in a ZIP. Uploading the build/ folder (which holds
+          # shipping-cost-monitor-for-woocommerce/) makes that ZIP the installable plugin ZIP.
+          path: build/
           if-no-files-found: error
           retention-days: 14
-          compression-level: 0
 
       - name: Upload Pro ZIP
         uses: actions/upload-artifact@v7.0.1
         with:
           name: shipping-cost-monitor-pro-for-woocommerce-${{ github.sha }}
-          path: |
-            shipping-cost-monitor-pro-for-woocommerce.zip
-            shipping-cost-monitor-pro-for-woocommerce.zip.sha256
+          path: build-pro/
           if-no-files-found: error
           retention-days: 14
-          compression-level: 0
