@@ -106,11 +106,7 @@ final class Page {
 			$dashboard
 		);
 
-		wp_set_script_translations(
-			'wpe-scm-admin',
-			'wpessential-shipping-cost-monitor',
-			WPE_SCM_DIR . 'languages'
-		);
+		wp_set_script_translations( 'wpe-scm-admin', 'wpessential-shipping-cost-monitor' );
 	}
 
 	/**
