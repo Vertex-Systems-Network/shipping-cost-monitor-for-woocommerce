@@ -27,6 +27,10 @@
 
 The old 9-item denominator counted three staging/CI execution observations and three source dry-runs together, while leaving other work bundled under vague “matrix / QA / performance / beta” language. That made the percentage look like release readiness and failed to tell the next contributor exactly what to do. The prior count is superseded. The seven passes above are explicitly narrow evidence packages; two are source-only dry-runs and none closes the corresponding runtime gate.
 
+## 2026-11-11 targeted P7-12 source finding
+
+A focused source review found that `CsvExport::export()` accepted any numeric recorded cost when calculating comparable variance and exported it as a recorded cost. `Summary::build()` rejects negative cost, so malformed legacy/extension-inserted `-5` could appear as a comparable CSV variance while the dashboard excluded it. Commit [`3320120`](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/commit/33201201ade1fb4ed88b695c0954c1c9e0f9f893) applies the same nonnegative condition to CSV comparison and blanks the recorded cost cell for invalid negative values. The original order metadata is not modified. This is source-level remediation only: current-build CI, runtime CSV regression, full independent security/privacy review and HTTP/browser matrix remain open. P7-12 stays Partial; P7-13 has no measured benchmark and stays Pending. Reviewer must test a controlled negative-cost metadata fixture and validate that CSV row is not marked Comparable.
+
 ## Current blocking handoff
 
 - **Staging state (2026-11-10):** build bbf95766b084 is installed on el-test; original HPOS datastore and compatibility-mode-off setting were restored after the legacy lane. Synthetic orders #103/#104 remain as QA fixtures, each with PKR 100 shipping; costs committed were PKR 85 via legacy and PKR 95 via HPOS.
