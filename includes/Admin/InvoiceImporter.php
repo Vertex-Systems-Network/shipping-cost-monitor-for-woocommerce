@@ -32,6 +32,7 @@ final class InvoiceImporter {
 		}
 
 		$nonce_value = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- This is the nonce check itself; the value is length-capped and sanitized below.
 			? wp_unslash( $_POST['nonce'] )
 			: '';
 		$nonce = strlen( $nonce_value ) <= 128 ? sanitize_text_field( $nonce_value ) : '';
@@ -44,6 +45,7 @@ final class InvoiceImporter {
 		}
 
 		$rows = isset( $_POST['rows'] ) && is_array( $_POST['rows'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce verified above; each row field is type-checked, length-capped and sanitized in commit_row().
 			? wp_unslash( $_POST['rows'] )
 			: array();
 
