@@ -118,7 +118,7 @@ jobs:
           rm -rf build "${slug}.zip" "${slug}.zip.sha256"
           mkdir -p "$package_dir"
           cp -R assets includes vendor "$package_dir/"
-          cp shipping-cost-monitor-for-woocommerce.php uninstall.php readme.txt changelog.txt LICENSE "$package_dir/"
+          cp shipping-cost-monitor-for-woocommerce.php uninstall.php readme.txt changelog.txt LICENSE composer.json "$package_dir/"
           printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
           (cd build && zip -qr "../${slug}.zip" "$slug")
@@ -140,7 +140,7 @@ jobs:
           rm -rf build-pro "${slug}.zip" "${slug}.zip.sha256"
           mkdir -p "$package_dir"
           cp -R pro/assets pro/includes pro/vendor "$package_dir/"
-          cp pro/shipping-cost-monitor-pro-for-woocommerce.php pro/uninstall.php pro/changelog.txt LICENSE "$package_dir/"
+          cp pro/shipping-cost-monitor-pro-for-woocommerce.php pro/uninstall.php pro/changelog.txt pro/composer.json LICENSE "$package_dir/"
           printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           (cd build-pro && zip -qr "../${slug}.zip" "$slug")
           unzip -t "${slug}.zip"
