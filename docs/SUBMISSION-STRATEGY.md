@@ -91,8 +91,8 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 | Uninstall cleanup | Done in source (credential option removed; order cost metadata kept by design) | Decided F-4 |
 | External service disclosure (ShipStation) | Done in `readme.txt` | Recheck ShipStation terms/privacy URLs before submitting |
 | Translation template (`languages/*.pot`) | Not done | WordPress.org generates language packs from source; a `.pot` is needed for WooCommerce.com distribution |
-| Public version number | Decided F-3: 0.1.0 until Phase 7 closes, then 1.0.0 | — |
-| Free/Pro packaging | Decided F-2: one free plugin; WooCommerce.com paid track deferred until a Pro add-on exists | The WooCommerce.com table below applies only when that add-on is built |
+| Public version number | Decided F-6: 1.0.0 for both plugins | — |
+| Free/Pro packaging | Decided F-7: free plugin + Pro add-on; CI builds both ZIPs and keeps Pro code out of the free package | Pro licensing, update delivery and storefront are not built |
 | Phase 7 gates | Open (see gate register) | P7-12, P7-13, P7-14 |
 
 ### WordPress.org (account `wpessential`)

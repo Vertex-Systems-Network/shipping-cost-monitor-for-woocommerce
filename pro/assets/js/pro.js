@@ -149,6 +149,40 @@
 		}
 	}
 
+	function statusText( code ) {
+		const labels = {
+			duplicate: __( 'Duplicate reference in this file', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			unmatched: __( 'No matching shipping order', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			ambiguous: __( 'More than one order matches', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			invalid: __( 'Missing or invalid required value', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			order_mismatch: __( 'Order changed since matching; match again', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			currency_mismatch: __( 'Currency differs from order', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			existing_cost: __( 'Existing cost kept', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			committed: __( 'Saved', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			already_imported: __( 'Already saved', 'shipping-cost-monitor-pro-for-woocommerce' ),
+		};
+		return labels[ code ] || String( code || '' );
+	}
+
+	function evidenceText( code ) {
+		const labels = {
+			invoice_final: __( 'Invoice-final', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			merchant_confirmed: __( 'Merchant-confirmed', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			booked_label: __( 'Booked label / manifest', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			estimate: __( 'Estimate only', 'shipping-cost-monitor-pro-for-woocommerce' ),
+		};
+		return labels[ code ] || String( code || '' );
+	}
+
+	function taxText( code ) {
+		const labels = {
+			exclusive: __( 'Tax-exclusive', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			inclusive: __( 'Tax-inclusive', 'shipping-cost-monitor-pro-for-woocommerce' ),
+			unknown: __( 'Tax unknown', 'shipping-cost-monitor-pro-for-woocommerce' ),
+		};
+		return labels[ code ] || String( code || '' );
+	}
+
 	function CsvInvoicePreview() {
 		const useState = wp.element.useState;
 		const useEffect = wp.element.useEffect;
@@ -712,14 +746,14 @@
 								: commitResult
 									? ( 'duplicate_order_in_batch' === commitResult.status
 										? __( 'Duplicate order in this invoice batch; none of its rows were saved.', 'shipping-cost-monitor-pro-for-woocommerce' )
-										: commitResult.status )
+										: statusText( commitResult.status ) )
 								: match && 'matched' === match.status && match.order_number && '__order_currency__' !== mapping.currency && currency.toUpperCase() !== String( match.currency || '' ).toUpperCase()
 									? __( 'Currency differs from order', 'shipping-cost-monitor-pro-for-woocommerce' ) + ' (' + match.currency + ')'
 									: match && 'existing_cost' === match.status && match.order_number
 										? __( 'Existing cost on order', 'shipping-cost-monitor-pro-for-woocommerce' ) + ' #' + match.order_number
 										: match && 'matched' === match.status && match.order_number
-											? 'matched: #' + match.order_number + ' (' + match.order_status + ')'
-											: match ? match.status : valid ? __( 'Ready to match', 'shipping-cost-monitor-pro-for-woocommerce' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'shipping-cost-monitor-pro-for-woocommerce' ) : __( 'Missing or invalid required value', 'shipping-cost-monitor-pro-for-woocommerce' );
+											? __( 'Ready to save', 'shipping-cost-monitor-pro-for-woocommerce' ) + ': #' + match.order_number + ' (' + match.order_status + ')'
+											: match ? statusText( match.status ) : valid ? __( 'Ready to match', 'shipping-cost-monitor-pro-for-woocommerce' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'shipping-cost-monitor-pro-for-woocommerce' ) : __( 'Missing or invalid required value', 'shipping-cost-monitor-pro-for-woocommerce' );
 							return h( 'tr', { key: item.number },
 								h( 'td', null, item.number ),
 								h( 'td', null, reference ),
@@ -730,7 +764,7 @@
 									match && 'existing_cost' === match.status && match.existing_cost
 										? h( 'div', { className: 'wpe-scm-import-review-detail' },
 											h( 'strong', null, __( 'Review comparison:', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
-											' ' + __( 'Recorded', 'shipping-cost-monitor-pro-for-woocommerce' ) + ': ' + match.existing_cost.currency + ' ' + match.existing_cost.amount + ' (' + match.existing_cost.evidence + '; tax ' + match.existing_cost.tax_basis + '). ',
+											' ' + __( 'Recorded', 'shipping-cost-monitor-pro-for-woocommerce' ) + ': ' + match.existing_cost.currency + ' ' + match.existing_cost.amount + ' (' + evidenceText( match.existing_cost.evidence ) + '; ' + taxText( match.existing_cost.tax_basis ) + '). ',
 											__( 'CSV row', 'shipping-cost-monitor-pro-for-woocommerce' ) + ': ' + ( '__order_currency__' === mapping.currency ? match.currency : currency.toUpperCase() ) + ' ' + ( amount || amountRaw ) + '. ',
 											__( 'Existing value is kept; review the difference before changing the order.', 'shipping-cost-monitor-pro-for-woocommerce' )
 										)
