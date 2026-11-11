@@ -88,3 +88,7 @@ On the installed `3320120` package, the dashboard-generated CSV export URL retur
 ## 2026-11-11 P7-12 authenticated import HTTP checks
 
 On the installed `3320120` Playground build, actual authenticated `admin-ajax.php` POSTs rejected invalid and 129-character nonces with HTTP 403, rejected a 51-row batch with HTTP 400, and classified a 65-character numeric amount as `invalid` with `persisted:false`/`committed:false`. The synthetic order's pre-existing `-5` cost and empty fingerprint remained unchanged. [Exact response matrix and limits](P7-12-PLAYGROUND-HTTP-IMPORT-BOUNDARIES.md). This adds HTTP transport evidence, while independent review and full browser upload/preview matrix remain open. P7-12 stays **Partial**.
+
+## 2026-11-11 P7-12 browser CSV import flow
+
+The installed `3320120` package on isolated Playground completed file selection, browser parsing/mapping, match, confirmation, AJAX save, WooCommerce CRUD persistence and report refresh for a synthetic invoice row. Existing malformed cost on order #13 was shown as a comparison and withheld from overwrite; fresh order #14 committed USD 8.25 invoice-final tax-exclusive against USD 12 shipping. The refreshed dashboard showed USD 3.75 comparable variance and 1/2 coverage. [Full flow and limits](P7-12-PLAYGROUND-BROWSER-CSV-FLOW.md). This closes the selected browser CSV workflow gap, but P7-12 remains **Partial** until independent security/privacy review and remaining matrix are complete.
