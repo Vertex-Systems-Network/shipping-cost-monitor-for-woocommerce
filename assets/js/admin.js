@@ -69,12 +69,17 @@
 					h( 'p', { className: 'wpe-scm-period' }, __( 'Order period:', 'shipping-cost-monitor-for-woocommerce' ) + ' ' + periodLabel )
 				),
 				h(
-					'a',
-					{
-						className: 'button button-primary wpe-scm-primary-action',
-						href: 'admin.php?page=wc-orders',
-					},
-					__( 'View WooCommerce orders', 'shipping-cost-monitor-for-woocommerce' )
+					'div',
+					{ className: 'wpe-scm-header-actions' },
+					report.docs_url ? h( 'a', { className: 'button', href: report.docs_url, target: '_blank', rel: 'noopener noreferrer' }, __( 'Documentation', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
+					h(
+						'a',
+						{
+							className: 'button button-primary wpe-scm-primary-action',
+							href: 'admin.php?page=wc-orders',
+						},
+						__( 'View WooCommerce orders', 'shipping-cost-monitor-for-woocommerce' )
+					)
 				)
 			),
 			h(

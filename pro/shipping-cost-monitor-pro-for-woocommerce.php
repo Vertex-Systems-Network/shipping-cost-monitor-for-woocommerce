@@ -14,7 +14,7 @@
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: shipping-cost-monitor-pro-for-woocommerce
- * Update URI: https://wpessential.org/shipping-cost-monitor-pro-for-woocommerce
+ * Update URI: https://woocommerce.com/products/shipping-cost-monitor-pro-for-woocommerce/
  *
  * @package WPEssentialShippingCostMonitorPro
  */
@@ -81,4 +81,20 @@ add_action(
 		}
 	},
 	30
+);
+
+/**
+ * Add a Documentation link beside Deactivate on the Plugins screen.
+ */
+add_filter(
+	'plugin_action_links_' . plugin_basename( WPE_SCM_PRO_FILE ),
+	static function ( $links ) {
+		$links         = is_array( $links ) ? $links : array();
+		$links['docs'] = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( 'https://github.com/Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce/blob/main/docs/user-guide/06-pro-invoice-import.md' ),
+			esc_html__( 'Documentation', 'shipping-cost-monitor-pro-for-woocommerce' )
+		);
+		return $links;
+	}
 );

@@ -61,3 +61,7 @@ All require `manage_woocommerce`, a nonce from the dashboard data, and POST.
 ## Building the plugins
 
 The repository builds both ZIPs in GitHub Actions (`.github/workflows/build-installable-zip.yml`): Composer generates each plugin's PSR-4 autoloader, PHP 8.1–8.4 lint runs, versions are checked, the free package is checked for Pro code, and two artifacts are uploaded. There is no npm or JavaScript build step; the admin UI uses WordPress's bundled React (`wp.element`).
+
+## Pro distribution
+
+Pro is sold on the WooCommerce.com Marketplace. WooCommerce.com handles billing and subscriptions, and delivers updates through its Update Manager, so Pro has no license-key code. Its header declares an `Update URI` on woocommerce.com so WordPress core never checks WordPress.org for it. When WooCommerce.com accepts the product it assigns a `Woo: <product_id>:<hash>` header, which goes into `pro/shipping-cost-monitor-pro-for-woocommerce.php`.

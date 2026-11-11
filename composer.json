@@ -1,5 +1,5 @@
 {
-  "name": "vertex-systems-network/wpessential-shipping-cost-monitor",
+  "name": "vertex-systems-network/shipping-cost-monitor-for-woocommerce",
   "description": "Shipping cost intelligence and margin reporting for WooCommerce.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
