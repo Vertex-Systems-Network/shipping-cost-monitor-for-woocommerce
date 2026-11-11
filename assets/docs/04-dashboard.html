@@ -1,0 +1,117 @@
+<h1 id="4-reading-the-dashboard">4. Reading the dashboard</h1>
+<p>Open <strong>WooCommerce → Shipping Cost Monitor</strong>.</p>
+<p><img alt="Full dashboard of the free plugin" src="%%IMAGES%%dashboard-full-free.png" /></p>
+<h2 id="the-header">The header</h2>
+<ul>
+<li><strong>Order period</strong> shows the dates being reported and the store time zone, for example <code>2026-10-13 — 2026-11-11 (+00:00)</code>.</li>
+<li><strong>View WooCommerce orders</strong> opens the order list, where you record costs.</li>
+</ul>
+<h2 id="choosing-dates">Choosing dates</h2>
+<p>Set <strong>From</strong> and <strong>To</strong>, then click <strong>Update report</strong>. The default is the last 30 days. The longest range is 366 days. If the dates are invalid or the range is longer, the report shows the default 30 days with the notice <strong>"The selected dates were invalid or exceeded 366 days. Showing the default 30-day period."</strong></p>
+<p><strong>Export CSV</strong> downloads the same date range. See <a href="%%DOCS%%05-csv-export">chapter 5</a>.</p>
+<h2 id="the-four-cards">The four cards</h2>
+<p><img alt="The four summary cards" src="%%IMAGES%%dashboard-metrics.png" /></p>
+<p>Using the <a href="%%DOCS%%02-key-ideas#the-six-example-orders-used-in-this-guide">six example orders</a>:</p>
+<h3 id="shipping-charged-net">Shipping charged net</h3>
+<p>What customers paid for shipping on all eligible orders, after shipping refunds, before shipping tax.</p>
+<p><code>12 + 10 + 15 + 25 + 25 + 5 = USD 92.00</code></p>
+<p>All eligible orders count here, with or without a cost.</p>
+<h3 id="confirmed-cost">Confirmed cost</h3>
+<p>The sum of costs marked <strong>Invoice-final</strong> or <strong>Merchant-confirmed</strong> in the order's currency.</p>
+<p><code>8.25 + 11.40 + 19.90 + 27.10 = USD 66.65</code></p>
+<p>Order C has no cost. Order F's 4.00 is a booked label, so it is not confirmed.</p>
+<h3 id="shipping-variance">Shipping variance</h3>
+<p>Net shipping charged minus cost, <strong>only for comparable orders</strong> (A, B, D, E):</p>
+<table>
+<thead>
+<tr>
+<th>Order</th>
+<th>Charged</th>
+<th>Cost</th>
+<th>Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>12.00</td>
+<td>8.25</td>
+<td>+3.75</td>
+</tr>
+<tr>
+<td>B</td>
+<td>10.00</td>
+<td>11.40</td>
+<td>−1.40</td>
+</tr>
+<tr>
+<td>D</td>
+<td>25.00</td>
+<td>19.90</td>
+<td>+5.10</td>
+</tr>
+<tr>
+<td>E</td>
+<td>25.00</td>
+<td>27.10</td>
+<td>−2.10</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>72.00</strong></td>
+<td><strong>66.65</strong></td>
+<td><strong>+5.35</strong></td>
+</tr>
+</tbody>
+</table>
+<p>So the card reads <strong>USD 5.35</strong> with the note <strong>"4 orders with matching currency and tax-exclusive cost"</strong>.</p>
+<p>Note that variance is <em>not</em> 92.00 − 66.65 = 25.35. Orders C and F have no comparable cost, so including their shipping charge would invent a profit.</p>
+<p><strong>Colour:</strong> the card turns <strong>green</strong> when variance is positive in every currency (customers paid more than delivery cost) and <strong>red</strong> when it is negative in every currency. With mixed signs across currencies it stays neutral. The sign is always shown too, so colour is never the only clue.</p>
+<h3 id="cost-coverage">Cost coverage</h3>
+<p>How many eligible orders have a confirmed cost in their own currency:</p>
+<p><code>4 / 6 = 66.7%</code></p>
+<p>Coverage tells you how complete the report is. Variance on 20% coverage says little about the whole store.</p>
+<h3 id="more-than-one-currency">More than one currency</h3>
+<p>Each card lists one value per currency, separated by <code>·</code>, for example <code>USD 92.00 · EUR 40.00</code>. Currencies are never added together.</p>
+<h2 id="cost-by-shipping-method">Cost by shipping method</h2>
+<p><img alt="Comparable shipping cost by method" src="%%IMAGES%%dashboard-method-table.png" /></p>
+<p>One row per shipping method and currency. An order with two shipping methods is grouped under their combination.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Meaning</th>
+<th>Flat rate example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Orders</strong></td>
+<td>All eligible orders using this method</td>
+<td>3 (A, B, C)</td>
+</tr>
+<tr>
+<td><strong>Shipping charged</strong></td>
+<td>Net shipping on those orders</td>
+<td>37.00</td>
+</tr>
+<tr>
+<td><strong>Confirmed cost</strong></td>
+<td>Comparable cost only</td>
+<td>8.25 + 11.40 = 19.65</td>
+</tr>
+<tr>
+<td><strong>Variance</strong></td>
+<td>Charged minus cost, comparable orders only</td>
+<td>(12 − 8.25) + (10 − 11.40) = 2.35</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>Shipping charged</strong> column includes order C, but <strong>Variance</strong> does not. Rows are sorted from the worst variance to the best, so loss-making methods appear first. Methods with no comparable cost (Local pickup in the example) are not listed.</p>
+<h2 id="the-lower-cards">The lower cards</h2>
+<p><img alt="Lower cards" src="%%IMAGES%%dashboard-pro-card-and-rules.png" /></p>
+<ul>
+<li><strong>Currency-separated order summary</strong> is a reminder of how variance is calculated. When there are no eligible orders it reads <strong>"No eligible shipping orders found"</strong> and explains which orders count.</li>
+<li><strong>Pro add-on</strong> appears only when Pro is not installed. With Pro active this space shows the invoice import panel (<a href="%%DOCS%%06-pro-invoice-import">chapter 6</a>).</li>
+<li><strong>How this report works</strong> and <strong>Evidence before estimates</strong> summarise the rules from <a href="%%DOCS%%02-key-ideas">chapter 2</a>.</li>
+</ul>

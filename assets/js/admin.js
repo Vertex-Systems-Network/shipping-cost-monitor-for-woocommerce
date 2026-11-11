@@ -71,7 +71,7 @@
 				h(
 					'div',
 					{ className: 'wpe-scm-header-actions' },
-					report.docs_url ? h( 'a', { className: 'button', href: report.docs_url, target: '_blank', rel: 'noopener noreferrer' }, __( 'Documentation', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
+					report.docs_url ? h( 'a', { className: 'button', href: report.docs_url }, __( 'Documentation', 'shipping-cost-monitor-for-woocommerce' ) ) : null,
 					h(
 						'a',
 						{

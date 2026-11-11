@@ -61,6 +61,10 @@ final class Page {
 			WPE_SCM_BUILD_ID
 		);
 
+		if ( self::is_docs_view() ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'wpe-scm-admin',
 			WPE_SCM_URL . 'assets/js/admin.js',
@@ -132,6 +136,84 @@ final class Page {
 			);
 		}
 
+		if ( self::is_docs_view() ) {
+			$this->render_docs();
+			return;
+		}
+
 		echo '<div class="wrap wpe-scm-wrap"><div id="wpe-scm-root"></div></div>';
+	}
+
+	/**
+	 * URL of the built-in documentation, optionally at one chapter.
+	 *
+	 * @param string $chapter Chapter slug from chapters(); empty for the contents page.
+	 */
+	public static function docs_url( string $chapter = '' ): string {
+		$args = array(
+			'page' => 'shipping-cost-monitor-for-woocommerce',
+			'tab'  => 'docs',
+		);
+		if ( '' !== $chapter && isset( self::chapters()[ $chapter ] ) ) {
+			$args['chapter'] = $chapter;
+		}
+		return add_query_arg( $args, admin_url( 'admin.php' ) );
+	}
+
+	/**
+	 * Documentation chapters bundled in assets/docs/, keyed by file slug.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function chapters(): array {
+		return array(
+			'index'                 => __( 'Contents', 'shipping-cost-monitor-for-woocommerce' ),
+			'01-install'            => __( '1. Install and first run', 'shipping-cost-monitor-for-woocommerce' ),
+			'02-key-ideas'          => __( '2. Key ideas: evidence, tax and currency', 'shipping-cost-monitor-for-woocommerce' ),
+			'03-record-a-cost'      => __( '3. Recording a cost on an order', 'shipping-cost-monitor-for-woocommerce' ),
+			'04-dashboard'          => __( '4. Reading the dashboard', 'shipping-cost-monitor-for-woocommerce' ),
+			'05-csv-export'         => __( '5. Exporting the report as CSV', 'shipping-cost-monitor-for-woocommerce' ),
+			'06-pro-invoice-import' => __( '6. Pro: importing a courier invoice CSV', 'shipping-cost-monitor-for-woocommerce' ),
+			'07-pro-shipstation'    => __( '7. Pro: ShipStation label costs', 'shipping-cost-monitor-for-woocommerce' ),
+			'08-troubleshooting'    => __( '8. Troubleshooting and FAQ', 'shipping-cost-monitor-for-woocommerce' ),
+			'09-developers'         => __( '9. For developers: hooks and data', 'shipping-cost-monitor-for-woocommerce' ),
+		);
+	}
+
+	/**
+	 * Whether the current request is for the documentation tab.
+	 */
+	private static function is_docs_view(): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only view switch on a capability-checked admin screen.
+		return isset( $_GET['tab'] ) && 'docs' === $_GET['tab'];
+	}
+
+	/**
+	 * Render the bundled documentation with a chapter list.
+	 */
+	private function render_docs(): void {
+		$chapters = self::chapters();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only chapter selection; only whitelisted slugs are used.
+		$requested = isset( $_GET['chapter'] ) ? sanitize_key( wp_unslash( $_GET['chapter'] ) ) : 'index';
+		$chapter   = isset( $chapters[ $requested ] ) ? $requested : 'index';
+		$file      = WPE_SCM_DIR . 'assets/docs/' . $chapter . '.html';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads a bundled local documentation file chosen from a fixed list.
+		$html = is_readable( $file ) ? (string) file_get_contents( $file ) : '';
+		$html = str_replace(
+			array( '%%IMAGES%%', '%%DOCS%%' ),
+			array( esc_url( WPE_SCM_URL . 'assets/docs/images/' ), esc_url( add_query_arg( 'chapter', '', self::docs_url() ) ) ),
+			$html
+		);
+
+		echo '<div class="wrap wpe-scm-wrap wpe-scm-docs">';
+		echo '<div class="wpe-scm-docs-head"><h1>' . esc_html__( 'Shipping Cost Monitor documentation', 'shipping-cost-monitor-for-woocommerce' ) . '</h1>';
+		echo '<a class="button" href="' . esc_url( admin_url( 'admin.php?page=shipping-cost-monitor-for-woocommerce' ) ) . '">' . esc_html__( 'Back to dashboard', 'shipping-cost-monitor-for-woocommerce' ) . '</a></div>';
+		echo '<div class="wpe-scm-docs-layout"><nav class="wpe-scm-docs-nav" aria-label="' . esc_attr__( 'Documentation chapters', 'shipping-cost-monitor-for-woocommerce' ) . '"><ul>';
+		foreach ( $chapters as $slug => $title ) {
+			$current = $slug === $chapter ? ' aria-current="page" class="is-current"' : '';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $current is a fixed literal.
+			echo '<li><a href="' . esc_url( self::docs_url( $slug ) ) . '"' . $current . '>' . esc_html( $title ) . '</a></li>';
+		}
+		echo '</ul></nav><article class="wpe-scm-docs-content">' . wp_kses_post( $html ) . '</article></div></div>';
 	}
 }

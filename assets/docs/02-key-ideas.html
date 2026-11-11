@@ -1,0 +1,152 @@
+<h1 id="2-key-ideas-evidence-tax-basis-and-currency">2. Key ideas: evidence, tax basis and currency</h1>
+<p>Three rules decide whether a cost is counted in the totals. They exist so the report never mixes a guess with a bill, or dollars with euros, or prices with and without tax.</p>
+<h2 id="rule-1-evidence--how-sure-is-this-number">Rule 1: evidence — how sure is this number?</h2>
+<p>Every cost carries an <strong>evidence</strong> type that says where the number came from.</p>
+<table>
+<thead>
+<tr>
+<th>Evidence (on screen)</th>
+<th>Meaning</th>
+<th>Counted as confirmed cost?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Invoice-final</strong></td>
+<td>Taken from the courier's final invoice or statement.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Merchant-confirmed</strong></td>
+<td>You checked it yourself and stand behind it (for example a cash payment to a local driver).</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Booked label / manifest</strong></td>
+<td>The price shown when the label was bought. Couriers often adjust it later for weight, size, fuel or address corrections.</td>
+<td>No — shown, never counted</td>
+</tr>
+<tr>
+<td><strong>Estimate only</strong></td>
+<td>A quote or rate-table guess.</td>
+<td>No — shown, never counted</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why:</strong> a label price of 4.00 can become an invoice of 6.30 after a dimensional-weight check. Counting the label would make delivery look 2.30 cheaper than it was.</p>
+<h2 id="rule-2-tax-basis--does-the-number-include-tax">Rule 2: tax basis — does the number include tax?</h2>
+<p>WooCommerce's shipping total in this report is <strong>before shipping tax</strong>. To compare like with like, a cost must also be <strong>before tax</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Tax treatment (on screen)</th>
+<th>Compared?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tax-exclusive</strong></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Tax-inclusive</strong></td>
+<td>No — the plugin does not know the tax rate to remove</td>
+</tr>
+<tr>
+<td><strong>Unknown — do not compare</strong></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>If your invoice shows tax separately, enter the amount without tax and choose <strong>Tax-exclusive</strong>.</p>
+<h2 id="rule-3-currency--same-money-only">Rule 3: currency — same money only</h2>
+<p>A cost is compared only when its currency equals the order's currency. The plugin never converts currencies, because exchange rates on the invoice date and order date differ and a silent conversion would hide that.</p>
+<p>A cost in another currency is kept on the order, excluded from the totals, and counted in a notice above the method table: <strong>"N confirmed cost record(s) use a different currency and are excluded from the confirmed-cost total and coverage."</strong></p>
+<h2 id="putting-the-rules-together">Putting the rules together</h2>
+<p>A cost is <strong>comparable</strong> only when all three hold:</p>
+<pre><code>evidence is Invoice-final or Merchant-confirmed
+AND tax treatment is Tax-exclusive
+AND cost currency = order currency
+</code></pre>
+<p>Comparable costs are the only ones in <strong>Shipping variance</strong> and in the method table.</p>
+<h2 id="which-orders-are-in-the-report-at-all">Which orders are in the report at all</h2>
+<p>An order is <strong>eligible</strong> when it:</p>
+<ul>
+<li>has the status <strong>Processing</strong> or <strong>Completed</strong>, and</li>
+<li>has at least one WooCommerce shipping line (local pickup counts; orders with no shipping line do not), and</li>
+<li>was created inside the selected date range.</li>
+</ul>
+<p>Pending, on-hold, cancelled, refunded and failed orders are left out, because they are not settled sales.</p>
+<h2 id="refunds">Refunds</h2>
+<p>If you refund part of the shipping on an order, the report uses <strong>net shipping</strong>: shipping charged minus the shipping refunded, never below zero. A cost record is not changed by a refund; if the courier also credited you, update the cost.</p>
+<h2 id="the-six-example-orders-used-in-this-guide">The six example orders used in this guide</h2>
+<table>
+<thead>
+<tr>
+<th>Order</th>
+<th>Method</th>
+<th>Customer paid</th>
+<th>Cost recorded</th>
+<th>Evidence</th>
+<th>Tax</th>
+<th>Comparable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>Flat rate</td>
+<td>12.00</td>
+<td>8.25</td>
+<td>Invoice-final</td>
+<td>Exclusive</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Flat rate</td>
+<td>10.00</td>
+<td>11.40</td>
+<td>Invoice-final</td>
+<td>Exclusive</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Flat rate</td>
+<td>15.00</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>No cost yet</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Express</td>
+<td>25.00</td>
+<td>19.90</td>
+<td>Merchant-confirmed</td>
+<td>Exclusive</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Express</td>
+<td>25.00</td>
+<td>27.10</td>
+<td>Invoice-final</td>
+<td>Exclusive</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F</td>
+<td>Local pickup</td>
+<td>5.00</td>
+<td>4.00</td>
+<td>Booked label</td>
+<td>Unknown</td>
+<td>No — label price</td>
+</tr>
+</tbody>
+</table>
+<p>All in USD, all Processing. <a href="%%DOCS%%04-dashboard">Chapter 4</a> walks through the totals these produce.</p>

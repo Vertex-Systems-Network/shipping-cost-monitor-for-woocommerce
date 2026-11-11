@@ -91,8 +91,8 @@ add_filter(
 	static function ( $links ) {
 		$links         = is_array( $links ) ? $links : array();
 		$links['docs'] = sprintf(
-			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-			esc_url( 'https://github.com/Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce/blob/main/docs/user-guide/06-pro-invoice-import.md' ),
+			'<a href="%1$s">%2$s</a>',
+			esc_url( admin_url( 'admin.php?page=shipping-cost-monitor-for-woocommerce&tab=docs&chapter=06-pro-invoice-import' ) ),
 			esc_html__( 'Documentation', 'shipping-cost-monitor-pro-for-woocommerce' )
 		);
 		return $links;

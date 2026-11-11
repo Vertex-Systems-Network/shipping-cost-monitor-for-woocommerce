@@ -554,3 +554,27 @@
 	flex-wrap: wrap;
 	gap: 8px;
 }
+
+/* Built-in documentation */
+.wpe-scm-docs-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.wpe-scm-docs-head h1 { margin: 0; font-size: 23px; font-weight: 600; }
+.wpe-scm-docs-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 24px; align-items: start; }
+.wpe-scm-docs-nav { position: sticky; top: 46px; background: #fff; border: 1px solid #e2dbea; border-radius: 10px; padding: 8px; }
+.wpe-scm-docs-nav ul { margin: 0; }
+.wpe-scm-docs-nav li { margin: 0; }
+.wpe-scm-docs-nav a { display: block; padding: 8px 12px; border-radius: 6px; color: #1d2327; text-decoration: none; }
+.wpe-scm-docs-nav a:hover { background: #f7f2fb; color: #684194; }
+.wpe-scm-docs-nav a.is-current { background: #684194; color: #fff; font-weight: 600; }
+.wpe-scm-docs-content { background: #fff; border: 1px solid #e2dbea; border-radius: 10px; padding: 28px 36px; max-width: 920px; font-size: 14px; line-height: 1.65; }
+.wpe-scm-docs-content h1 { font-size: 26px; margin-top: 0; }
+.wpe-scm-docs-content h2 { font-size: 19px; margin-top: 32px; padding-top: 8px; border-top: 1px solid #f0edf3; }
+.wpe-scm-docs-content h3 { font-size: 15px; margin-top: 24px; }
+.wpe-scm-docs-content img { max-width: 100%; height: auto; border: 1px solid #e2dbea; border-radius: 8px; margin: 8px 0; }
+.wpe-scm-docs-content table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+.wpe-scm-docs-content th, .wpe-scm-docs-content td { border: 1px solid #e2dbea; padding: 7px 10px; text-align: left; vertical-align: top; }
+.wpe-scm-docs-content th { background: #faf8fc; }
+.wpe-scm-docs-content code { background: #f6f7f7; padding: 1px 5px; border-radius: 4px; }
+.wpe-scm-docs-content pre { background: #f6f7f7; padding: 12px 14px; border-radius: 6px; overflow-x: auto; }
+.wpe-scm-docs-content pre code { background: none; padding: 0; }
+.wpe-scm-docs-content blockquote { margin: 12px 0; padding: 8px 14px; border-left: 4px solid #684194; background: #f7f2fb; }
+@media (max-width: 960px) { .wpe-scm-docs-layout { grid-template-columns: 1fr; } .wpe-scm-docs-nav { position: static; } }

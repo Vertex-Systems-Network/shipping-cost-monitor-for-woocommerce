@@ -1,0 +1,121 @@
+<h1 id="5-exporting-the-report-as-csv">5. Exporting the report as CSV</h1>
+<p>Click <strong>Export CSV</strong> on the dashboard. The file is named <code>shipping-cost-report-&lt;from&gt;-to-&lt;to&gt;.csv</code> and covers the dates shown in the header.</p>
+<h2 id="what-is-in-it--and-what-is-not">What is in it — and what is not</h2>
+<p>One row per eligible order. The file deliberately contains <strong>no customer names, addresses, emails, phone numbers or notes</strong>, so it can be shared with an accountant without exposing customer data.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Example</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Order ID</strong></td>
+<td><code>10</code></td>
+<td>Internal WooCommerce ID</td>
+</tr>
+<tr>
+<td><strong>Order number</strong></td>
+<td><code>10</code></td>
+<td>What customers see; differs from the ID if an order-number plugin is used</td>
+</tr>
+<tr>
+<td><strong>Order date</strong></td>
+<td><code>2026-11-11 16:44:02</code></td>
+<td>Store time zone</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td><code>processing</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Currency</strong></td>
+<td><code>USD</code></td>
+<td>Order currency</td>
+</tr>
+<tr>
+<td><strong>Shipping refunded (ex tax)</strong></td>
+<td><code>0.00</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Shipping charged net (ex tax)</strong></td>
+<td><code>12.00</code></td>
+<td>Charged minus refunded</td>
+</tr>
+<tr>
+<td><strong>Recorded cost</strong></td>
+<td><code>8.25</code></td>
+<td>Blank if none, or if the stored value is invalid</td>
+</tr>
+<tr>
+<td><strong>Cost currency</strong></td>
+<td><code>USD</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Evidence</strong></td>
+<td><code>invoice_final</code></td>
+<td>Internal key: <code>invoice_final</code>, <code>merchant_confirmed</code>, <code>booked_label</code>, <code>estimate</code></td>
+</tr>
+<tr>
+<td><strong>Cost tax treatment</strong></td>
+<td><code>exclusive</code></td>
+<td><code>exclusive</code>, <code>inclusive</code> or <code>unknown</code></td>
+</tr>
+<tr>
+<td><strong>Comparable variance</strong></td>
+<td><code>3.75</code></td>
+<td>Filled only when the comparison status is Comparable</td>
+</tr>
+<tr>
+<td><strong>Comparison status</strong></td>
+<td><code>Comparable</code></td>
+<td>See below</td>
+</tr>
+</tbody>
+</table>
+<h2 id="comparison-status-values">Comparison status values</h2>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Comparable</strong></td>
+<td>Confirmed, tax-exclusive, same currency. In the variance.</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td><strong>No confirmed cost</strong></td>
+<td>No cost recorded, or the stored amount is not a valid non-negative number.</td>
+<td>Record the cost</td>
+</tr>
+<tr>
+<td><strong>Evidence not confirmed</strong></td>
+<td>A booked label or estimate is recorded.</td>
+<td>Replace it with the invoice amount</td>
+</tr>
+<tr>
+<td><strong>Currency mismatch</strong></td>
+<td>Cost currency differs from the order currency.</td>
+<td>Enter the cost in the order currency if you want it compared</td>
+</tr>
+<tr>
+<td><strong>Tax basis not comparable</strong></td>
+<td>Cost is tax-inclusive or unknown.</td>
+<td>Enter the tax-exclusive amount</td>
+</tr>
+</tbody>
+</table>
+<h2 id="opening-in-a-spreadsheet">Opening in a spreadsheet</h2>
+<p>The file is UTF-8 with commas. In Excel use <strong>Data → From Text/CSV</strong> and pick UTF-8 if accents look wrong. Text cells that start with <code>=</code>, <code>+</code>, <code>-</code> or <code>@</code> are prefixed with an apostrophe so the spreadsheet cannot run them as formulas.</p>
+<h2 id="large-stores">Large stores</h2>
+<p>The export reads orders in pages of 100, so it does not load the whole store into memory at once. Exports have been measured on 100 orders; timings for thousands of orders are not yet published.</p>

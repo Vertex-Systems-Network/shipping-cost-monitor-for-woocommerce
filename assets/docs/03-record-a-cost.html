@@ -1,0 +1,81 @@
+<h1 id="3-recording-a-cost-on-an-order">3. Recording a cost on an order</h1>
+<p>The free plugin adds a <strong>Shipping Cost Monitor</strong> section to every order's edit screen, under the shipping address.</p>
+<p><img alt="Order edit screen with the Shipping Cost Monitor section" src="%%IMAGES%%order-editor-full.png" /></p>
+<h2 id="step-by-step">Step by step</h2>
+<ol>
+<li>Go to <strong>WooCommerce → Orders</strong> and open the order.</li>
+<li>Find <strong>Shipping Cost Monitor</strong> in the right-hand column of the order details.</li>
+<li>Fill in the fields below.</li>
+<li>Click <strong>Update</strong> (top right, in <strong>Order actions</strong>). The cost is saved only when the order is saved.</li>
+</ol>
+<p><img alt="The cost fields close up" src="%%IMAGES%%order-editor-cost-fields.png" /></p>
+<h2 id="every-field">Every field</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Current recorded cost</strong></td>
+<td>Read-only line showing what is saved now.</td>
+<td><code>USD 8.25 (Invoice-final)</code></td>
+<td>Absent until a cost is saved.</td>
+</tr>
+<tr>
+<td><strong>Merchant-paid shipping cost</strong></td>
+<td>What you paid the courier for this order, as a plain number.</td>
+<td><code>8.25</code></td>
+<td>Digits and one decimal point only. No currency symbol, no thousands separator, no minus sign. Leave empty and save to delete the record.</td>
+</tr>
+<tr>
+<td><strong>Cost currency (ISO 4217)</strong></td>
+<td>The three-letter currency code of the bill.</td>
+<td><code>USD</code></td>
+<td>Pre-filled with the order currency. Must be a currency WooCommerce knows. A different currency is saved but not compared.</td>
+</tr>
+<tr>
+<td><strong>Cost evidence</strong></td>
+<td>Where the number came from.</td>
+<td><code>Invoice-final</code></td>
+<td>See <a href="%%DOCS%%02-key-ideas#rule-1-evidence--how-sure-is-this-number">evidence</a>. Only Invoice-final and Merchant-confirmed count.</td>
+</tr>
+<tr>
+<td><strong>Cost tax treatment</strong></td>
+<td>Whether the amount includes tax.</td>
+<td><code>Tax-exclusive</code></td>
+<td>Only Tax-exclusive is compared.</td>
+</tr>
+<tr>
+<td><strong>Source or note</strong></td>
+<td>Free text to find the bill later.</td>
+<td><code>Courier invoice INV-1042</code></td>
+<td>Up to 2,000 characters. Never exported to CSV.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p><strong>A normal courier invoice.</strong> Invoice INV-1042 lists the parcel at 8.25 plus 1.65 VAT. Enter <code>8.25</code>, <code>USD</code>, <strong>Invoice-final</strong>, <strong>Tax-exclusive</strong>, note <code>INV-1042</code>. This cost is comparable.</p>
+<p><strong>A cash payment to a local rider.</strong> You paid 4.00 in cash and there is no invoice. Enter <code>4.00</code>, <strong>Merchant-confirmed</strong>, <strong>Tax-exclusive</strong>. Comparable, because you vouch for it.</p>
+<p><strong>You only have the label price.</strong> Enter it with <strong>Booked label / manifest</strong> so the dashboard can show it is still unconfirmed. When the invoice arrives, change the amount and the evidence to <strong>Invoice-final</strong>.</p>
+<p><strong>The courier billed in another currency.</strong> Order in USD, invoice in EUR 7.60. Enter <code>7.60</code> and <code>EUR</code>. It is saved and listed as a currency mismatch, but not compared. If you want it in the variance, convert it yourself at the rate you actually paid, enter the USD amount, and note the rate.</p>
+<h2 id="history-every-change-is-logged">History: every change is logged</h2>
+<p>Each save that changes the amount, currency, evidence or tax treatment adds a <strong>private order note</strong>, for example:</p>
+<blockquote>
+<p>Shipping cost record updated: USD 8.25 (Invoice-final) → USD 8.40 (Invoice-final; tax exclusive); source note updated.</p>
+</blockquote>
+<p>The first save of a cost reads <strong>"Shipping cost record added: …"</strong>, with the old value empty.</p>
+<p>Removing a cost adds <strong>"Shipping cost record removed: …"</strong>. Notes are private, so customers never see them.</p>
+<h2 id="when-a-save-is-ignored">When a save is ignored</h2>
+<p>The plugin silently keeps the previous value (no error box) when:</p>
+<ul>
+<li>the amount has letters, a minus sign, a comma or more than one decimal point;</li>
+<li>the currency is not a valid three-letter code known to WooCommerce;</li>
+<li>the evidence or tax value is not one of the listed options;</li>
+<li>your user cannot edit that order.</li>
+</ul>
+<p>If a cost does not appear after saving, check the amount format first.</p>

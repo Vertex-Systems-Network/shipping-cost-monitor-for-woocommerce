@@ -1,0 +1,146 @@
+<h1 id="shipping-cost-monitor-for-woocommerce-user-guide">Shipping Cost Monitor for WooCommerce: user guide</h1>
+<p>This guide explains every screen, field and number in <strong>Shipping Cost Monitor for WooCommerce</strong> (free) and its <strong>Pro add-on</strong>. It is written for store owners and the people who reconcile courier bills, not for developers. Developer hooks are in the last chapter.</p>
+<p><img alt="The Shipping Cost Monitor dashboard" src="%%IMAGES%%dashboard-overview.png" /></p>
+<h2 id="what-the-plugin-answers">What the plugin answers</h2>
+<p>Every order with delivery has two shipping numbers:</p>
+<ol>
+<li><strong>What the customer paid you for shipping.</strong> WooCommerce already knows this.</li>
+<li><strong>What you paid the courier for that parcel.</strong> WooCommerce does not know this. It arrives later, on a courier invoice or a label bill.</li>
+</ol>
+<p>The plugin stores the second number on each order, then reports the difference. A positive difference means customers paid more for shipping than it cost you; a negative difference means you are subsidising delivery.</p>
+<h2 id="chapters">Chapters</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chapter</th>
+<th>Edition</th>
+<th>What you learn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="%%DOCS%%01-install">Install and first run</a></td>
+<td>Free, Pro</td>
+<td>Requirements, installing both plugins, what you see first</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="%%DOCS%%02-key-ideas">Key ideas: evidence, tax basis and currency</a></td>
+<td>Free, Pro</td>
+<td>Why some costs are counted and others are not. Read this before trusting any number</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="%%DOCS%%03-record-a-cost">Recording a cost on an order</a></td>
+<td>Free</td>
+<td>Every field in the order editor, with examples</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="%%DOCS%%04-dashboard">Reading the dashboard</a></td>
+<td>Free</td>
+<td>Each card and table, with a worked example you can recompute by hand</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="%%DOCS%%05-csv-export">Exporting the report as CSV</a></td>
+<td>Free</td>
+<td>Every column, every comparison status, opening it in a spreadsheet</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="%%DOCS%%06-pro-invoice-import">Pro: importing a courier invoice CSV</a></td>
+<td>Pro</td>
+<td>Mapping columns, matching orders, review states, saving safely</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="%%DOCS%%07-pro-shipstation">Pro: ShipStation label costs</a></td>
+<td>Pro</td>
+<td>Getting the API key, connecting, previewing labels, what is stored</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="%%DOCS%%08-troubleshooting">Troubleshooting and FAQ</a></td>
+<td>Free, Pro</td>
+<td>Every message the plugin can show, and what to do</td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="%%DOCS%%09-developers">For developers: hooks and data</a></td>
+<td>Free, Pro</td>
+<td>Order meta keys, filters and actions, building another add-on</td>
+</tr>
+</tbody>
+</table>
+<h2 id="free-and-pro-at-a-glance">Free and Pro at a glance</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Free</th>
+<th>Pro add-on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shipping-cost record on each order (amount, currency, evidence, tax basis, note)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Private order note for every change</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dashboard: shipping charged, confirmed cost, variance, coverage</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Cost by shipping method</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CSV export without customer personal data</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Courier invoice CSV import with column mapping</td>
+<td>—</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exact order matching with duplicate, ambiguous, currency and refund checks</td>
+<td>—</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Saved column-mapping profiles (kept in your browser)</td>
+<td>—</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>ShipStation V2 label costs (read-only)</td>
+<td>—</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Calls any external service</td>
+<td>Never</td>
+<td>Only ShipStation, only after you connect it</td>
+</tr>
+</tbody>
+</table>
+<p>The Pro add-on is a separate plugin that needs the free plugin. Removing Pro never removes the costs it saved; they are ordinary order records that the free plugin keeps reading.</p>
+<h2 id="conventions-in-this-guide">Conventions in this guide</h2>
+<ul>
+<li><strong>Bold labels</strong> are the exact text on screen.</li>
+<li>Examples use a test store in US dollars with six orders. The same six orders appear in every chapter, so the numbers can be checked against each other.</li>
+<li>"Cost" always means what <em>you</em> paid. "Shipping charged" always means what the <em>customer</em> paid.</li>
+</ul>
