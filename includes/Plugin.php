@@ -35,18 +35,6 @@ final class Plugin {
 	 * Register plugin hooks.
 	 */
 	public function init(): void {
-		add_filter(
-			'wpe_scm_carrier_adapters',
-			static function ( $adapters ) {
-				$adapters = is_array( $adapters ) ? $adapters : array();
-				$adapters[] = new Integrations\ShipStationAdapter();
-				return $adapters;
-			}
-		);
-
-		$carrier_sync = new Admin\CarrierSyncController();
-		$carrier_sync->register();
-
 		$page = new Admin\Page();
 		$page->register();
 
@@ -56,10 +44,11 @@ final class Plugin {
 		$csv_export = new Admin\CsvExport();
 		$csv_export->register();
 
-		$reference_matcher = new Admin\ReferenceMatcher();
-		$reference_matcher->register();
-
-		$invoice_importer = new Admin\InvoiceImporter();
-		$invoice_importer->register();
+		/**
+		 * Fires after the core modules are registered. Add-ons hook here to register their own.
+		 *
+		 * @param Plugin $plugin Plugin instance.
+		 */
+		do_action( 'wpe_scm_init', $this );
 	}
 }

@@ -3,7 +3,7 @@
  * Plugin Name: Shipping Cost Monitor for WooCommerce
  * Plugin URI: https://wpessential.org
  * Description: Shipping cost intelligence and margin reporting for WooCommerce.
- * Version: 0.1.0
+ * Version: 1.0.0
  * Requires at least: 7.0
  * Requires PHP: 8.1
  * WC requires at least: 11.2
@@ -103,7 +103,7 @@ if ( ! function_exists( 'wpe_scm_missing_autoloader_notice' ) ) {
 	}
 }
 
-define( 'WPE_SCM_VERSION', '0.1.0' );
+define( 'WPE_SCM_VERSION', '1.0.0' );
 define( 'WPE_SCM_FILE', __FILE__ );
 define( 'WPE_SCM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPE_SCM_URL', plugin_dir_url( __FILE__ ) );

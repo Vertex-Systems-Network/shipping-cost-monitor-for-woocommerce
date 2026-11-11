@@ -96,19 +96,25 @@ final class Page {
 			admin_url( 'admin-post.php' )
 		);
 		$dashboard['export_url'] = wp_nonce_url( $export_url, 'wpe_scm_export_report' );
-		$dashboard['ajax_url'] = admin_url( 'admin-ajax.php' );
-		$dashboard['match_nonce'] = wp_create_nonce( 'wpe_scm_match_preview' );
-		$dashboard['import_nonce'] = wp_create_nonce( 'wpe_scm_commit_invoice_rows' );
-		$dashboard['carrier_nonce'] = wp_create_nonce( 'wpe_scm_carrier_manage' );
-		$dashboard['carrier_sync_nonce'] = wp_create_nonce( 'wpe_scm_carrier_sync' );
-		$dashboard['build_id'] = WPE_SCM_BUILD_ID;
-		$dashboard['carrier_adapters'] = ( new \WPEssential\ShippingCostMonitor\Integrations\AdapterRegistry() )->get_public_status();
+		/**
+		 * Filter the data passed to the dashboard script.
+		 *
+		 * Add-ons append their own keys (for example nonces); they must not remove core keys.
+		 *
+		 * @param array<string,mixed> $dashboard Dashboard data.
+		 */
+		$dashboard = apply_filters( 'wpe_scm_dashboard_data', $dashboard );
 
 		wp_localize_script(
 			'wpe-scm-admin',
 			'wpeScmDashboard',
 			$dashboard
 		);
+
+		/**
+		 * Fires after the dashboard script is enqueued, so add-ons can enqueue scripts that depend on it.
+		 */
+		do_action( 'wpe_scm_dashboard_enqueued' );
 
 		wp_set_script_translations( 'wpe-scm-admin', 'shipping-cost-monitor-for-woocommerce' );
 	}

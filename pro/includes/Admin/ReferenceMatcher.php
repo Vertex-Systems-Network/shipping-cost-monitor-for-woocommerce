@@ -2,10 +2,10 @@
 /**
  * Exact, non-persistent invoice reference matching preview.
  *
- * @package WPEssentialShippingCostMonitor
+ * @package WPEssentialShippingCostMonitorPro
  */
 
-namespace WPEssential\ShippingCostMonitor\Admin;
+namespace WPEssential\ShippingCostMonitorPro\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,7 +26,7 @@ final class ReferenceMatcher {
 	public function match_preview(): void {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'You do not have permission to match invoice references.', 'shipping-cost-monitor-for-woocommerce' ) ),
+				array( 'message' => __( 'You do not have permission to match invoice references.', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
 				403
 			);
 		}
@@ -39,7 +39,7 @@ final class ReferenceMatcher {
 
 		if ( ! wp_verify_nonce( $nonce, 'wpe_scm_match_preview' ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'The matching request expired. Reload the page and try again.', 'shipping-cost-monitor-for-woocommerce' ) ),
+				array( 'message' => __( 'The matching request expired. Reload the page and try again.', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
 				403
 			);
 		}
@@ -51,7 +51,7 @@ final class ReferenceMatcher {
 
 		if ( empty( $references ) || count( $references ) > 50 ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Match between 1 and 50 invoice rows at a time.', 'shipping-cost-monitor-for-woocommerce' ) ),
+				array( 'message' => __( 'Match between 1 and 50 invoice rows at a time.', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
 				400
 			);
 		}
@@ -60,7 +60,7 @@ final class ReferenceMatcher {
 		foreach ( $references as $row ) {
 			if ( ! is_array( $row ) || ! isset( $row['row'] ) || ! isset( $row['reference'] ) || ! is_scalar( $row['row'] ) || ! is_scalar( $row['reference'] ) ) {
 				wp_send_json_error(
-					array( 'message' => __( 'The reference list has an invalid row.', 'shipping-cost-monitor-for-woocommerce' ) ),
+					array( 'message' => __( 'The reference list has an invalid row.', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
 					400
 				);
 			}
@@ -74,7 +74,7 @@ final class ReferenceMatcher {
 				|| strlen( $raw_reference ) > 100
 			) {
 				wp_send_json_error(
-					array( 'message' => __( 'The reference list has an invalid row.', 'shipping-cost-monitor-for-woocommerce' ) ),
+					array( 'message' => __( 'The reference list has an invalid row.', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
 					400
 				);
 			}
@@ -84,7 +84,7 @@ final class ReferenceMatcher {
 			$reference = preg_replace( '/^#\s*/', '', $reference );
 			if ( '' === $reference || strlen( $reference ) > 100 ) {
 				wp_send_json_error(
-					array( 'message' => __( 'Each reference must contain 1 to 100 characters.', 'shipping-cost-monitor-for-woocommerce' ) ),
+					array( 'message' => __( 'Each reference must contain 1 to 100 characters.', 'shipping-cost-monitor-pro-for-woocommerce' ) ),
 					400
 				);
 			}
