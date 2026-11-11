@@ -1,4 +1,4 @@
-name: Build installable plugin ZIP
+name: Build installable plugin ZIPs (Free + Pro)
 
 on:
   workflow_dispatch:
@@ -9,6 +9,7 @@ on:
       - '.github/workflows/build-installable-zip.yml'
       - 'assets/**'
       - 'includes/**'
+      - 'pro/**'
       - 'composer.json'
       - 'shipping-cost-monitor-for-woocommerce.php'
       - 'uninstall.php'
@@ -41,23 +42,24 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Install Composer autoloader
-        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
+      - name: Install Composer autoloaders (Free and Pro)
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
+          composer install --working-dir=pro --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
 
-      - name: Lint plugin and generated PHP
+      - name: Lint Free and Pro PHP
         shell: bash
         run: |
           set -euo pipefail
-          php -l shipping-cost-monitor-for-woocommerce.php
-          php -l uninstall.php
-          find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
+          find shipping-cost-monitor-for-woocommerce.php includes vendor pro -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
 
       - name: Verify Composer PSR-4 autoload
         run: |
-          php -r 'require "vendor/autoload.php"; if (!class_exists("WPEssential\\ShippingCostMonitor\\Plugin")) { fwrite(STDERR, "PSR-4 autoload smoke failed\\n"); exit(1); } echo "PSR-4 autoload smoke passed\\n";'
+          php -r 'define("ABSPATH", __DIR__ . "/"); require "vendor/autoload.php"; require "pro/vendor/autoload.php"; foreach (array("WPEssential\\ShippingCostMonitor\\Plugin", "WPEssential\\ShippingCostMonitorPro\\Plugin", "WPEssential\\ShippingCostMonitorPro\\Admin\\InvoiceImporter") as $c) { if (!class_exists($c)) { fwrite(STDERR, "PSR-4 autoload smoke failed: $c\n"); exit(1); } } echo "PSR-4 autoload smoke passed\n";' | tee /tmp/smoke.txt
+          grep -q "PSR-4 autoload smoke passed" /tmp/smoke.txt
 
   build:
-    name: Lint, build and upload ZIP
+    name: Build and upload Free and Pro ZIPs
     needs: php-compatibility
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -74,51 +76,88 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Install Composer autoloader
-        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
+      - name: Install Composer autoloaders (Free and Pro)
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
+          composer install --working-dir=pro --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
 
-      - name: Lint plugin and generated PHP
+      - name: Check versions match
         shell: bash
         run: |
           set -euo pipefail
-          php -l shipping-cost-monitor-for-woocommerce.php
-          php -l uninstall.php
-          find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
+          free_version="$(sed -n 's/^ \* Version: *//p' shipping-cost-monitor-for-woocommerce.php)"
+          stable_tag="$(sed -n 's/^Stable tag: *//p' readme.txt)"
+          pro_version="$(sed -n 's/^ \* Version: *//p' pro/shipping-cost-monitor-pro-for-woocommerce.php)"
+          pro_constant="$(sed -n "s/^define( 'WPE_SCM_PRO_VERSION', '\(.*\)' );/\1/p" pro/shipping-cost-monitor-pro-for-woocommerce.php)"
+          free_constant="$(sed -n "s/^define( 'WPE_SCM_VERSION', '\(.*\)' );/\1/p" shipping-cost-monitor-for-woocommerce.php)"
+          echo "Free $free_version (constant $free_constant, readme $stable_tag); Pro $pro_version (constant $pro_constant)"
+          if [ -z "$free_version" ] || [ "$free_version" != "$stable_tag" ] || [ "$free_version" != "$free_constant" ]; then
+            echo "Free plugin Version, WPE_SCM_VERSION and readme Stable tag must match" >&2
+            exit 1
+          fi
+          if [ -z "$pro_version" ] || [ "$pro_version" != "$pro_constant" ]; then
+            echo "Pro plugin Version and WPE_SCM_PRO_VERSION must match" >&2
+            exit 1
+          fi
 
-      - name: Verify Composer PSR-4 autoload
+      - name: Check the Free package contains no Pro code
+        shell: bash
         run: |
-          php -r 'require "vendor/autoload.php"; if (!class_exists("WPEssential\\ShippingCostMonitor\\Plugin")) { fwrite(STDERR, "PSR-4 autoload smoke failed\n"); exit(1); } echo "PSR-4 autoload smoke passed\n";'
+          set -euo pipefail
+          if grep -rlE 'ShippingCostMonitorPro|wpe_scm_shipstation|wpe_scm_commit_invoice_rows|api\.shipstation\.com' shipping-cost-monitor-for-woocommerce.php includes assets; then
+            echo "Pro code found in the Free plugin files above" >&2
+            exit 1
+          fi
 
-      - name: Package installable plugin ZIP
+      - name: Package Free ZIP
         shell: bash
         run: |
           set -euo pipefail
           slug='shipping-cost-monitor-for-woocommerce'
-          archive="${slug}.zip"
-          rm -rf build "$archive" "$archive.sha256"
           package_dir="build/${slug}"
+          rm -rf build "${slug}.zip" "${slug}.zip.sha256"
           mkdir -p "$package_dir"
           cp -R assets includes vendor "$package_dir/"
-          plugin_version="$(sed -n 's/^ \* Version: *//p' shipping-cost-monitor-for-woocommerce.php)"
-          stable_tag="$(sed -n 's/^Stable tag: *//p' readme.txt)"
-          if [ -z "$plugin_version" ] || [ "$plugin_version" != "$stable_tag" ]; then
-            echo "Plugin Version ($plugin_version) and readme Stable tag ($stable_tag) differ" >&2
-            exit 1
-          fi
           cp shipping-cost-monitor-for-woocommerce.php uninstall.php readme.txt changelog.txt LICENSE "$package_dir/"
           printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
-          (cd build && zip -qr "../${archive}" "$slug")
-          unzip -t "$archive"
-          sha256sum "$archive" > "${archive}.sha256"
+          (cd build && zip -qr "../${slug}.zip" "$slug")
+          unzip -t "${slug}.zip"
+          sha256sum "${slug}.zip" > "${slug}.zip.sha256"
 
-      - name: Upload downloadable build artifact
+      - name: Package Pro ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          slug='shipping-cost-monitor-pro-for-woocommerce'
+          package_dir="build-pro/${slug}"
+          rm -rf build-pro "${slug}.zip" "${slug}.zip.sha256"
+          mkdir -p "$package_dir"
+          cp -R pro/assets pro/includes pro/vendor "$package_dir/"
+          cp pro/shipping-cost-monitor-pro-for-woocommerce.php pro/uninstall.php pro/changelog.txt LICENSE "$package_dir/"
+          printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
+          (cd build-pro && zip -qr "../${slug}.zip" "$slug")
+          unzip -t "${slug}.zip"
+          sha256sum "${slug}.zip" > "${slug}.zip.sha256"
+
+      - name: Upload Free ZIP
         uses: actions/upload-artifact@v7.0.1
         with:
           name: shipping-cost-monitor-for-woocommerce-${{ github.sha }}
           path: |
             shipping-cost-monitor-for-woocommerce.zip
             shipping-cost-monitor-for-woocommerce.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+      - name: Upload Pro ZIP
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: shipping-cost-monitor-pro-for-woocommerce-${{ github.sha }}
+          path: |
+            shipping-cost-monitor-pro-for-woocommerce.zip
+            shipping-cost-monitor-pro-for-woocommerce.zip.sha256
           if-no-files-found: error
           retention-days: 14
           compression-level: 0

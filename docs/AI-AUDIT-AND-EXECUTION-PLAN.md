@@ -29,11 +29,11 @@ This document holds **rules and routing only**. It deliberately carries no gate 
 
 ## What is implemented, and what is not
 
-**In source:** order-level cost record through WooCommerce CRUD; dashboard report with currency, tax-basis and evidence guardrails; shipping-method breakdown; privacy-minimized CSV export; browser-local invoice CSV preview, mapping, exact-reference matching and reviewed commit; read-only ShipStation V2 booked-label adapter with AES-256-GCM encrypted key storage, bounded sync preview and hand-off to the same review/commit flow; HPOS compatibility declaration; uninstall cleanup of the stored credential; `readme.txt`, `changelog.txt` and `LICENSE` in the CI package.
+**In source (version 1.0.0, F-6):** Free — order-level cost record through WooCommerce CRUD; dashboard report with currency, tax-basis and evidence guardrails; shipping-method breakdown; privacy-minimized CSV export; Pro add-on — browser-local invoice CSV preview, mapping, exact-reference matching and reviewed commit; read-only ShipStation V2 booked-label adapter with AES-256-GCM encrypted key storage, bounded sync preview and hand-off to the same review/commit flow; HPOS compatibility declaration; uninstall cleanup of the stored credential; `readme.txt`, `changelog.txt` and `LICENSE` in the CI package; user guide with screenshots in `docs/user-guide/`.
 
 **Implemented but not validated with a real account:** the ShipStation adapter. No merchant API key has been used against it. Owner decision C-3 records the credential design as implemented with independent security review still pending. Do not describe it as merchant-verified.
 
-**Not delivered:** zone/category loss analysis, scheduled alerts, historical comparisons, rate-change simulation, PDF reports, per-parcel allocation, background reconciliation, persistent invoice archive, server-synchronized mapping profiles, and a Free/Pro split in code. The repository builds one free plugin (decision F-2).
+**Not delivered:** zone/category loss analysis, scheduled alerts, historical comparisons, rate-change simulation, PDF reports, per-parcel allocation, background reconciliation, persistent invoice archive, server-synchronized mapping profiles, and a Free/Pro split in code. The repository builds two plugins (decision F-7): the free plugin at the root and the Pro add-on in `pro/`.
 
 **Guardrails that still apply:** never persist raw invoice uploads or customer profile data; use WooCommerce CRUD and query abstractions; keep currency and tax basis comparable; never silently overwrite an existing cost; a quote or booked label is never a final cost; no runtime LLM or customer-data transmission.
 

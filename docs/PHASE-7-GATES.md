@@ -165,3 +165,17 @@ After the rename, PHP lint, the JavaScript syntax check, the WPCS security/I18n 
 - Plugin Check (General, Plugin Repo, Security; errors and warnings): **"Checks complete. 5 warnings found."** No errors. All five are repository-only files (`.cursor`, `.github`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) that the CI package does not contain. The `trademarked_term` warnings are gone.
 
 **Still not covered:** Plugin Check on the CI ZIP itself (which would also exercise the Composer autoloader), uninstall on a WordPress site, the legacy-build pause notice in a real WordPress install (verified only in a PHP stub), invoice import on this build, phone-width layout, and the ShipStation connection. P7-12 stays Partial pending independent review.
+
+## 2026-11-11 Free/Pro split and 1.0.0 runtime check (AI-47)
+
+**Environment:** fresh non-persistent playground.wordpress.net site, WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3 (PHP.wasm, SQLite, legacy order storage in this site). **Source:** branch `claude/v1-free-pro-docs` at `fa34146`, free plugin from the repository root and Pro from `pro/` through Blueprint `git:directory` resources, each with a hand-written PSR-4 autoloader stand-in (not the CI ZIPs).
+
+**Fixture:** six Processing orders created through WooCommerce CRUD (USD): Flat rate 12.00 / cost 8.25 invoice-final exclusive; Flat rate 10.00 / 11.40 invoice-final exclusive; Flat rate 15.00 / no cost; Express 25.00 / 19.90 merchant-confirmed exclusive; Express 25.00 / 27.10 invoice-final exclusive; Local pickup 5.00 / 4.00 booked label, tax unknown.
+
+**Free only (Pro inactive):** dashboard showed USD 92.00 charged, USD 66.65 confirmed cost, USD 5.35 variance (green), 66.7% coverage (4 / 6); method table Flat rate 3 / 37.00 / 19.65 / 2.35 and Express 2 / 50.00 / 47.00 / 3.00; the booked-label cost was excluded. All match hand calculation. No build ID shown; buttons use one style; content fills the width with the standard 20px right margin. The Pro add-on card replaced the importer.
+
+**Free + Pro:** Pro activated with "Plugin activated."; the Plugins screen showed the free plugin as "Required by" Pro. `window.wpeScmPro` defined, invoice panel and carrier card rendered, the ShipStation key field showed both help links, no console errors. Dashboard data included Pro nonces and `carrier_adapters` (ShipStation, disconnected). Authenticated AJAX from the dashboard page: match preview returned `duplicate` for `# 12` and `12`, `existing_cost` with the stored USD 8.25 for order 10, `unmatched` for 99999; commit to order 12 returned `committed`, identical replay `already_imported` (`persisted:false`); invalid nonce HTTP 403; ShipStation sync without a key HTTP 400 "Connect a ShipStation API key before syncing.". A browser-injected four-row CSV auto-mapped Order / Charge / Currency, and matching produced existing-cost comparisons, `unmatched` and "Credit/refund needs review" for the negative row.
+
+**Found and fixed during this run:** the Pro review column showed raw codes (`unmatched`, `duplicate`, `committed`, `merchant_confirmed`); they now use translated labels. The CI autoload smoke test had been exiting with status 0 before checking any class because class files exit without `ABSPATH`; it now defines `ABSPATH` and asserts its output.
+
+**Not covered:** the two CI ZIPs themselves, Plugin Check on the split packages, the label fix in a browser (PHP lint and `node --check` only), HPOS datastore on this site, and Pro licensing/updates (not built).

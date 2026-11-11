@@ -26,7 +26,7 @@ If a task is ambiguous, report the conflict or assumption. This repository is AI
 - Carrier connections are optional adapters. Do not claim API access, supported regions or final-invoice data without provider-specific evidence.
 - No runtime AI service or customer-data transmission to an LLM is currently in scope.
 - Do not claim work, compatibility, tests, security review or Marketplace acceptance that has not been evidenced.
-- Preserve the GitHub repository name `wpessential-shipping-cost-monitor`. The plugin slug, text domain, package folder and main file are `shipping-cost-monitor-for-woocommerce` (decision F-5).
+- Preserve the GitHub repository name `wpessential-shipping-cost-monitor`. The free plugin's slug, text domain, package folder and main file are `shipping-cost-monitor-for-woocommerce` (F-5). The Pro add-on lives in `pro/` as `shipping-cost-monitor-pro-for-woocommerce` (F-7). Never put Pro code in the free plugin; CI rejects it.
 - Keep status/progress in README aligned with actual evidence and mark target dates as proposed until approved.
 
 ## Work handoff

@@ -2,17 +2,17 @@
 /**
  * Read-only ShipStation V2 label evidence adapter.
  *
- * @package WPEssentialShippingCostMonitor
+ * @package WPEssentialShippingCostMonitorPro
  */
 
-namespace WPEssential\ShippingCostMonitor\Integrations;
+namespace WPEssential\ShippingCostMonitorPro\Integrations;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Fetches bounded booked-label evidence. It never creates labels or mutates orders.
  */
-final class ShipStationAdapter implements CarrierAdapterInterface {
+final class ShipStationAdapter implements \WPEssential\ShippingCostMonitor\Integrations\CarrierAdapterInterface {
 	private const OPTION_NAME = 'wpe_scm_shipstation_credentials';
 	private const API_URL = 'https://api.shipstation.com/v2/labels';
 	private const PAGE_SIZE = 100;
@@ -51,7 +51,7 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 	 */
 	public function connect( string $api_key ) {
 		if ( strlen( $api_key ) < 12 || strlen( $api_key ) > 512 || ! preg_match( '/^[A-Za-z0-9._-]+$/D', $api_key ) ) {
-			return new \WP_Error( 'wpe_scm_shipstation_key_invalid', __( 'Enter a valid ShipStation V2 API key.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_key_invalid', __( 'Enter a valid ShipStation V2 API key.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 
 		$test = $this->request_labels( $api_key, array( 'page_size' => 1 ) );
@@ -106,7 +106,7 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 		$start = $this->parse_date( $from );
 		$end = $this->parse_date( $to );
 		if ( ! $start || ! $end || $start > $end || ( $end->getTimestamp() - $start->getTimestamp() ) > ( self::MAX_WINDOW_DAYS * DAY_IN_SECONDS ) ) {
-			return new \WP_Error( 'wpe_scm_shipstation_date_range', __( 'Choose a valid date range of 31 days or less.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_date_range', __( 'Choose a valid date range of 31 days or less.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 
 		$page = isset( $query['cursor'] ) && is_scalar( $query['cursor'] ) ? absint( $query['cursor'] ) : 1;
@@ -128,7 +128,7 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 		}
 
 		if ( ! isset( $labels['labels'] ) || ! is_array( $labels['labels'] ) ) {
-			return new \WP_Error( 'wpe_scm_shipstation_response', __( 'ShipStation returned an unsupported labels response.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_response', __( 'ShipStation returned an unsupported labels response.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 
 		$items = array();
@@ -190,27 +190,27 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 			)
 		);
 		if ( is_wp_error( $response ) ) {
-			return new \WP_Error( 'wpe_scm_shipstation_unreachable', __( 'Could not reach ShipStation. Check the site connection and try again.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_unreachable', __( 'Could not reach ShipStation. Check the site connection and try again.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 
 		$status = (int) wp_remote_retrieve_response_code( $response );
 		if ( 401 === $status ) {
-			return new \WP_Error( 'wpe_scm_shipstation_auth', __( 'ShipStation rejected the API key. Check it and reconnect.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_auth', __( 'ShipStation rejected the API key. Check it and reconnect.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		if ( 403 === $status ) {
-			return new \WP_Error( 'wpe_scm_shipstation_scope', __( 'ShipStation denied access to label data for this account or plan.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_scope', __( 'ShipStation denied access to label data for this account or plan.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		if ( 429 === $status ) {
-			return new \WP_Error( 'wpe_scm_shipstation_rate_limit', __( 'ShipStation rate-limited the request. Wait before syncing again.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_rate_limit', __( 'ShipStation rate-limited the request. Wait before syncing again.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		if ( 200 !== $status ) {
-			return new \WP_Error( 'wpe_scm_shipstation_response', __( 'ShipStation returned an unexpected response. No order data was changed.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_response', __( 'ShipStation returned an unexpected response. No order data was changed.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body, true );
 		if ( ! is_array( $data ) ) {
-			return new \WP_Error( 'wpe_scm_shipstation_json', __( 'ShipStation returned invalid JSON. No order data was changed.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_json', __( 'ShipStation returned invalid JSON. No order data was changed.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		return $data;
 	}
@@ -223,7 +223,7 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 	private function stored_key() {
 		$stored = get_option( self::OPTION_NAME, false );
 		if ( false === $stored ) {
-			return new \WP_Error( 'wpe_scm_shipstation_disconnected', __( 'Connect a ShipStation API key before syncing.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_shipstation_disconnected', __( 'Connect a ShipStation API key before syncing.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		return $this->decrypt_key( $stored );
 	}
@@ -236,7 +236,7 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 	 */
 	private function encrypt_key( string $api_key ) {
 		if ( ! function_exists( 'openssl_encrypt' ) || ! function_exists( 'random_bytes' ) ) {
-			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Secure credential storage is unavailable on this server; the key was not saved.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Secure credential storage is unavailable on this server; the key was not saved.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		$key = $this->encryption_key();
 		if ( is_wp_error( $key ) ) {
@@ -245,13 +245,13 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 		try {
 			$iv = random_bytes( 12 );
 		} catch ( \Throwable $error ) {
-			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Could not create a secure credential envelope; the key was not saved.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Could not create a secure credential envelope; the key was not saved.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 
 		$tag = '';
 		$ciphertext = openssl_encrypt( $api_key, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag, 'wpe-scm-shipstation-v1' );
 		if ( false === $ciphertext || 16 !== strlen( $tag ) ) {
-			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Could not encrypt the API key; the key was not saved.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Could not encrypt the API key; the key was not saved.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Encodes binary IV, tag and ciphertext of the AES-256-GCM credential envelope for option storage; not code obfuscation.
 		return array(
@@ -271,10 +271,10 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 	 */
 	private function decrypt_key( $stored ) {
 		if ( ! is_array( $stored ) || 1 !== ( $stored['version'] ?? null ) || ! isset( $stored['iv'], $stored['tag'], $stored['ciphertext'] ) ) {
-			return new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key is unavailable.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key is unavailable.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		if ( ! function_exists( 'openssl_decrypt' ) ) {
-			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Secure credential storage is unavailable on this server.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Secure credential storage is unavailable on this server.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		$key = $this->encryption_key();
 		if ( is_wp_error( $key ) ) {
@@ -286,12 +286,12 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 		$ciphertext = base64_decode( (string) $stored['ciphertext'], true );
 		// phpcs:enable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 		if ( false === $iv || 12 !== strlen( $iv ) || false === $tag || 16 !== strlen( $tag ) || false === $ciphertext || strlen( $ciphertext ) > 1024 ) {
-			return new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key is invalid.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key is invalid.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		$plaintext = openssl_decrypt( $ciphertext, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag, 'wpe-scm-shipstation-v1' );
 		return is_string( $plaintext ) && '' !== $plaintext
 			? $plaintext
-			: new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key cannot be opened with the current site salts.', 'shipping-cost-monitor-for-woocommerce' ) );
+			: new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key cannot be opened with the current site salts.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 	}
 
 	/**
@@ -301,13 +301,13 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 	 */
 	private function encryption_key() {
 		if ( ! defined( 'AUTH_KEY' ) || ! defined( 'SECURE_AUTH_KEY' ) ) {
-			return new \WP_Error( 'wpe_scm_crypto_salts', __( 'Add unique AUTH_KEY and SECURE_AUTH_KEY values in wp-config.php before connecting a carrier.', 'shipping-cost-monitor-for-woocommerce' ) );
+			return new \WP_Error( 'wpe_scm_crypto_salts', __( 'Add unique AUTH_KEY and SECURE_AUTH_KEY values in wp-config.php before connecting a carrier.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 		}
 		$auth = (string) AUTH_KEY;
 		$secure = (string) SECURE_AUTH_KEY;
 		foreach ( array( $auth, $secure ) as $salt ) {
 			if ( '' === $salt || false !== stripos( $salt, 'put your unique phrase here' ) || false !== stripos( $salt, 'change this to a unique phrase' ) ) {
-				return new \WP_Error( 'wpe_scm_crypto_salts', __( 'Replace default WordPress salts in wp-config.php before connecting a carrier.', 'shipping-cost-monitor-for-woocommerce' ) );
+				return new \WP_Error( 'wpe_scm_crypto_salts', __( 'Replace default WordPress salts in wp-config.php before connecting a carrier.', 'shipping-cost-monitor-pro-for-woocommerce' ) );
 			}
 		}
 		return hash_hmac( 'sha256', 'wpe_scm_shipstation_encryption_v1', $auth . '|' . $secure, true );

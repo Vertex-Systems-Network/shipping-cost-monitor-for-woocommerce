@@ -5,8 +5,8 @@
 	--wpe-scm-surface: #fff;
 	--wpe-scm-soft: #f6f7f7;
 	--wpe-scm-accent: #7f54b3;
-	max-width: 1440px;
-	margin: 26px 24px 48px 0;
+	max-width: none;
+	margin: 20px 20px 48px 0;
 	color: var(--wpe-scm-ink);
 }
 
@@ -45,20 +45,6 @@
 	color: var(--wpe-scm-muted);
 	font-size: 14px;
 	line-height: 1.6;
-}
-
-.wpe-scm-primary-action {
-	min-height: 38px !important;
-	padding: 3px 15px !important;
-	border: 0 !important;
-	border-radius: 5px !important;
-	background: var(--wpe-scm-accent) !important;
-	font-weight: 600 !important;
-}
-
-.wpe-scm-primary-action:hover,
-.wpe-scm-primary-action:focus {
-	background: #684194 !important;
 }
 
 .wpe-scm-metrics {
@@ -216,13 +202,6 @@
 	color: var(--wpe-scm-muted);
 	font-size: 12px;
 	font-weight: 600;
-}
-
-.wpe-scm-build-id {
-	margin: 3px 0 0;
-	color: var(--wpe-scm-muted);
-	font-family: monospace;
-	font-size: 11px;
 }
 
 .wpe-scm-report-notice {
@@ -519,4 +498,53 @@
 
 .wpe-scm-method-table {
 	min-width: 520px;
+}
+
+/* One button style across the dashboard and the Pro panels. */
+.wpe-scm-wrap .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 36px;
+	padding: 0 16px;
+	border: 1px solid var(--wpe-scm-accent);
+	border-radius: 6px;
+	background: var(--wpe-scm-surface);
+	box-shadow: none;
+	color: var(--wpe-scm-accent);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+}
+
+.wpe-scm-wrap .button:hover {
+	border-color: #684194;
+	background: #f7f2fb;
+	color: #684194;
+}
+
+.wpe-scm-wrap .button.button-primary {
+	border-color: var(--wpe-scm-accent);
+	background: var(--wpe-scm-accent);
+	color: #fff;
+}
+
+.wpe-scm-wrap .button.button-primary:hover {
+	border-color: #684194;
+	background: #684194;
+	color: #fff;
+}
+
+.wpe-scm-wrap .button:disabled,
+.wpe-scm-wrap .button[disabled] {
+	border-color: var(--wpe-scm-border) !important;
+	background: var(--wpe-scm-soft) !important;
+	color: #a7aaad !important;
+	cursor: not-allowed;
+}
+
+.wpe-scm-api-help a {
+	color: var(--wpe-scm-accent);
+	font-weight: 600;
 }
