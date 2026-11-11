@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Shipping Cost Monitor for WooCommerce
- * Plugin URI: https://wpessential.org
+ * Plugin URI: https://wpessential.org/plugins/shipping-cost-monitor-for-woocommerce
  * Description: Shipping cost intelligence and margin reporting for WooCommerce.
  * Version: 1.0.0
  * Requires at least: 7.0
