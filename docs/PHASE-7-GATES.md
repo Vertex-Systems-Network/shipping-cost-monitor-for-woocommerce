@@ -80,3 +80,7 @@ The CI package from commit `3320120` was installed in isolated WordPress Playgro
 ## 2026-11-11 P7-12 Playground import handler probes
 
 On the installed `3320120` CI package in isolated WP 7.1.4 / WC 11.2.2 / PHP 8.3.36 Playground, direct PHP handler calls rejected anonymous access, invalid and 129-character nonces, a 51-row batch, a 65-character amount, and a negative amount. The synthetic target order retained its pre-existing `-5` cost and blank import fingerprint. [Exact cases and evidence limits](P7-12-PLAYGROUND-IMPORT-BOUNDARY-PROBES.md). These are handler-runtime probes, not HTTP AJAX/browser transport. P7-12 remains **Partial** pending the broader matrix and independent review; gate counts do not change.
+
+## 2026-11-11 P7-12 Playground HTTP export check
+
+On the installed `3320120` package, the dashboard-generated CSV export URL returned HTTP 200 with a CSV attachment response. Synthetic order #13's malformed `-5` recorded cost and comparable variance were blank, with `No confirmed cost`; the dashboard showed 0/1 coverage. Replacing its nonce with an invalid value returned HTTP 403. [Response and limitations](P7-12-PLAYGROUND-HTTP-EXPORT.md). The browser click did not expose a download event, so this is HTTP route evidence, not browser download UX. P7-12 remains **Partial** pending independent review and remaining browser/import transport matrix.
