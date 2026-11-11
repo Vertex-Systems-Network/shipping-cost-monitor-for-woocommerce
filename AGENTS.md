@@ -34,7 +34,7 @@ If a task is ambiguous, report the conflict or assumption. This repository is AI
 - Pro may use only the Free contract listed in the Pro repository's `README.md` (actions `wpe_scm_init`, `wpe_scm_dashboard_enqueued`; filters `wpe_scm_dashboard_data`, `wpe_scm_carrier_adapters`; constant `WPE_SCM_FILE`; script handle `wpe-scm-admin`; JS globals `wpeScmDashboard` and `wpeScmPro`). `.github/scripts/check-contract.sh`, identical in both repositories, fails CI when they drift.
 - **Every change, in either repository, must be checked against the other.** When a Free change alters or removes anything Pro uses, or Pro needs something new from Free, change both: use a branch with the **same name** in each repository and open both PRs. CI builds each branch against the same-named branch of the other repository, so the pair is tested together. Merge Free first.
 - When a change affects documented behaviour, update the built-in documentation (`assets/docs/`) and the GitHub wiki in the same work.
-- Keep `.github/workflows/build-installable-zip.yml` and `.github/scripts/check-contract.sh` identical in both repositories, apart from the `paths:` trigger list. CI always builds and uploads both ZIPs.
+- Keep `.github/workflows/build-installable-zip.yml` and `.github/scripts/check-contract.sh` identical in both repositories, apart from the `paths:` trigger list. CI always builds both plugins; the Pro ZIP is uploaded only from the private Pro repository (F-12), never from this public one.
 
 ## Work handoff
 
