@@ -69,10 +69,14 @@ final class Page {
 			true
 		);
 
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Read-only report date filter on a capability-checked admin screen; no state change. Length-capped and sanitized below.
 		$requested_start_raw = isset( $_GET['wpe_scm_start'] ) && is_string( $_GET['wpe_scm_start'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Read-only report date filter on a capability-checked admin screen; no state change. Length-capped and sanitized below.
 			? wp_unslash( $_GET['wpe_scm_start'] )
 			: null;
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Read-only report date filter on a capability-checked admin screen; no state change. Length-capped and sanitized below.
 		$requested_end_raw = isset( $_GET['wpe_scm_end'] ) && is_string( $_GET['wpe_scm_end'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Read-only report date filter on a capability-checked admin screen; no state change. Length-capped and sanitized below.
 			? wp_unslash( $_GET['wpe_scm_end'] )
 			: null;
 		$requested_start = is_string( $requested_start_raw ) && strlen( $requested_start_raw ) <= 10

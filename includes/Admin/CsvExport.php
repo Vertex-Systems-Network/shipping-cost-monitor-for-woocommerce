@@ -35,9 +35,11 @@ final class CsvExport {
 		check_admin_referer( 'wpe_scm_export_report' );
 
 		$requested_start_raw = isset( $_GET['wpe_scm_start'] ) && is_string( $_GET['wpe_scm_start'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce checked by check_admin_referer() above; length-capped and sanitized below.
 			? wp_unslash( $_GET['wpe_scm_start'] )
 			: null;
 		$requested_end_raw = isset( $_GET['wpe_scm_end'] ) && is_string( $_GET['wpe_scm_end'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce checked by check_admin_referer() above; length-capped and sanitized below.
 			? wp_unslash( $_GET['wpe_scm_end'] )
 			: null;
 		$requested_start = is_string( $requested_start_raw ) && strlen( $requested_start_raw ) <= 10

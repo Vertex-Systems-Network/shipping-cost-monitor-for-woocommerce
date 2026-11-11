@@ -253,12 +253,14 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 		if ( false === $ciphertext || 16 !== strlen( $tag ) ) {
 			return new \WP_Error( 'wpe_scm_crypto_unavailable', __( 'Could not encrypt the API key; the key was not saved.', 'wpessential-shipping-cost-monitor' ) );
 		}
+		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Encodes binary IV, tag and ciphertext of the AES-256-GCM credential envelope for option storage; not code obfuscation.
 		return array(
 			'version'    => 1,
 			'iv'         => base64_encode( $iv ),
 			'tag'        => base64_encode( $tag ),
 			'ciphertext' => base64_encode( $ciphertext ),
 		);
+		// phpcs:enable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 	}
 
 	/**
@@ -278,9 +280,11 @@ final class ShipStationAdapter implements CarrierAdapterInterface {
 		if ( is_wp_error( $key ) ) {
 			return $key;
 		}
+		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Strictly decodes the stored credential envelope written by encrypt_key(); not code obfuscation.
 		$iv = base64_decode( (string) $stored['iv'], true );
 		$tag = base64_decode( (string) $stored['tag'], true );
 		$ciphertext = base64_decode( (string) $stored['ciphertext'], true );
+		// phpcs:enable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 		if ( false === $iv || 12 !== strlen( $iv ) || false === $tag || 16 !== strlen( $tag ) || false === $ciphertext || strlen( $ciphertext ) > 1024 ) {
 			return new \WP_Error( 'wpe_scm_crypto_invalid', __( 'Reconnect ShipStation; its encrypted key is invalid.', 'wpessential-shipping-cost-monitor' ) );
 		}

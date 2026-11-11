@@ -28,6 +28,7 @@ define( 'WPE_SCM_URL', plugin_dir_url( __FILE__ ) );
 $wpe_scm_build_id = 'source';
 $wpe_scm_build_file = WPE_SCM_DIR . 'BUILD-ID.txt';
 if ( is_readable( $wpe_scm_build_file ) ) {
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads the plugin's own local BUILD-ID.txt (41 bytes max), not a remote URL.
 	$wpe_scm_build_candidate = trim( (string) file_get_contents( $wpe_scm_build_file, false, null, 0, 41 ) );
 	if ( preg_match( '/^[a-f0-9]{40}$/D', $wpe_scm_build_candidate ) ) {
 		$wpe_scm_build_id = substr( $wpe_scm_build_candidate, 0, 12 );

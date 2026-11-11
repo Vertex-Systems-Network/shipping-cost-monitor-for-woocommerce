@@ -129,3 +129,18 @@ Changes in the same change set that need runtime confirmation (backlog AI-45): H
 **Fixed in the follow-up change:** the stream calls carry a justified `phpcs:ignore`; the `Domain Path` header and `load_plugin_textdomain()` call were removed (WordPress loads translations for the slug); the method table no longer forces horizontal scrolling at this width; "1 orders" now uses a plural-aware string.
 
 **Not tested:** uninstall on a real site, the ShipStation connection, the invoice import flow on this build, a narrow phone viewport, and a Plugin Check re-run after the fixes. P7-12 stays Partial.
+
+
+## 2026-11-11 Plugin Check warning triage (P7-12 evidence, not closure)
+
+The Plugin Check run above reported nonce and sanitization findings that were not all read in the browser. They were reproduced statically on `main` at `2deece9` with PHP_CodeSniffer 3.13.2 and WordPress Coding Standards 3.1.0 (security, alternative-function, I18n and database sniffs): 34 errors and 7 warnings in 7 files.
+
+Each flagged line was read. None was an exploitable defect:
+- `CarrierSyncController`: nonce and capability are verified in `authorize()` before any input is read; the sniff does not follow the helper call.
+- `InvoiceImporter`, `ReferenceMatcher`, `CsvExport`: the flagged reads are the nonce check itself, or input read after the nonce check, length-capped before sanitizing (the bounded-input hardening recorded earlier for P7-12).
+- `OrderCostFields`: raw values are type- and length-checked and the handler returns early; nothing is saved until the nonce and `edit_shop_order` are verified.
+- `Page`: read-only report date filter on a capability-checked screen.
+- `file_get_contents()` reads the plugin's own 41-byte `BUILD-ID.txt`.
+- `base64_encode/decode` store the AES-256-GCM credential envelope; not obfuscation.
+
+Each line now carries a `phpcs:ignore` (or a `phpcs:disable`/`enable` pair for the base64 envelope) with its reason. Code behaviour is unchanged. After the change the same sniffs report no findings, and the ShipStation/uninstall stub harness still passes all cases. Remaining WordPress-Extra findings are file names (PSR-4 class files) and WooCommerce capabilities unknown to WPCS; both are intentional. Plugin Check itself has not been re-run on this change.

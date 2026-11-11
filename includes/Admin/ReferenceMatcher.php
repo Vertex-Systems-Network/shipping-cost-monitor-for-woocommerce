@@ -32,6 +32,7 @@ final class ReferenceMatcher {
 		}
 
 		$nonce_value = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- This is the nonce check itself; the value is length-capped and sanitized below.
 			? wp_unslash( $_POST['nonce'] )
 			: '';
 		$nonce = strlen( $nonce_value ) <= 128 ? sanitize_text_field( $nonce_value ) : '';
@@ -44,6 +45,7 @@ final class ReferenceMatcher {
 		}
 
 		$references = isset( $_POST['references'] ) && is_array( $_POST['references'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce verified above; each reference is type-checked, length-capped and sanitized before use.
 			? wp_unslash( $_POST['references'] )
 			: array();
 

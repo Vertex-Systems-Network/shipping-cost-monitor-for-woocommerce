@@ -164,9 +164,11 @@ final class OrderCostFields {
 			! $order_id
 			|| ! isset( $_POST[ $nonce_key ] )
 			|| ! is_string( $_POST[ $nonce_key ] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Type/length guard only (returns without saving); nonce and capability are verified below before any value is used.
 			|| strlen( $_POST[ $nonce_key ] ) > 128
 			|| ! isset( $_POST['wpe_scm_cost_amount'] )
 			|| ! is_string( $_POST['wpe_scm_cost_amount'] )
+			// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Type/length guard only (returns without saving); nonce and capability are verified below before any value is used.
 			|| strlen( $_POST['wpe_scm_cost_amount'] ) > 64
 		) {
 			return;
@@ -182,6 +184,7 @@ final class OrderCostFields {
 		foreach ( $max_field_bytes as $field => $max_bytes ) {
 			if (
 				isset( $_POST[ $field ] )
+				// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Type/length guard only (returns without saving); nonce and capability are verified below before any value is used.
 				&& ( ! is_string( $_POST[ $field ] ) || strlen( $_POST[ $field ] ) > $max_bytes )
 			) {
 				return;

@@ -27,6 +27,7 @@ final class CarrierSyncController {
 	 */
 	public function connect(): void {
 		$this->authorize( 'wpe_scm_carrier_manage' );
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce and capability verified in authorize() above; raw value is length-checked, then validated by the adapter.
 		$key_value = isset( $_POST['api_key'] ) && is_string( $_POST['api_key'] ) ? wp_unslash( $_POST['api_key'] ) : '';
 		if ( strlen( $key_value ) > 512 ) {
 			wp_send_json_error( array( 'message' => __( 'The API key exceeds the supported length.', 'wpessential-shipping-cost-monitor' ) ), 400 );
@@ -52,8 +53,11 @@ final class CarrierSyncController {
 	 */
 	public function sync(): void {
 		$this->authorize( 'wpe_scm_carrier_sync' );
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce verified in authorize() above; length-checked here and sanitized below.
 		$from_raw = isset( $_POST['from'] ) && is_string( $_POST['from'] ) ? wp_unslash( $_POST['from'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce and capability verified in authorize() above; raw value is length-checked, then validated by the adapter.
 		$to_raw = isset( $_POST['to'] ) && is_string( $_POST['to'] ) ? wp_unslash( $_POST['to'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- Nonce and capability verified in authorize() above; raw value is length-checked, then validated by the adapter.
 		$cursor = isset( $_POST['cursor'] ) && is_scalar( $_POST['cursor'] ) ? (string) wp_unslash( $_POST['cursor'] ) : '1';
 		if ( strlen( $from_raw ) > 10 || strlen( $to_raw ) > 10 || strlen( $cursor ) > 4 || ! preg_match( '/^[1-9][0-9]{0,3}$/D', $cursor ) ) {
 			wp_send_json_error( array( 'message' => __( 'The label preview request is invalid.', 'wpessential-shipping-cost-monitor' ) ), 400 );
@@ -82,6 +86,7 @@ final class CarrierSyncController {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage carrier connections.', 'wpessential-shipping-cost-monitor' ) ), 403 );
 		}
+		// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- This is the nonce check itself; the value is length-capped and sanitized on the next line.
 		$raw_nonce = isset( $_POST['nonce'] ) && is_string( $_POST['nonce'] ) ? wp_unslash( $_POST['nonce'] ) : '';
 		$nonce = strlen( $raw_nonce ) <= 128 ? sanitize_text_field( $raw_nonce ) : '';
 		if ( ! wp_verify_nonce( $nonce, $action ) ) {
