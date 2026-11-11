@@ -752,7 +752,7 @@
 									: match && 'existing_cost' === match.status && match.order_number
 										? __( 'Existing cost on order', 'shipping-cost-monitor-pro-for-woocommerce' ) + ' #' + match.order_number
 										: match && 'matched' === match.status && match.order_number
-											? __( 'Ready to save', 'shipping-cost-monitor-pro-for-woocommerce' ) + ': #' + match.order_number + ' (' + match.order_status + ')'
+											? __( 'Ready to save', 'shipping-cost-monitor-pro-for-woocommerce' ) + ': #' + match.order_number + ' (' + ( match.order_status_label || match.order_status ) + ')'
 											: match ? statusText( match.status ) : valid ? __( 'Ready to match', 'shipping-cost-monitor-pro-for-woocommerce' ) : amount && '-' === amount.charAt( 0 ) ? __( 'Credit/refund needs review', 'shipping-cost-monitor-pro-for-woocommerce' ) : __( 'Missing or invalid required value', 'shipping-cost-monitor-pro-for-woocommerce' );
 							return h( 'tr', { key: item.number },
 								h( 'td', null, item.number ),

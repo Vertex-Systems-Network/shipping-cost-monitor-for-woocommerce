@@ -60,7 +60,7 @@ Variance uses only costs marked invoice-final or merchant-confirmed, in the same
 
 = Where is the data stored and what happens on uninstall? =
 
-Cost records are stored as order metadata through WooCommerce and stay with your orders if you remove the plugin. The plugin stores no other settings.
+Cost records are stored as order metadata through WooCommerce and stay with your orders if you remove the plugin. The plugin stores no other settings. Uninstalling it also removes a ShipStation key left by a pre-1.0 test build, unless the Pro add-on is installed.
 
 = Does it work with High-Performance Order Storage? =
 

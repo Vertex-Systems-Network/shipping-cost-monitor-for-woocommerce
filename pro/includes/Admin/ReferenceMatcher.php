@@ -120,6 +120,7 @@ final class ReferenceMatcher {
 					'order_id'          => $order->get_id(),
 					'order_number'      => $order->get_order_number(),
 					'order_status'      => $order->get_status(),
+					'order_status_label' => wc_get_order_status_name( $order->get_status() ),
 					'currency'          => $order->get_currency(),
 					'has_existing_cost' => $has_existing_cost,
 				);
