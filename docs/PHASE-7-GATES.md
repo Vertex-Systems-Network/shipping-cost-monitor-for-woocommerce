@@ -179,3 +179,18 @@ After the rename, PHP lint, the JavaScript syntax check, the WPCS security/I18n 
 **Found and fixed during this run:** the Pro review column showed raw codes (`unmatched`, `duplicate`, `committed`, `merchant_confirmed`); they now use translated labels. The CI autoload smoke test had been exiting with status 0 before checking any class because class files exit without `ABSPATH`; it now defines `ABSPATH` and asserts its output.
 
 **Not covered:** the two CI ZIPs themselves, Plugin Check on the split packages, the label fix in a browser (PHP lint and `node --check` only), HPOS datastore on this site, and Pro licensing/updates (not built).
+
+
+## 2026-11-11 Real CI artifacts installed and checked (AI-45 / AI-47)
+
+**Build:** CI run 43078644836 on branch `claude/docs-link-woo-billing` at `e078de7`, artifacts `shipping-cost-monitor-for-woocommerce-e078de7…` and `shipping-cost-monitor-pro-for-woocommerce-e078de7…`, installed into a fresh non-persistent Playground (WordPress 7.1.4, WooCommerce 11.2.2, PHP 8.3, Plugin Check 2.2.0) through Blueprint `url` resources pointing at the artifacts' short-lived download links. This is the first runtime check of the **CI packages themselves**, including the Composer autoloaders.
+
+**Artifact layout:** before this change each artifact ZIP wrapped the plugin ZIP and a checksum, so uploading the downloaded file in WordPress failed with "Plugin installation failed." (owner report). Artifacts now upload the plugin folder; each downloaded file installed as-is into `shipping-cost-monitor-for-woocommerce/` and `shipping-cost-monitor-pro-for-woocommerce/`.
+
+**Observed:** both plugins active; the free plugin shows "Required by" Pro. Plugins screen row actions: Free — Deactivate | Check this plugin | **Documentation** | **Dashboard**; Pro — Deactivate | Check this plugin | **Documentation**, all pointing to the renamed repository. Dashboard with three synthetic USD orders (12.00 / 8.25 invoice-final; 15.00 / no cost; 25.00 / 27.10 invoice-final): 52.00 charged, 35.35 confirmed cost, 1.65 variance, 66.7% coverage, matching hand calculation; Documentation button in the header; Pro panel and ShipStation help links present; `admin.js` then `pro.js` loaded with HTTP 200.
+
+**Plugin Check on the packages:**
+- Free: "1 warning" — `missing_composer_json_file`. Fixed in the follow-up commit by packaging `composer.json`.
+- Pro: "2 errors and 2 warnings" — `missing_composer_json_file` (fixed the same way); `plugin_updater_detected` for `Update URI`, `no_plugin_readme`, and `plugin_header_requires_plugins_not_in_directory`. The last three are WordPress.org-directory rules; Pro is distributed on WooCommerce.com (F-8), which requires the `Update URI` behaviour and `changelog.txt`, and the dependency warning clears once the free plugin is published on WordPress.org.
+
+**Not covered:** uninstall on this site, ShipStation with a real key, invoice import through the UI on the packaged build, WooCommerce QIT.

@@ -1,7 +1,7 @@
 # AI audit and execution plan
 
 **Last reconciled:** 2026-11-11 against repository head `4e568c4` plus the release-preparation change set that introduced this revision.  
-**Repository:** `Vertex-Systems-Network/wpessential-shipping-cost-monitor`  
+**Repository:** `Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce`  
 **Purpose:** Route ChatGPT, Claude, Gemini, Cursor, Copilot and human contributors to the right source of truth and the next unblocked task.
 
 This document holds **rules and routing only**. It deliberately carries no gate counts, build IDs or staging snapshots, because copies of status drift. Read status where it is owned:
@@ -48,7 +48,7 @@ Take the first row you can act on. Rows 1–3 need no external party.
 | 3 | AI-45 | Install the CI ZIP built from the release-preparation change set and confirm: activation, HPOS compatibility shown as compatible in WooCommerce > Settings > Advanced > Features, dashboard layout, uninstall removes `wpe_scm_shipstation_credentials`, and Plugin Check reports no errors. | Open. Needs a CI run on the merged change and a test site. |
 | 4 | AI-31 | Connect a real ShipStation V2 key on a test site; record connect, sync, review and commit results and the exact fields returned. | Blocked: owner must supply a merchant or sandbox API key. Does not block rows 1–3. |
 | 5 | P7-14 | Run the approved beta with consenting merchants; record sanitized, reproducible feedback and resolutions. | Blocked: needs participating merchants and anonymized invoice samples (decision A-3). |
-| 6 | Phase 8 | Work through the submission readiness checklist in `SUBMISSION-STRATEGY.md`. | Starts when Phase 7 closes or the owner narrows scope. Several items are owner-only. |
+| 6 | Phase 8 | Work through the submission readiness checklist in `SUBMISSION-STRATEGY.md`. Free goes to WordPress.org; Pro goes to WooCommerce.com (F-8), whose billing and update system replaces any licensing code. | Starts when Phase 7 closes or the owner narrows scope. Several items are owner-only. |
 
 Gates P7-08, P7-09 and P7-11 are passed for their stated scopes. Do not re-run them unless the build, dataset, environment or test path changes.
 
@@ -58,7 +58,7 @@ The repository is AI-operated (Gate F in `OWNER-DECISION-REGISTER.md`). When a t
 
 ## Contributor protocol (all AI tools and humans)
 
-1. Confirm the repository is exactly `Vertex-Systems-Network/wpessential-shipping-cost-monitor` and inspect the current default branch head before editing.
+1. Confirm the repository is exactly `Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce` and inspect the current default branch head before editing.
 2. Read `AGENTS.md`, this plan, the README status block, the assigned backlog row and its cited sources. Check current files rather than trusting copied chat context.
 3. Take the first actionable row above, or the highest-priority unblocked backlog item. Do a concrete implementation or verification in the session and meet its acceptance evidence where possible.
 4. Check existing feature IDs before adding any option or setting. Do not duplicate controls, reports, integrations or counters.

@@ -39,7 +39,7 @@ On the **Plugins** screen the free plugin then shows **Required by: Shipping Cos
 
 ## Where to find it
 
-**WooCommerce → Shipping Cost Monitor** opens the dashboard. The cost fields are in every order's edit screen (**WooCommerce → Orders → open an order**).
+**WooCommerce → Shipping Cost Monitor** opens the dashboard. On the **Plugins** screen each plugin also shows **Documentation** (this guide) next to **Deactivate**, and the free plugin shows **Dashboard**. The dashboard header has a **Documentation** button too. The cost fields are in every order's edit screen (**WooCommerce → Orders → open an order**).
 
 ## What you see on day one
 
@@ -54,4 +54,4 @@ Test builds before version 1.0.0 used a different folder name. If one is still a
 ## Removing the plugin
 
 - **Free:** deactivating or deleting keeps every cost record on your orders. Reinstalling shows them again. The free plugin stores no settings. Deleting it also removes a ShipStation key left by a pre-1.0 test build, unless Pro is installed.
-- **Pro:** deleting Pro removes the stored ShipStation API key. Costs it saved stay on the orders. Pro is not hosted on WordPress.org and declares its own `Update URI`, so WordPress never offers it a WordPress.org update.
+- **Pro:** deleting Pro removes the stored ShipStation API key. Costs it saved stay on the orders. Pro is sold on the WooCommerce.com Marketplace: its subscription, renewals and updates are managed there, through the WooCommerce.com Update Manager. Pro never asks WordPress.org for updates.

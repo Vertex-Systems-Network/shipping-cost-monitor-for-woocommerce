@@ -548,3 +548,9 @@
 	color: var(--wpe-scm-accent);
 	font-weight: 600;
 }
+
+.wpe-scm-header-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}

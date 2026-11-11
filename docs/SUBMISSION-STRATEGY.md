@@ -92,7 +92,7 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 | External service disclosure (ShipStation) | Done in `readme.txt` | Recheck ShipStation terms/privacy URLs before submitting |
 | Translation template (`languages/*.pot`) | Not done | WordPress.org generates language packs from source; a `.pot` is needed for WooCommerce.com distribution |
 | Public version number | Decided F-6: 1.0.0 for both plugins | — |
-| Free/Pro packaging | Decided F-7: free plugin + Pro add-on; CI builds both ZIPs and keeps Pro code out of the free package | Pro licensing, update delivery and storefront are not built |
+| Free/Pro packaging | Decided F-7: free plugin + Pro add-on; CI builds both ZIPs and keeps Pro code out of the free package | Storefront, billing and updates: WooCommerce.com (F-8); no licensing code in Pro |
 | Phase 7 gates | Open (see gate register) | P7-12, P7-13, P7-14 |
 
 ### WordPress.org (account `wpessential`)
@@ -113,7 +113,8 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 | Item | State | Owner / next action |
 |---|---|---|
 | Vendor account and product application | Not done | Owner |
-| `Woo:` plugin header (product ID and hash) | Not possible yet | Assigned by WooCommerce.com after the product is accepted |
+| `Woo:` plugin header (product ID and hash) | Not possible yet | Added by WooCommerce.com's deployment after acceptance. Do not add it to the source manually; verify the deployed package carries it |
+| Update URI not pointing at WordPress.org | Done in source (WooCommerce.com product URL) | — |
 | `changelog.txt` in Marketplace format | Done in source | — |
 | `WC requires at least` / `WC tested up to` headers | Done in source (11.2 / 11.2) | Update at release |
 | QIT test runs (activation, security, PHPStan, PHPCompatibility, Woo API/E2E) | Not run | Requires vendor access to QIT |

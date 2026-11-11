@@ -96,6 +96,7 @@ final class Page {
 			admin_url( 'admin-post.php' )
 		);
 		$dashboard['export_url'] = wp_nonce_url( $export_url, 'wpe_scm_export_report' );
+		$dashboard['docs_url']   = WPE_SCM_DOCS_URL;
 		/**
 		 * Filter the data passed to the dashboard script.
 		 *

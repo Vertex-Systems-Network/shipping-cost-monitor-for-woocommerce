@@ -39,7 +39,7 @@ WooCommerce 11.2 or later. The plugin uses WooCommerce order APIs and works with
 
 **Documentation**
 
-Step-by-step guide with screenshots: https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/blob/main/docs/user-guide/README.md
+Step-by-step guide with screenshots: https://github.com/Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce/blob/main/docs/user-guide/README.md
 
 == Installation ==
 
