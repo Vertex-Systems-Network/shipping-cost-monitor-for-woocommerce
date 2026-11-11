@@ -26,7 +26,7 @@ final class InvoiceImporter {
 	public function commit_rows(): void {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'You do not have permission to import shipping costs.', 'wpessential-shipping-cost-monitor' ) ),
+				array( 'message' => __( 'You do not have permission to import shipping costs.', 'shipping-cost-monitor-for-woocommerce' ) ),
 				403
 			);
 		}
@@ -39,7 +39,7 @@ final class InvoiceImporter {
 
 		if ( ! wp_verify_nonce( $nonce, 'wpe_scm_commit_invoice_rows' ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'The import request expired. Reload the page and review the rows again.', 'wpessential-shipping-cost-monitor' ) ),
+				array( 'message' => __( 'The import request expired. Reload the page and review the rows again.', 'shipping-cost-monitor-for-woocommerce' ) ),
 				403
 			);
 		}
@@ -51,7 +51,7 @@ final class InvoiceImporter {
 
 		if ( empty( $rows ) || count( $rows ) > 50 ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Commit between 1 and 50 matched rows at a time.', 'wpessential-shipping-cost-monitor' ) ),
+				array( 'message' => __( 'Commit between 1 and 50 matched rows at a time.', 'shipping-cost-monitor-for-woocommerce' ) ),
 				400
 			);
 		}
@@ -249,7 +249,7 @@ final class InvoiceImporter {
 
 		$source = sprintf(
 			/* translators: %d: invoice source row number. */
-			__( 'Invoice CSV source row %d', 'wpessential-shipping-cost-monitor' ),
+			__( 'Invoice CSV source row %d', 'shipping-cost-monitor-for-woocommerce' ),
 			$row_number
 		);
 
@@ -268,7 +268,7 @@ final class InvoiceImporter {
 		$order->add_order_note(
 			sprintf(
 				/* translators: 1: amount, 2: currency, 3: source row, 4: evidence, 5: tax treatment. */
-				__( 'Shipping cost imported from invoice CSV: %1$s %2$s, source row %3$d (%4$s; tax %5$s).', 'wpessential-shipping-cost-monitor' ),
+				__( 'Shipping cost imported from invoice CSV: %1$s %2$s, source row %3$d (%4$s; tax %5$s).', 'shipping-cost-monitor-for-woocommerce' ),
 				$amount,
 				$currency,
 				$row_number,

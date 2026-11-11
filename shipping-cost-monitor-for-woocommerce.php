@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WPEssential Shipping Cost Monitor
+ * Plugin Name: Shipping Cost Monitor for WooCommerce
  * Plugin URI: https://wpessential.org
  * Description: Shipping cost intelligence and margin reporting for WooCommerce.
  * Version: 0.1.0
@@ -13,7 +13,7 @@
  * Author URI: https://wpessential.org
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wpessential-shipping-cost-monitor
+ * Text Domain: shipping-cost-monitor-for-woocommerce
  *
  * @package WPEssentialShippingCostMonitor
  */
@@ -79,8 +79,8 @@ function wpe_scm_missing_woocommerce_notice(): void {
 	printf(
 		'<div class="notice notice-error"><p>%s</p></div>',
 		esc_html__(
-			'WPEssential Shipping Cost Monitor requires WooCommerce to be installed and active.',
-			'wpessential-shipping-cost-monitor'
+			'Shipping Cost Monitor for WooCommerce requires WooCommerce to be installed and active.',
+			'shipping-cost-monitor-for-woocommerce'
 		)
 	);
 }
@@ -96,8 +96,8 @@ function wpe_scm_missing_autoloader_notice(): void {
 	printf(
 		'<div class="notice notice-error"><p>%s</p></div>',
 		esc_html__(
-			'WPEssential Shipping Cost Monitor is missing its generated files. Install the packaged plugin ZIP instead of the raw source.',
-			'wpessential-shipping-cost-monitor'
+			'Shipping Cost Monitor for WooCommerce is missing its generated files. Install the packaged plugin ZIP instead of the raw source.',
+			'shipping-cost-monitor-for-woocommerce'
 		)
 	);
 }

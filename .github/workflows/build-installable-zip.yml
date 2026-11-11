@@ -10,7 +10,7 @@ on:
       - 'assets/**'
       - 'includes/**'
       - 'composer.json'
-      - 'wpessential-shipping-cost-monitor.php'
+      - 'shipping-cost-monitor-for-woocommerce.php'
       - 'uninstall.php'
       - 'readme.txt'
       - 'changelog.txt'
@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          php -l wpessential-shipping-cost-monitor.php
+          php -l shipping-cost-monitor-for-woocommerce.php
           php -l uninstall.php
           find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
 
@@ -81,7 +81,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          php -l wpessential-shipping-cost-monitor.php
+          php -l shipping-cost-monitor-for-woocommerce.php
           php -l uninstall.php
           find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
 
@@ -93,19 +93,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          slug='wpessential-shipping-cost-monitor'
+          slug='shipping-cost-monitor-for-woocommerce'
           archive="${slug}.zip"
           rm -rf build "$archive" "$archive.sha256"
           package_dir="build/${slug}"
           mkdir -p "$package_dir"
           cp -R assets includes vendor "$package_dir/"
-          plugin_version="$(sed -n 's/^ \* Version: *//p' wpessential-shipping-cost-monitor.php)"
+          plugin_version="$(sed -n 's/^ \* Version: *//p' shipping-cost-monitor-for-woocommerce.php)"
           stable_tag="$(sed -n 's/^Stable tag: *//p' readme.txt)"
           if [ -z "$plugin_version" ] || [ "$plugin_version" != "$stable_tag" ]; then
             echo "Plugin Version ($plugin_version) and readme Stable tag ($stable_tag) differ" >&2
             exit 1
           fi
-          cp wpessential-shipping-cost-monitor.php uninstall.php readme.txt changelog.txt LICENSE "$package_dir/"
+          cp shipping-cost-monitor-for-woocommerce.php uninstall.php readme.txt changelog.txt LICENSE "$package_dir/"
           printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
           (cd build && zip -qr "../${archive}" "$slug")
@@ -115,10 +115,10 @@ jobs:
       - name: Upload downloadable build artifact
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: wpessential-shipping-cost-monitor-${{ github.sha }}
+          name: shipping-cost-monitor-for-woocommerce-${{ github.sha }}
           path: |
-            wpessential-shipping-cost-monitor.zip
-            wpessential-shipping-cost-monitor.zip.sha256
+            shipping-cost-monitor-for-woocommerce.zip
+            shipping-cost-monitor-for-woocommerce.zip.sha256
           if-no-files-found: error
           retention-days: 14
           compression-level: 0

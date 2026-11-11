@@ -1,4 +1,4 @@
-# WPEssential Shipping Cost Monitor — Copilot instructions
+# Shipping Cost Monitor for WooCommerce — Copilot instructions
 
 Before acting, read `AGENTS.md`, `docs/AI-AUDIT-AND-EXECUTION-PLAN.md`, `README.md`, and the task-relevant files under `docs/`. The canonical feature bank is `docs/PRODUCT-SPEC.md`; architecture is `docs/ARCHITECTURE.md`; AI task IDs/gates are `docs/AI-BACKLOG.md`.
 

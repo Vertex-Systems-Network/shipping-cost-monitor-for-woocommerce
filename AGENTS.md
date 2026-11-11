@@ -15,7 +15,7 @@ If a task is ambiguous, report the conflict or assumption. This repository is AI
 
 ## Project rules
 
-- Product: **WPEssential Shipping Cost Monitor**, a future WPEssential WooCommerce add-on.
+- Product: **Shipping Cost Monitor for WooCommerce** by WPEssential (decision F-5). Do not put "WP" or a trademark at the start of the product name, slug or text domain.
 - Use the feature IDs in `docs/PRODUCT-SPEC.md`; check them before adding options, settings or workflows. Avoid duplicate capabilities under different names/screens.
 - The owner authorized the initial implementation on 2026-11-06; see `docs/OWNER-DECISION-REGISTER.md` for the accepted scope and limits. Phase 5 may proceed within that scope.
 - On 2026-11-07, the owner explicitly authorized a CI-only GitHub Actions workflow that builds a downloadable installable ZIP, generates the Composer PSR-4 vendor autoloader, runs PHP lint and checks PSR-4 loading. This is a narrow exception to the earlier no-build boundary. Do not add local CLI setup, an in-plugin CLI, npm, a JS bundler or unrelated build tooling. The approved React path remains plain JavaScript using WordPress-bundled `wp.element`.
@@ -26,7 +26,7 @@ If a task is ambiguous, report the conflict or assumption. This repository is AI
 - Carrier connections are optional adapters. Do not claim API access, supported regions or final-invoice data without provider-specific evidence.
 - No runtime AI service or customer-data transmission to an LLM is currently in scope.
 - Do not claim work, compatibility, tests, security review or Marketplace acceptance that has not been evidenced.
-- Preserve repository slug `wpessential-shipping-cost-monitor`; display product name is title case as above.
+- Preserve the GitHub repository name `wpessential-shipping-cost-monitor`. The plugin slug, text domain, package folder and main file are `shipping-cost-monitor-for-woocommerce` (decision F-5).
 - Keep status/progress in README aligned with actual evidence and mark target dates as proposed until approved.
 
 ## Work handoff

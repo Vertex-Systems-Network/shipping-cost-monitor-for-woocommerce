@@ -26,8 +26,8 @@ final class CsvExport {
 	public function export(): void {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			wp_die(
-				esc_html__( 'You do not have permission to export shipping reports.', 'wpessential-shipping-cost-monitor' ),
-				esc_html__( 'Access denied', 'wpessential-shipping-cost-monitor' ),
+				esc_html__( 'You do not have permission to export shipping reports.', 'shipping-cost-monitor-for-woocommerce' ),
+				esc_html__( 'Access denied', 'shipping-cost-monitor-for-woocommerce' ),
 				array( 'response' => 403 )
 			);
 		}
@@ -60,25 +60,25 @@ final class CsvExport {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streams the CSV to the HTTP response; no file is written.
 		$output = fopen( 'php://output', 'w' );
 		if ( false === $output ) {
-			wp_die( esc_html__( 'Unable to open the report stream.', 'wpessential-shipping-cost-monitor' ) );
+			wp_die( esc_html__( 'Unable to open the report stream.', 'shipping-cost-monitor-for-woocommerce' ) );
 		}
 
 		fputcsv(
 			$output,
 			array(
-				__( 'Order ID', 'wpessential-shipping-cost-monitor' ),
-				__( 'Order number', 'wpessential-shipping-cost-monitor' ),
-				__( 'Order date', 'wpessential-shipping-cost-monitor' ),
-				__( 'Status', 'wpessential-shipping-cost-monitor' ),
-				__( 'Currency', 'wpessential-shipping-cost-monitor' ),
-				__( 'Shipping refunded (ex tax)', 'wpessential-shipping-cost-monitor' ),
-				__( 'Shipping charged net (ex tax)', 'wpessential-shipping-cost-monitor' ),
-				__( 'Recorded cost', 'wpessential-shipping-cost-monitor' ),
-				__( 'Cost currency', 'wpessential-shipping-cost-monitor' ),
-				__( 'Evidence', 'wpessential-shipping-cost-monitor' ),
-				__( 'Cost tax treatment', 'wpessential-shipping-cost-monitor' ),
-				__( 'Comparable variance', 'wpessential-shipping-cost-monitor' ),
-				__( 'Comparison status', 'wpessential-shipping-cost-monitor' ),
+				__( 'Order ID', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Order number', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Order date', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Status', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Currency', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Shipping refunded (ex tax)', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Shipping charged net (ex tax)', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Recorded cost', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Cost currency', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Evidence', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Cost tax treatment', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Comparable variance', 'shipping-cost-monitor-for-woocommerce' ),
+				__( 'Comparison status', 'shipping-cost-monitor-for-woocommerce' ),
 			)
 		);
 
@@ -120,7 +120,7 @@ final class CsvExport {
 				$shipping_refunded = min( (float) $order->get_shipping_total(), (float) $order->get_total_shipping_refunded() );
 				$shipping_net = (float) $order->get_shipping_total() - $shipping_refunded;
 				$variance     = '';
-				$comparison   = __( 'No confirmed cost', 'wpessential-shipping-cost-monitor' );
+				$comparison   = __( 'No confirmed cost', 'shipping-cost-monitor-for-woocommerce' );
 
 				if (
 					in_array( $evidence, array( 'invoice_final', 'merchant_confirmed' ), true )
@@ -129,18 +129,18 @@ final class CsvExport {
 					&& (float) $cost_amount >= 0
 				) {
 					if ( $currency !== $cost_currency ) {
-						$comparison = __( 'Currency mismatch', 'wpessential-shipping-cost-monitor' );
+						$comparison = __( 'Currency mismatch', 'shipping-cost-monitor-for-woocommerce' );
 					} elseif ( 'exclusive' !== $tax_basis ) {
-						$comparison = __( 'Tax basis not comparable', 'wpessential-shipping-cost-monitor' );
+						$comparison = __( 'Tax basis not comparable', 'shipping-cost-monitor-for-woocommerce' );
 					} else {
 						$variance = wc_format_decimal(
 							$shipping_net - (float) $cost_amount,
 							wc_get_price_decimals()
 						);
-						$comparison = __( 'Comparable', 'wpessential-shipping-cost-monitor' );
+						$comparison = __( 'Comparable', 'shipping-cost-monitor-for-woocommerce' );
 					}
 				} elseif ( '' !== $evidence && ! in_array( $evidence, array( 'invoice_final', 'merchant_confirmed' ), true ) ) {
-					$comparison = __( 'Evidence not confirmed', 'wpessential-shipping-cost-monitor' );
+					$comparison = __( 'Evidence not confirmed', 'shipping-cost-monitor-for-woocommerce' );
 				}
 
 				$created = $order->get_date_created();
