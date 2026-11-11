@@ -89,7 +89,10 @@ add_action(
 add_filter(
 	'plugin_action_links_' . plugin_basename( WPE_SCM_PRO_FILE ),
 	static function ( $links ) {
-		$links         = is_array( $links ) ? $links : array();
+		$links = is_array( $links ) ? $links : array();
+		if ( ! defined( 'WPE_SCM_FILE' ) || ! class_exists( 'WooCommerce' ) || ! current_user_can( 'manage_woocommerce' ) ) {
+			return $links;
+		}
 		$links['docs'] = sprintf(
 			'<a href="%1$s">%2$s</a>',
 			esc_url( admin_url( 'admin.php?page=shipping-cost-monitor-for-woocommerce&tab=docs&chapter=06-pro-invoice-import' ) ),
