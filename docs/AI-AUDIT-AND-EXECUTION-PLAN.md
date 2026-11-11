@@ -33,7 +33,7 @@ This document holds **rules and routing only**. It deliberately carries no gate 
 
 **Implemented but not validated with a real account:** the ShipStation adapter. No merchant API key has been used against it. Owner decision C-3 records the credential design as implemented with independent security review still pending. Do not describe it as merchant-verified.
 
-**Not delivered:** zone/category loss analysis, scheduled alerts, historical comparisons, rate-change simulation, PDF reports, per-parcel allocation, background reconciliation, persistent invoice archive, server-synchronized mapping profiles, and a Free/Pro split in code. The repository builds one plugin; the Free/Pro packaging decision is open (see the submission checklist).
+**Not delivered:** zone/category loss analysis, scheduled alerts, historical comparisons, rate-change simulation, PDF reports, per-parcel allocation, background reconciliation, persistent invoice archive, server-synchronized mapping profiles, and a Free/Pro split in code. The repository builds one free plugin (decision F-2).
 
 **Guardrails that still apply:** never persist raw invoice uploads or customer profile data; use WooCommerce CRUD and query abstractions; keep currency and tax basis comparable; never silently overwrite an existing cost; a quote or booked label is never a final cost; no runtime LLM or customer-data transmission.
 
@@ -51,6 +51,10 @@ Take the first row you can act on. Rows 1–3 need no external party.
 | 6 | Phase 8 | Work through the submission readiness checklist in `SUBMISSION-STRATEGY.md`. | Starts when Phase 7 closes or the owner narrows scope. Several items are owner-only. |
 
 Gates P7-08, P7-09 and P7-11 are passed for their stated scopes. Do not re-run them unless the build, dataset, environment or test path changes.
+
+## Who decides
+
+The repository is AI-operated (Gate F in `OWNER-DECISION-REGISTER.md`). When a task needs a product or engineering decision, make it, record it in Gate F with the reasoning, then act. Ask the owner only for what an AI cannot supply: external-account actions, secrets, and real merchants.
 
 ## Contributor protocol (all AI tools and humans)
 

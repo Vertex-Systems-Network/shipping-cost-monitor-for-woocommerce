@@ -39,11 +39,21 @@ The owner said “start” after reviewing the gate register. For the initial sc
 | D-2 | Local/in-plugin CLI | Do not add a local CLI prerequisite, CLI distributed inside the plugin, npm or JS build chain. | Product development should remain usable from the repository source; package compilation is isolated to GitHub Actions. | Accepted; remains prohibited |
 | D-3 | Installable ZIP artifact workflow | Add a manually downloadable GitHub Actions workflow that runs Composer PSR-4 generation, PHP lint, autoloader smoke and ZIP packaging. | Explicit owner request on 2026-11-07: “artifact build system add krro take build kr k me download krron phir testing pr upload kr don”. CI-generated artifacts support staging installs; they do not constitute a Marketplace release. | Authorized; initial artifact build passed 2026-11-07 (run #42373229279). Phase 7 follow-up added PHP 8.1–8.4 CI lint/autoload matrix, which passed in run #42374396949; this remains CI-only, with no local or in-plugin CLI. |
 
+## Gate F — delegated decisions (AI-operated repository)
+
+On 2026-11-11 the owner stated that no human works in this repository and that every decision is to be made by the AI contributors. From that date, AI contributors decide product and engineering questions, record each decision here with its reasoning, and do not wait for owner approval. Three kinds of item still need the owner in person, because an AI contributor cannot supply them: actions inside external accounts (WordPress.org, WooCommerce.com, ShipStation), secrets and API keys, and real merchants or their data.
+
+| ID | Decision | Reasoning | State |
+|---|---|---|---|
+| F-1 | Declare HPOS (`custom_order_tables`) compatibility. | Gates P7-04 and P7-09 passed manual save, invoice commit, refund-adjusted report and export on HPOS and legacy storage; all order access is WooCommerce CRUD. WooCommerce.com requires the declaration. | Decided 2026-11-11 |
+| F-2 | Ship one free plugin containing every current feature. No Pro split in this release. | The code is one plugin with no licensing layer; WordPress.org requires everything in a hosted plugin to be free and functional. A paid add-on can be designed later from features not yet built (alerts, zone/category analysis, simulation). This narrows A-1 for the first release; the WooCommerce.com paid track is deferred until a Pro add-on exists. | Decided 2026-11-11 |
+| F-3 | Keep version 0.1.0 until Phase 7 closes; the first public release is 1.0.0. | The independent security review (P7-12), the full benchmark (P7-13) and beta (P7-14) are open; a 1.0.0 label before they close would overstate readiness. | Decided 2026-11-11 |
+| F-4 | Uninstall deletes the stored carrier credential and keeps order cost metadata. | Cost records are merchant accounting data attached to orders; deleting them on uninstall would be silent data loss. The readme states this. | Decided 2026-11-11 |
+
 ## Remaining decisions
 
 - Provide anonymized merchant invoice samples before CSV parsing/matching is finalized (A-3).
 - Complete the independent credential-security review of the implemented ShipStation key storage before release, and the retention review before adding CSV upload persistence (C-3/C-4). No further provider credentials without a new decision.
-- Decide Free/Pro packaging: the repository currently builds one plugin containing invoice import and the ShipStation adapter, while A-1 describes those as Pro. See the submission readiness checklist.
-- Decide the first public version number (currently 0.1.0).
+- Free/Pro packaging and version are decided in F-2 and F-3.
 - Recheck compatibility versions and run the matrix before making support claims (C-5).
 - Keep local/in-plugin CLI, npm and JS bundlers out of scope. Use only the explicitly authorized GitHub Actions artifact workflow (D-2/D-3).

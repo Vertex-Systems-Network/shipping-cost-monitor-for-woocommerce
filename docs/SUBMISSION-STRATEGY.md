@@ -88,11 +88,11 @@ The user's target remains **Free on WordPress.org and Paid/Pro on WooCommerce.co
 | GPL-compatible license file and headers | Done in source (`LICENSE`, GPL-2.0-or-later) | — |
 | Plugin headers: name, URIs, version, requires, text domain | Done in source | Owner confirms `https://wpessential.org` as Plugin/Author URI |
 | HPOS compatibility declared | Done in source; runtime confirmation pending | AI-45 |
-| Uninstall cleanup | Done in source (credential option removed; order cost metadata kept by design) | Owner confirms keeping order metadata on uninstall |
+| Uninstall cleanup | Done in source (credential option removed; order cost metadata kept by design) | Decided F-4 |
 | External service disclosure (ShipStation) | Done in `readme.txt` | Recheck ShipStation terms/privacy URLs before submitting |
 | Translation template (`languages/*.pot`) | Not done | WordPress.org generates language packs from source; a `.pot` is needed for WooCommerce.com distribution |
-| Public version number | Open (0.1.0) | Owner decision |
-| Free/Pro packaging | Open | Owner decision: the code is one plugin; A-1 describes invoice import and carrier sync as Pro. Either ship one free plugin, or split a Pro add-on before submitting both tracks |
+| Public version number | Decided F-3: 0.1.0 until Phase 7 closes, then 1.0.0 | — |
+| Free/Pro packaging | Decided F-2: one free plugin; WooCommerce.com paid track deferred until a Pro add-on exists | The WooCommerce.com table below applies only when that add-on is built |
 | Phase 7 gates | Open (see gate register) | P7-12, P7-13, P7-14 |
 
 ### WordPress.org (account `wpessential`)
