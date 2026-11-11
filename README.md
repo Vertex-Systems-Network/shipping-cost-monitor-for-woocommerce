@@ -49,7 +49,7 @@ Full walkthrough: see the built-in documentation (below).
 
 The user guide ships inside the plugin. Open it from **Plugins → Shipping Cost Monitor for WooCommerce → Documentation**, or with the **Documentation** button on the dashboard (**WooCommerce → Shipping Cost Monitor**). It explains every screen, field and number, with screenshots and a worked example, in nine chapters: install and first run; key ideas (evidence, tax basis and currency); recording a cost; reading the dashboard; CSV export; Pro invoice import; Pro ShipStation label costs; troubleshooting; and developer hooks.
 
-The chapters are HTML files in `assets/docs/`, with screenshots in `assets/docs/images/`. Edit those files to change the guide.
+The same guide is published on the [GitHub wiki](https://github.com/Vertex-Systems-Network/shipping-cost-monitor-for-woocommerce/wiki). The chapters are HTML files in `assets/docs/`, with screenshots in `assets/docs/images/`. Edit those files to change the guide.
 
 ## Repository layout
 
