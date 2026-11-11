@@ -3,7 +3,8 @@
 > **Current scope decision (2026-11-10):** WPML/WCML and Polylang integration and runtime compatibility are removed from the release requirements. Historical references below are superseded; no support claim is made. WordPress core translation APIs used by the plugin remain.
 
 **Authority:** This is the canonical Phase 7 gate register. README shows a summary only. Use [AI audit and execution plan](AI-AUDIT-AND-EXECUTION-PLAN.md) for current cross-document evidence, environment distinctions and ordered next actions.  
-**Last reviewed:** 2026-11-10  
+**Last reviewed:** 2026-11-11  
+**Current count (2026-11-11):** 11 active gates — 8 Pass (P7-01, 02, 03, 04, 07, 08, 09, 11), 2 Partial (P7-12, P7-13), 1 Pending (P7-14). The gate table is authoritative. Dated notes further down quote older counts (for example "7 passes, 2 partial, 5 pending", "P7-11 remains partial" or "P7-13 Pending"); those are history and are superseded by this line and the table.  
 **Scope:** Compatibility, security, regression, performance, beta evidence for WPEssential Shipping Cost Monitor.  
 **Interpretation:** Gate rows are not equal-sized. The prior “6/9 = 67%” mixed source dry-runs with runtime checks and is retired as a release-readiness percentage. Historical evidence is retained below, but Phase 7 closes only when every mandatory gate is passed or explicitly removed from supported scope by the owner.
 
@@ -96,3 +97,12 @@ The installed `3320120` package on isolated Playground completed file selection,
 ## 2026-11-11 shipping-method table correction
 
 A mixed comparable/noncomparable fixture revealed that the method row displayed one comparable order beside the USD 22 charged total for two orders. Commit [`3b8b5c9`](https://github.com/Vertex-Systems-Network/wpessential-shipping-cost-monitor/commit/3b8b5c9162ca78a6e2fe99cf2b03cc3da49f4fc4) uses the total method order count for that column. A direct edit to the isolated Playground test copy rendered **2 / USD 22.00 / USD 8.25 / USD 3.75** after refresh. [Regression evidence](P7-12-METHOD-COUNT-REGRESSION.md). A CI artifact of this later commit has not been installed; the source edit does not close P7-12 independent review.
+
+
+## 2026-11-11 release-preparation source review (P7-12 evidence, not closure)
+
+A source review of every PHP entry point confirmed each AJAX and admin-post handler checks `manage_woocommerce` and a bounded nonce before reading input, and that order writes also check `edit_shop_order`. No direct database access, unescaped output or unbounded input was found. This review was done by an AI contributor, so it does not satisfy the independent-review requirement.
+
+An isolated PHP 8.3.6 stub harness (no WordPress; WordPress functions replaced by minimal stand-ins) exercised `ShipStationAdapter`: a too-short key and an HTTP 401 probe saved nothing; a valid key was stored only as an AES-256-GCM envelope with no plaintext; a tampered ciphertext returned `reauth_required`; default salts were rejected; a 32-day range and an invalid calendar date were rejected; voided, return and negative-cost labels were dropped; requests went only to the fixed `https://api.shipstation.com/v2/labels` host. `uninstall.php` removed the stored envelope, and the bootstrap registered an admin notice instead of failing when `vendor/autoload.php` was absent. PHP lint and a JavaScript syntax check passed on the working tree. These are static and stub results: no WordPress runtime, no real ShipStation account and no CI run are claimed.
+
+Changes in the same change set that need runtime confirmation (backlog AI-45): HPOS compatibility declaration, autoloader guard, `uninstall.php`, dashboard layout and style changes, and the packaged `readme.txt`, `changelog.txt` and `LICENSE`.

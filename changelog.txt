@@ -1,0 +1,9 @@
+*** WPEssential Shipping Cost Monitor Changelog ***
+
+2026-11-11 - version 0.1.0
+* Add - Shipping-cost record on WooCommerce orders with private order-note history.
+* Add - Dashboard report: net shipping charged, confirmed cost, variance and coverage.
+* Add - Privacy-minimized CSV export.
+* Add - Browser-local invoice CSV preview, column mapping, exact order matching and reviewed save.
+* Add - Optional read-only ShipStation V2 booked-label import with encrypted API key storage.
+* Add - High-Performance Order Storage compatibility declaration.

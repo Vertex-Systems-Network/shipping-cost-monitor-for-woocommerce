@@ -42,6 +42,8 @@ The owner said “start” after reviewing the gate register. For the initial sc
 ## Remaining decisions
 
 - Provide anonymized merchant invoice samples before CSV parsing/matching is finalized (A-3).
-- Complete credential-security and retention reviews before adding API credentials or CSV upload persistence (C-3/C-4).
+- Complete the independent credential-security review of the implemented ShipStation key storage before release, and the retention review before adding CSV upload persistence (C-3/C-4). No further provider credentials without a new decision.
+- Decide Free/Pro packaging: the repository currently builds one plugin containing invoice import and the ShipStation adapter, while A-1 describes those as Pro. See the submission readiness checklist.
+- Decide the first public version number (currently 0.1.0).
 - Recheck compatibility versions and run the matrix before making support claims (C-5).
 - Keep local/in-plugin CLI, npm and JS bundlers out of scope. Use only the explicitly authorized GitHub Actions artifact workflow (D-2/D-3).

@@ -11,6 +11,10 @@ on:
       - 'includes/**'
       - 'composer.json'
       - 'wpessential-shipping-cost-monitor.php'
+      - 'uninstall.php'
+      - 'readme.txt'
+      - 'changelog.txt'
+      - 'LICENSE'
 
 permissions:
   contents: read
@@ -45,6 +49,7 @@ jobs:
         run: |
           set -euo pipefail
           php -l wpessential-shipping-cost-monitor.php
+          php -l uninstall.php
           find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
 
       - name: Verify Composer PSR-4 autoload
@@ -77,6 +82,7 @@ jobs:
         run: |
           set -euo pipefail
           php -l wpessential-shipping-cost-monitor.php
+          php -l uninstall.php
           find includes vendor -type f -name '*.php' -print0 | xargs -0 -r -n 1 php -l
 
       - name: Verify Composer PSR-4 autoload
@@ -93,7 +99,13 @@ jobs:
           package_dir="build/${slug}"
           mkdir -p "$package_dir"
           cp -R assets includes vendor "$package_dir/"
-          cp wpessential-shipping-cost-monitor.php "$package_dir/"
+          plugin_version="$(sed -n 's/^ \* Version: *//p' wpessential-shipping-cost-monitor.php)"
+          stable_tag="$(sed -n 's/^Stable tag: *//p' readme.txt)"
+          if [ -z "$plugin_version" ] || [ "$plugin_version" != "$stable_tag" ]; then
+            echo "Plugin Version ($plugin_version) and readme Stable tag ($stable_tag) differ" >&2
+            exit 1
+          fi
+          cp wpessential-shipping-cost-monitor.php uninstall.php readme.txt changelog.txt LICENSE "$package_dir/"
           printf '%s\n' "$GITHUB_SHA" > "$package_dir/BUILD-ID.txt"
           if [ -d languages ]; then cp -R languages "$package_dir/languages"; fi
           (cd build && zip -qr "../${archive}" "$slug")

@@ -1,13 +1,16 @@
 <?php
 /**
  * Plugin Name: WPEssential Shipping Cost Monitor
+ * Plugin URI: https://wpessential.org
  * Description: Shipping cost intelligence and margin reporting for WooCommerce.
  * Version: 0.1.0
  * Requires at least: 7.0
  * Requires PHP: 8.1
  * WC requires at least: 11.2
+ * WC tested up to: 11.2
  * Requires Plugins: woocommerce
  * Author: WPEssential
+ * Author URI: https://wpessential.org
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wpessential-shipping-cost-monitor
@@ -33,7 +36,24 @@ if ( is_readable( $wpe_scm_build_file ) ) {
 }
 define( 'WPE_SCM_BUILD_ID', $wpe_scm_build_id );
 
+if ( ! is_readable( WPE_SCM_DIR . 'vendor/autoload.php' ) ) {
+	add_action( 'admin_notices', 'wpe_scm_missing_autoloader_notice' );
+	return;
+}
+
 require_once WPE_SCM_DIR . 'vendor/autoload.php';
+
+/**
+ * Declare order-storage compatibility; all order access uses WooCommerce CRUD.
+ */
+add_action(
+	'before_woocommerce_init',
+	static function (): void {
+		if ( class_exists( '\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil' ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', WPE_SCM_FILE, true );
+		}
+	}
+);
 
 /**
  * Start the plugin after WooCommerce has loaded.
@@ -66,6 +86,23 @@ function wpe_scm_missing_woocommerce_notice(): void {
 		'<div class="notice notice-error"><p>%s</p></div>',
 		esc_html__(
 			'WPEssential Shipping Cost Monitor requires WooCommerce to be installed and active.',
+			'wpessential-shipping-cost-monitor'
+		)
+	);
+}
+
+/**
+ * Explain an incomplete package instead of failing with a fatal error.
+ */
+function wpe_scm_missing_autoloader_notice(): void {
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		return;
+	}
+
+	printf(
+		'<div class="notice notice-error"><p>%s</p></div>',
+		esc_html__(
+			'WPEssential Shipping Cost Monitor is missing its generated files. Install the packaged plugin ZIP instead of the raw source.',
 			'wpessential-shipping-cost-monitor'
 		)
 	);
