@@ -123,6 +123,7 @@ final class CsvExport {
 					in_array( $evidence, array( 'invoice_final', 'merchant_confirmed' ), true )
 					&& '' !== (string) $cost_amount
 					&& is_numeric( $cost_amount )
+					&& (float) $cost_amount >= 0
 				) {
 					if ( $currency !== $cost_currency ) {
 						$comparison = __( 'Currency mismatch', 'wpessential-shipping-cost-monitor' );
@@ -148,7 +149,7 @@ final class CsvExport {
 					self::safe_text( $currency ),
 					wc_format_decimal( $shipping_refunded, wc_get_price_decimals() ),
 					wc_format_decimal( $shipping_net, wc_get_price_decimals() ),
-					is_numeric( $cost_amount ) ? wc_format_decimal( $cost_amount, wc_get_price_decimals() ) : '',
+					is_numeric( $cost_amount ) && (float) $cost_amount >= 0 ? wc_format_decimal( $cost_amount, wc_get_price_decimals() ) : '',
 					self::safe_text( $cost_currency ),
 					self::safe_text( $evidence ),
 					self::safe_text( $tax_basis ),
